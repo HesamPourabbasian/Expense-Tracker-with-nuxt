@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { BankAccount, Transaction } from '~/types'
+import type { BankAccount, PaginatedTransactions, Transaction } from '~/types'
 
 const route = useRoute()
 const accountId = route.params.id as string
@@ -10,16 +10,27 @@ const toast = useToast()
 const showTransactionModal = ref(false)
 const editTransaction = ref<Transaction | null>(null)
 const filterType = ref<string>('')
+const page = ref(1)
 
-const { data: account } = await useFetch<BankAccount>(`/api/accounts/${accountId}`)
+const { data: account, refresh: refreshAccount } = await useFetch<BankAccount>(`/api/accounts/${accountId}`)
 
-const { data: allTransactions, refresh } = await useFetch<Transaction[]>('/api/transactions', {
-  query: { bankAccountId: accountId }
+const { data: transactionData, status, refresh: refreshTransactions } = await useFetch<PaginatedTransactions>('/api/transactions', {
+  query: { bankAccountId: accountId, type: filterType, page }
 })
 
-const transactions = computed(() => filterType.value
-  ? allTransactions.value?.filter(transaction => transaction.type === filterType.value)
-  : allTransactions.value)
+const transactions = computed(() => transactionData.value?.transactions)
+const pagination = computed(() => transactionData.value?.pagination)
+
+function setFilter(type: string) {
+  filterType.value = type
+  page.value = 1
+}
+
+function setPage(nextPage: number) {
+  if (!pagination.value || nextPage < 1 || nextPage > pagination.value.totalPages) return
+  page.value = nextPage
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 function openEdit(t: Transaction) {
   editTransaction.value = t
@@ -30,7 +41,9 @@ async function deleteTransaction(id: number) {
   try {
     await $fetch(`/api/transactions/${id}`, { method: 'DELETE' })
     toast.success('تراکنش حذف شد')
-    refresh()
+    await refreshTransactions()
+    await refreshAccount()
+    if (pagination.value && page.value > pagination.value.totalPages) page.value = pagination.value.totalPages || 1
   } catch (e: any) {
     toast.error('خطا در حذف تراکنش')
   }
@@ -38,13 +51,15 @@ async function deleteTransaction(id: number) {
 
 async function handleCreated() {
   showTransactionModal.value = false
-  await refresh()
+  await refreshTransactions()
+  await refreshAccount()
   toast.success('تراکنش جدید اضافه شد')
 }
 
 async function handleUpdated() {
   editTransaction.value = null
-  await refresh()
+  await refreshTransactions()
+  await refreshAccount()
   toast.success('تراکنش ویرایش شد')
 }
 </script>
@@ -78,12 +93,17 @@ async function handleUpdated() {
     </div>
 
     <div class="segmented">
-      <button @click="filterType = ''" :class="!filterType ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50'">همه</button>
-      <button @click="filterType = 'income'" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>
-      <button @click="filterType = 'expense'" :class="filterType === 'expense' ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-50'">هزینه</button>
+       <button @click="setFilter('')" :class="!filterType ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50'">همه</button>
+       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>
+       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-50'">هزینه</button>
     </div>
 
-    <div v-if="transactions?.length" class="surface divide-y divide-gray-100 overflow-hidden">
+    <div v-if="status === 'pending'" class="empty-state">
+      <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-primary-600" />
+      <p class="text-gray-500">در حال دریافت تراکنش‌ها</p>
+    </div>
+
+    <div v-else-if="transactions?.length" class="surface divide-y divide-gray-100 overflow-hidden">
       <div
         v-for="t in transactions"
         :key="t.id"
@@ -124,6 +144,18 @@ async function handleUpdated() {
     <div v-else class="empty-state">
       <Icon name="bx:bx-receipt" class="w-12 h-12 text-gray-300 mx-auto mb-3" />
       <p class="text-gray-500">تراکنشی ثبت نشده</p>
+    </div>
+
+    <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3">
+      <button class="primary-button bg-white text-gray-700 ring-1 ring-inset ring-gray-200 shadow-none hover:bg-gray-50 disabled:hover:bg-white" :disabled="page === 1" @click="setPage(page - 1)">
+        <Icon name="lucide:chevron-right" class="h-4 w-4" />
+        قبلی
+      </button>
+      <p class="text-sm text-gray-500">صفحه {{ page }} از {{ pagination.totalPages }}</p>
+      <button class="primary-button bg-white text-gray-700 ring-1 ring-inset ring-gray-200 shadow-none hover:bg-gray-50 disabled:hover:bg-white" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
+        بعدی
+        <Icon name="lucide:chevron-left" class="h-4 w-4" />
+      </button>
     </div>
 
     <TransactionModal

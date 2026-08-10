@@ -30,6 +30,16 @@ export interface Transaction {
   bankAccount?: { name: string; icon: string }
 }
 
+export interface PaginatedTransactions {
+  transactions: Transaction[]
+  pagination: {
+    page: number
+    pageSize: number
+    total: number
+    totalPages: number
+  }
+}
+
 export interface CashTransaction {
   id: number
   userId: number
