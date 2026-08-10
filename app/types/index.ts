@@ -65,3 +65,14 @@ export interface DashboardData {
   debtsIOwe: number
   debtsOwedToMe: number
 }
+
+export interface Todo {
+  id: number
+  userId: number
+  title: string
+  description: string | null
+  date: string
+  completed: boolean
+  createdAt: string
+  updatedAt: string
+}

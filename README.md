@@ -126,6 +126,12 @@ npm run dev
 ### Dashboard
 - `GET /api/dashboard?year=&month=` - Get dashboard data
 
+### Daily Todos
+- `GET /api/todos?date=YYYY-MM-DD` - Get tasks and performance summary for a day
+- `POST /api/todos` - Create a daily task
+- `PATCH /api/todos/:id` - Edit or complete a task
+- `DELETE /api/todos/:id` - Delete a task
+
 ## Database Schema
 
 The application uses the following models:
@@ -135,6 +141,7 @@ The application uses the following models:
 - **Transaction** - Bank transactions
 - **CashTransaction** - Cash transactions
 - **Debt** - Debts and creditors
+- **Todo** - Daily tasks and completion status
 
 ## Development
 

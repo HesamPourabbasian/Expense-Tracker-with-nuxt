@@ -12,7 +12,8 @@ const navItems = [
   { to: '/', label: 'خانه', icon: 'lucide:layout-dashboard' },
   { to: '/accounts', label: 'حساب‌ها', icon: 'lucide:landmark' },
   { to: '/cash', label: 'نقدی', icon: 'lucide:wallet' },
-  { to: '/debts', label: 'بدهی‌ها', icon: 'lucide:hand-coins' }
+  { to: '/debts', label: 'بدهی‌ها', icon: 'lucide:hand-coins' },
+  { to: '/todos', label: 'برنامه روزانه', icon: 'lucide:check-square-2' }
 ]
 
 const mobileMenuOpen = ref(false)
@@ -79,7 +80,7 @@ function isActive(path: string) {
       </div>
     </main>
 
-    <nav class="fixed inset-x-3 bottom-[calc(.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-4 border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur lg:hidden" style="border-radius: 8px">
+    <nav class="fixed inset-x-3 bottom-[calc(.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-5 border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur lg:hidden" style="border-radius: 8px">
       <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to" class="flex min-h-12 flex-col items-center justify-center gap-1 text-xs font-medium" :class="isActive(item.to) ? 'bg-primary-50 text-primary-700' : 'text-gray-400'" style="border-radius: 6px">
         <Icon :name="item.icon" class="h-5 w-5" />
         {{ item.label }}
