@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { background: #f6f7f4; }
+  body { @apply bg-[#f6f7f4] text-gray-900 antialiased; }
+  button, a, input { -webkit-tap-highlight-color: transparent; }
+  button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+  }
+}
+
+@layer components {
+  .page-shell { @apply mx-auto w-full max-w-7xl space-y-6; }
+  .page-heading { @apply text-2xl font-bold text-gray-950 lg:text-3xl; }
+  .page-kicker { @apply mt-1 text-sm text-gray-500; }
+  .surface { @apply border border-gray-200/80 bg-white shadow-sm; border-radius: 8px; }
+  .primary-button { @apply inline-flex min-h-11 items-center justify-center gap-2 bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-50; border-radius: 8px; }
+  .icon-button { @apply inline-flex h-10 w-10 shrink-0 items-center justify-center text-gray-500 transition hover:bg-gray-100 hover:text-gray-900; border-radius: 8px; }
+  .segmented { @apply inline-flex overflow-hidden border border-gray-200 bg-white p-1; border-radius: 8px; }
+  .segmented > button { @apply min-h-9 px-4 text-sm font-medium transition; border-radius: 6px; }
+  .empty-state { @apply surface flex min-h-64 flex-col items-center justify-center px-6 text-center; }
+  .modal-panel { @apply w-full max-w-md border border-gray-200 bg-white p-6 shadow-2xl; border-radius: 8px; }
+}
+
+@media (max-width: 640px) {
+  .transaction-row { @apply items-start; }
+  .transaction-row > :last-child { @apply flex-col items-end gap-1; }
+}
