@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     }
   },
   app: {
+    pageTransition: { name: 'page-fade', mode: 'out-in' },
     head: {
       htmlAttrs: { dir: 'rtl', lang: 'fa' },
       title: 'خرج‌یار | مدیریت مالی شخصی',
