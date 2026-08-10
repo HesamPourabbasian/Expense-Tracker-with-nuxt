@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { CryptoHolding } from '~/types'
+import type { CryptoHolding, CryptoMarketPrice } from '~/types'
 
-const props = defineProps<{ holdings: CryptoHolding[] }>()
+const props = defineProps<{ holdings: CryptoHolding[]; prices: Record<string, CryptoMarketPrice> }>()
 const emit = defineEmits(['close', 'created'])
 
 const assets = [
@@ -18,7 +18,12 @@ const saving = ref(false)
 const error = ref('')
 const selectedAsset = computed(() => assets.find(asset => asset.symbol === form.symbol)!)
 const holding = computed(() => props.holdings.find(item => item.symbol === form.symbol))
+const marketPrice = computed(() => props.prices[form.symbol]?.price || 0)
 const total = computed(() => form.quantity > 0 && form.price > 0 ? form.quantity * form.price : 0)
+
+watch(marketPrice, (price) => {
+  if (price) form.price = price
+}, { immediate: true })
 
 async function submit() {
   error.value = ''
@@ -75,13 +80,13 @@ async function submit() {
             <input v-model.number="form.quantity" class="form-control text-left" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00">
           </div>
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-700">قیمت هر واحد (تومان)</label>
+            <div class="mb-1.5 flex items-center justify-between gap-2"><label class="text-sm font-medium text-gray-700">قیمت هر واحد (ریال)</label><button v-if="marketPrice" type="button" class="text-xs font-semibold text-primary-700" @click="form.price = marketPrice">قیمت لحظه‌ای</button></div>
             <input v-model.number="form.price" class="form-control text-left" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0">
           </div>
         </div>
 
         <div class="rounded-lg border border-[#d7b66b]/35 bg-[#f8f4e9] p-4">
-          <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm text-gray-500">ارزش کل معامله</span><strong class="money text-lg text-gray-950">{{ new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 }).format(total) }} تومان</strong></div>
+          <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm text-gray-500">ارزش کل معامله</span><strong class="money text-lg text-gray-950">{{ new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 }).format(total) }} ریال</strong></div>
         </div>
 
         <div>

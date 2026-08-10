@@ -101,3 +101,8 @@ export interface CryptoHolding {
   invested: number
   averagePrice: number
 }
+
+export interface CryptoMarketPrice {
+  price: number
+  change24h: number
+}

@@ -134,6 +134,7 @@ npm run dev
 
 ### Cryptocurrency Portfolio
 - `GET /api/crypto` - Get holdings, trade history, and realized performance
+- `GET /api/crypto/prices` - Get cached live crypto prices in Iranian rial
 - `POST /api/crypto` - Record a local buy or sell transaction
 - `DELETE /api/crypto/:id` - Delete a valid transaction
 
