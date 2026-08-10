@@ -132,6 +132,11 @@ npm run dev
 - `PATCH /api/todos/:id` - Edit or complete a task
 - `DELETE /api/todos/:id` - Delete a task
 
+### Cryptocurrency Portfolio
+- `GET /api/crypto` - Get holdings, trade history, and realized performance
+- `POST /api/crypto` - Record a local buy or sell transaction
+- `DELETE /api/crypto/:id` - Delete a valid transaction
+
 ## Database Schema
 
 The application uses the following models:
@@ -142,6 +147,7 @@ The application uses the following models:
 - **CashTransaction** - Cash transactions
 - **Debt** - Debts and creditors
 - **Todo** - Daily tasks and completion status
+- **CryptoTrade** - Local cryptocurrency buy and sell records
 
 ## Development
 

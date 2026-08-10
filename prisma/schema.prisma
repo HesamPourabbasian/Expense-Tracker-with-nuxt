@@ -18,6 +18,7 @@ model User {
   cashTransactions CashTransaction[]
   debts            Debt[]
   todos            Todo[]
+  cryptoTrades     CryptoTrade[]
 }
 
 model BankAccount {
@@ -97,4 +98,22 @@ model Todo {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, date])
+}
+
+model CryptoTrade {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  asset        String
+  symbol       String
+  type         String
+  quantity     Float
+  price        Float
+  totalValue   Float
+  note         String?
+  date         DateTime
+  createdAt    DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, symbol, date])
 }

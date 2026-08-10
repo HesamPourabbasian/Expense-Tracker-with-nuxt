@@ -76,3 +76,28 @@ export interface Todo {
   createdAt: string
   updatedAt: string
 }
+
+export interface CryptoTrade {
+  id: number
+  userId: number
+  asset: string
+  symbol: string
+  type: 'BUY' | 'SELL'
+  quantity: number
+  price: number
+  totalValue: number
+  note: string | null
+  date: string
+  createdAt: string
+  realizedProfit?: number
+}
+
+export interface CryptoHolding {
+  asset: string
+  symbol: string
+  icon: string
+  color: string
+  quantity: number
+  invested: number
+  averagePrice: number
+}
