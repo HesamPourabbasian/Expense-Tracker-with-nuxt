@@ -66,11 +66,11 @@ async function handleUpdated() {
 
 <template>
   <div class="page-shell">
-    <div class="flex items-end justify-between gap-4">
-      <div><h1 class="page-heading">بدهی‌ها و طلب‌ها</h1><p class="page-kicker">تعهدات باز و تسویه‌شده را دنبال کن.</p></div>
+    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="min-w-0"><h1 class="page-heading">بدهی‌ها و طلب‌ها</h1><p class="page-kicker">تعهدات باز و تسویه‌شده را دنبال کن.</p></div>
       <button
         @click="showCreateModal = true"
-        class="primary-button"
+        class="primary-button w-full sm:w-auto"
       >
         <Icon name="bx:bx-plus" class="w-4 h-4" />
         بدهی جدید
@@ -86,7 +86,7 @@ async function handleUpdated() {
           </div>
           <span class="text-sm text-gray-500">بدهی‌های من</span>
         </div>
-        <p class="text-xl font-bold text-orange-600">{{ formatCurrency(totalIOwe) }}</p>
+        <p class="money max-w-full break-words text-xl font-bold text-orange-600">{{ formatCurrency(totalIOwe) }}</p>
       </div>
 
       <div class="surface p-5">
@@ -96,7 +96,7 @@ async function handleUpdated() {
           </div>
           <span class="text-sm text-gray-500">طلب‌های من</span>
         </div>
-        <p class="text-xl font-bold text-teal-600">{{ formatCurrency(totalOwedToMe) }}</p>
+        <p class="money max-w-full break-words text-xl font-bold text-teal-600">{{ formatCurrency(totalOwedToMe) }}</p>
       </div>
     </div>
 
@@ -124,13 +124,12 @@ async function handleUpdated() {
       <div
         v-for="d in debts"
         :key="d.id"
-        class="transaction-row p-4 transition hover:bg-gray-50"
+        class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 transition hover:bg-gray-50"
         :class="d.status === 'paid' ? 'opacity-60' : ''"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-3">
+          <div class="flex min-w-0 items-start gap-3">
             <div
-              class="w-10 h-10 rounded-xl flex items-center justify-center"
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
               :class="d.type === 'I_OWE' ? 'bg-orange-50' : 'bg-teal-50'"
             >
               <Icon
@@ -139,40 +138,39 @@ async function handleUpdated() {
                 :class="d.type === 'I_OWE' ? 'text-orange-600' : 'text-teal-600'"
               />
             </div>
-            <div>
-              <div class="flex items-center gap-2">
-                <p class="font-medium text-gray-900 text-sm">{{ d.person }}</p>
+            <div class="min-w-0">
+              <div class="flex min-w-0 flex-wrap items-center gap-2">
+                <p class="break-words text-sm font-medium text-gray-900">{{ d.person }}</p>
                 <span
                   v-if="d.status === 'paid'"
-                  class="px-2 py-0.5 text-[10px] rounded-full bg-emerald-100 text-emerald-700 font-medium"
+                  class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700"
                 >پرداخت شده</span>
               </div>
-              <p class="text-xs text-gray-400">{{ toJalali(d.date) }}</p>
-              <p v-if="d.description" class="text-xs text-gray-500 mt-1">{{ d.description }}</p>
+              <p class="mt-0.5 text-sm text-gray-400">{{ toJalali(d.date) }}</p>
+              <p v-if="d.description" class="mt-1 break-words text-sm leading-6 text-gray-500">{{ d.description }}</p>
             </div>
           </div>
-          <div class="flex items-center gap-3">
-            <p class="font-bold text-sm" :class="d.type === 'I_OWE' ? 'text-orange-600' : 'text-teal-600'">
+          <div class="flex flex-col items-end gap-2">
+            <p class="money whitespace-nowrap text-sm font-bold" :class="d.type === 'I_OWE' ? 'text-orange-600' : 'text-teal-600'">
               {{ formatCurrency(d.amount) }}
             </p>
             <div class="flex items-center gap-1">
               <button
                 v-if="d.status === 'pending'"
                 @click="markPaid(d.id)"
-                class="p-1.5 rounded-lg hover:bg-emerald-50 text-gray-400 hover:text-emerald-500"
+                class="icon-button h-10 w-10 hover:bg-emerald-50 hover:text-emerald-600"
                 title="پرداخت شده"
               >
                 <Icon name="bx:bx-check" class="w-4 h-4" />
               </button>
-              <button @click="editDebt = d" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+              <button @click="editDebt = d" class="icon-button h-10 w-10">
                 <Icon name="bx:bx-edit" class="w-4 h-4" />
               </button>
-              <button @click="deleteDebt(d.id)" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500">
+              <button @click="deleteDebt(d.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500">
                 <Icon name="bx:bx-trash" class="w-4 h-4" />
               </button>
             </div>
           </div>
-        </div>
       </div>
     </div>
 

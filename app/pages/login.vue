@@ -29,20 +29,20 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="flex min-h-[calc(100vh-2.25rem)] items-center justify-center bg-[#f2f3ee] p-4">
-    <div class="w-full max-w-sm">
+  <div class="flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-[#f3f1eb] p-4 sm:p-6">
+    <div class="w-full max-w-md">
       <div class="mb-8 text-center">
-        <div class="mb-4 inline-flex h-16 w-16 items-center justify-center bg-[#173f35] text-[#f5c451] shadow-lg" style="border-radius: 8px">
+        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center border border-[#315b4c] bg-[#173f35] text-[#d7b66b] shadow-lg" style="border-radius: 10px">
           <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21M3 7h18" />
             <rect width="18" height="18" x="3" y="3" rx="2" />
           </svg>
         </div>
-        <h1 class="text-3xl font-bold text-gray-950">خرج‌یار</h1>
-        <p class="mt-2 text-sm text-gray-500">کنترل ساده و دقیق زندگی مالی</p>
+        <h1 class="text-3xl font-bold tracking-tight text-[#17231f]">خرج‌یار</h1>
+        <p class="mt-2 text-sm leading-6 text-gray-500">دفتر خصوصی مدیریت زندگی مالی شما</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-5 border border-gray-200 bg-white p-7 shadow-xl shadow-gray-900/5" style="border-radius: 8px">
+      <form @submit.prevent="handleLogin" class="space-y-5 border bg-[#fffdf9] p-5 shadow-xl shadow-gray-900/5 sm:p-8" style="border-color: rgba(29, 54, 44, .12); border-radius: 10px">
         <div v-if="error" class="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
           {{ error }}
         </div>
@@ -54,7 +54,7 @@ async function handleLogin() {
             type="text"
             autocomplete="username"
             autofocus
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+            class="form-control"
             placeholder="نام کاربری خود را وارد کنید"
           />
         </div>
@@ -65,7 +65,7 @@ async function handleLogin() {
             v-model="form.password"
             type="password"
             autocomplete="current-password"
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+            class="form-control"
             placeholder="رمز عبور خود را وارد کنید"
           />
         </div>

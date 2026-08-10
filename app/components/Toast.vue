@@ -3,12 +3,12 @@ const { toasts } = useToast()
 </script>
 
 <template>
-  <div class="fixed bottom-4 left-4 right-4 lg:left-auto lg:right-4 z-50 space-y-2">
+  <div class="fixed bottom-[calc(5.75rem+env(safe-area-inset-bottom))] left-3 right-3 z-[65] space-y-2 sm:left-auto sm:right-4 sm:w-full sm:max-w-sm lg:bottom-4">
     <TransitionGroup name="toast">
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="px-4 py-3 rounded-xl shadow-lg text-sm font-medium text-white"
+        class="border border-white/10 px-4 py-3 text-sm font-medium text-white shadow-xl backdrop-blur" style="border-radius: 8px"
         :class="{
           'bg-emerald-500': toast.type === 'success',
           'bg-red-500': toast.type === 'error',

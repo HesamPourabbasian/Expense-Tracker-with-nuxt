@@ -47,16 +47,16 @@ async function handleUpdated() {
 
 <template>
   <div class="page-shell">
-    <div class="flex items-end justify-between gap-4">
-      <div>
+    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="min-w-0">
         <h1 class="page-heading">کیف پول نقدی</h1>
         <p class="text-sm text-gray-500 mt-1" :class="balance >= 0 ? '' : 'text-red-500'">
-          موجودی: {{ formatCurrency(balance) }}
+          موجودی: <bdi class="money">{{ formatCurrency(balance) }}</bdi>
         </p>
       </div>
       <button
         @click="showTransactionModal = true"
-        class="primary-button"
+        class="primary-button w-full sm:w-auto"
       >
         <Icon name="bx:bx-plus" class="w-4 h-4" />
         تراکنش جدید
@@ -89,7 +89,7 @@ async function handleUpdated() {
         :key="t.id"
         class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
       >
-        <div class="flex items-center gap-3">
+        <div class="transaction-details flex min-w-0 items-center gap-3">
           <div
             class="w-10 h-10 rounded-xl flex items-center justify-center"
             :class="t.type === 'income' ? 'bg-emerald-50' : 'bg-red-50'"
@@ -100,20 +100,20 @@ async function handleUpdated() {
               :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'"
             />
           </div>
-          <div>
-            <p class="font-medium text-gray-900 text-sm">{{ t.description || (t.type === 'income' ? 'درآمد نقدی' : 'هزینه نقدی') }}</p>
+          <div class="min-w-0">
+            <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد نقدی' : 'هزینه نقدی') }}</p>
             <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <p class="font-bold text-sm" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
+        <div class="transaction-actions flex items-center gap-3">
+          <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
             {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
           </p>
           <div class="flex items-center gap-1">
-            <button @click="editTransaction = t" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+            <button @click="editTransaction = t" class="icon-button h-10 w-10">
               <Icon name="bx:bx-edit" class="w-4 h-4" />
             </button>
-            <button @click="deleteTransaction(t.id)" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500">
+            <button @click="deleteTransaction(t.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500">
               <Icon name="bx:bx-trash" class="w-4 h-4" />
             </button>
           </div>

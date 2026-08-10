@@ -41,11 +41,11 @@ async function handleUpdated() {
 
 <template>
   <div class="page-shell">
-    <div class="flex items-end justify-between gap-4">
-      <div><h1 class="page-heading">حساب‌های بانکی</h1><p class="page-kicker">موجودی و تراکنش‌های هر حساب را مدیریت کن.</p></div>
+    <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div class="min-w-0"><h1 class="page-heading">حساب‌های بانکی</h1><p class="page-kicker">موجودی و تراکنش‌های هر حساب را مدیریت کن.</p></div>
       <button
         @click="showCreateModal = true"
-        class="primary-button"
+        class="primary-button w-full sm:w-auto"
       >
         <Icon name="bx:bx-plus" class="w-4 h-4" />
         حساب جدید
@@ -59,12 +59,12 @@ async function handleUpdated() {
         class="surface group p-5 transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md"
       >
         <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-3">
+          <div class="flex min-w-0 flex-1 items-center gap-3">
             <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-50">
               <Icon :name="account.icon" class="w-6 h-6 text-primary-600" />
             </div>
-            <div>
-              <h3 class="font-semibold text-gray-900">{{ account.name }}</h3>
+            <div class="min-w-0">
+              <h3 class="truncate font-semibold text-gray-900">{{ account.name }}</h3>
               <p class="text-xs text-gray-400">{{ account._count?.transactions || 0 }} تراکنش</p>
             </div>
           </div>
@@ -84,7 +84,7 @@ async function handleUpdated() {
           </div>
         </div>
         <NuxtLink :to="`/accounts/${account.id}`" class="mt-6 block border-t border-gray-100 pt-4">
-          <div class="flex items-end justify-between gap-2"><div><p class="text-xs text-gray-400">موجودی فعلی</p><p class="mt-1 text-xl font-bold" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p></div><Icon name="lucide:arrow-up-left" class="h-5 w-5 text-gray-300 transition group-hover:text-primary-600" /></div>
+          <div class="flex items-end justify-between gap-2"><div class="min-w-0"><p class="text-sm text-gray-400">موجودی فعلی</p><p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p></div><Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" /></div>
         </NuxtLink>
       </article>
     </div>

@@ -56,14 +56,14 @@ async function handleUpdated() {
         <NuxtLink to="/accounts" class="icon-button">
           <Icon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
-        <div class="flex items-center gap-3">
+        <div class="flex min-w-0 items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50">
             <Icon :name="account.icon" class="h-5 w-5 text-primary-600" />
           </div>
-          <div>
+          <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
             <p class="text-sm" :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
-              موجودی: {{ formatCurrency(account.balance || 0) }}
+              موجودی: <bdi class="money">{{ formatCurrency(account.balance || 0) }}</bdi>
             </p>
           </div>
         </div>
@@ -89,7 +89,7 @@ async function handleUpdated() {
         :key="t.id"
         class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
       >
-        <div class="flex items-center gap-3">
+        <div class="transaction-details flex min-w-0 items-center gap-3">
           <div
             class="w-10 h-10 rounded-xl flex items-center justify-center"
             :class="t.type === 'income' ? 'bg-emerald-50' : 'bg-red-50'"
@@ -100,20 +100,20 @@ async function handleUpdated() {
               :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'"
             />
           </div>
-          <div>
-            <p class="font-medium text-gray-900 text-sm">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
+          <div class="min-w-0">
+            <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
             <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <p class="font-bold text-sm" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
+        <div class="transaction-actions flex items-center gap-3">
+          <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
             {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
           </p>
           <div class="flex items-center gap-1">
-            <button @click="openEdit(t)" class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600">
+            <button @click="openEdit(t)" class="icon-button h-10 w-10">
               <Icon name="bx:bx-edit" class="w-4 h-4" />
             </button>
-            <button @click="deleteTransaction(t.id)" class="p-1.5 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500">
+            <button @click="deleteTransaction(t.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500">
               <Icon name="bx:bx-trash" class="w-4 h-4" />
             </button>
           </div>

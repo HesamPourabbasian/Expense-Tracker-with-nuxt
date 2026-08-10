@@ -23,15 +23,15 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-screen bg-[#f6f7f4]">
+  <div v-if="user" class="min-h-[calc(100dvh-2.25rem)] bg-[#f3f1eb]">
     <aside class="hidden border-l border-gray-200 bg-[#132f28] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col">
       <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
-        <div class="flex h-10 w-10 items-center justify-center bg-[#f5c451] text-[#173f35]" style="border-radius: 8px">
+        <div class="flex h-10 w-10 items-center justify-center border border-[#e4c87c] bg-[#d7b66b] text-[#173f35] shadow-sm" style="border-radius: 8px">
           <Icon name="lucide:wallet-cards" class="h-5 w-5" />
         </div>
         <div>
-          <h1 class="text-lg font-bold">خرج‌یار</h1>
-          <p class="text-xs text-white/55">دفتر مالی شخصی</p>
+          <h1 class="text-lg font-bold tracking-tight">خرج‌یار</h1>
+          <p class="text-xs text-white/55">دفتر مالی خصوصی</p>
         </div>
       </div>
       <nav class="flex-1 space-y-2 px-4 py-6">
@@ -59,10 +59,10 @@ function isActive(path: string) {
       </div>
     </aside>
 
-    <header class="fixed inset-x-0 top-9 z-40 border-b border-gray-200 bg-white/95 backdrop-blur lg:hidden">
+    <header class="fixed inset-x-0 top-9 z-40 border-b border-[#1d362c]/10 bg-[#fffdf9]/95 backdrop-blur lg:hidden">
       <div class="flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-9 w-9 items-center justify-center bg-primary-600 text-white" style="border-radius: 8px">
+          <div class="flex h-9 w-9 items-center justify-center bg-[#173f35] text-[#d7b66b]" style="border-radius: 8px">
             <Icon name="lucide:wallet-cards" class="h-5 w-5" />
           </div>
           <h1 class="font-bold text-gray-950">خرج‌یار</h1>
@@ -73,14 +73,14 @@ function isActive(path: string) {
       </div>
     </header>
 
-    <main class="min-h-screen pb-24 pt-16 lg:mr-64 lg:pb-0 lg:pt-0">
+    <main class="min-h-[calc(100dvh-2.25rem)] pb-24 pt-16 lg:mr-64 lg:pb-0 lg:pt-0">
       <div class="p-4 sm:p-6 lg:p-8 xl:p-10">
         <slot />
       </div>
     </main>
 
-    <nav class="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur lg:hidden" style="border-radius: 8px">
-      <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to" class="flex min-h-12 flex-col items-center justify-center gap-1 text-[11px] font-medium" :class="isActive(item.to) ? 'text-primary-700' : 'text-gray-400'" style="border-radius: 6px">
+    <nav class="fixed inset-x-3 bottom-[calc(.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-4 border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur lg:hidden" style="border-radius: 8px">
+      <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to" class="flex min-h-12 flex-col items-center justify-center gap-1 text-xs font-medium" :class="isActive(item.to) ? 'bg-primary-50 text-primary-700' : 'text-gray-400'" style="border-radius: 6px">
         <Icon :name="item.icon" class="h-5 w-5" />
         {{ item.label }}
       </NuxtLink>

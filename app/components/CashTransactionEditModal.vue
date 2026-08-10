@@ -44,11 +44,11 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" @click.self="emit('close')">
+  <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
     <div class="modal-panel">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-lg font-bold text-gray-900">ویرایش تراکنش نقدی</h2>
-        <button @click="emit('close')" class="p-1 rounded-lg hover:bg-gray-100">
+        <button @click="emit('close')" class="icon-button" aria-label="بستن پنجره">
           <Icon name="bx:bx-x" class="w-5 h-5 text-gray-500" />
         </button>
       </div>
@@ -79,7 +79,7 @@ async function handleSubmit() {
             v-model.number="form.amount"
             type="number"
             min="1"
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+            class="form-control"
           />
         </div>
 
@@ -88,7 +88,8 @@ async function handleSubmit() {
           <input
             v-model="form.date"
             type="text"
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+            class="form-control text-left"
+            dir="ltr"
           />
         </div>
 
@@ -97,7 +98,7 @@ async function handleSubmit() {
           <input
             v-model="form.description"
             type="text"
-            class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 outline-none transition-all text-sm"
+            class="form-control"
           />
         </div>
 
