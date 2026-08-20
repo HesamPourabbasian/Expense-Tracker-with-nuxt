@@ -43,6 +43,7 @@ model Transaction {
   amount        Float
   description   String?
   date          DateTime
+  isUnnecessary Boolean  @default(false)
   createdAt     DateTime @default(now())
 
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
