@@ -25,72 +25,95 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-[calc(100dvh-2.25rem)] bg-[#f3f1eb]">
-    <aside class="hidden border-l border-gray-200 bg-[#132f28] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-      <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
-        <div class="flex h-10 w-10 items-center justify-center border border-[#e4c87c] bg-[#d7b66b] text-[#173f35] shadow-sm" style="border-radius: 8px">
-          <Icon name="lucide:wallet-cards" class="h-5 w-5" />
+  <div v-if="user" class="min-h-[calc(100dvh-2.25rem)] bg-slate-50">
+    <!-- Desktop Sidebar -->
+    <aside class="hidden border-l border-slate-800 bg-[#090e17] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col shadow-xl">
+      <div class="flex h-20 items-center gap-3 border-b border-slate-800/80 px-6">
+        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20 ring-1 ring-white/20">
+          <Icon name="lucide:wallet-cards" class="h-6 w-6" />
         </div>
         <div>
-          <h1 class="text-lg font-bold tracking-tight">خرج‌یار</h1>
-          <p class="text-xs text-white/55">دفتر مالی خصوصی</p>
+          <h1 class="text-base font-extrabold tracking-tight text-white">خرج‌یار</h1>
+          <p class="text-[11px] font-medium text-emerald-400/90">مدیریت مالی شخصی</p>
         </div>
       </div>
-      <nav class="flex-1 space-y-2 px-4 py-6">
+
+      <nav class="flex-1 space-y-1.5 px-3.5 py-6">
         <NuxtLink
           v-for="item in navItems"
           :key="item.to"
           :to="item.to"
-          class="flex min-h-11 items-center gap-3 px-4 text-sm font-medium transition" style="border-radius: 8px"
-          :class="isActive(item.to) ? 'bg-white text-[#173f35] shadow-sm' : 'text-white/65 hover:bg-white/10 hover:text-white'"
+          class="group flex min-h-11 items-center gap-3.5 px-4 text-sm font-medium rounded-xl transition-all"
+          :class="isActive(item.to) 
+            ? 'bg-gradient-to-r from-emerald-500/20 to-teal-500/10 text-emerald-300 font-semibold border border-emerald-500/30 shadow-sm' 
+            : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'"
         >
-          <Icon :name="item.icon" class="w-5 h-5" />
+          <Icon 
+            :name="item.icon" 
+            class="w-5 h-5 transition-transform group-hover:scale-110" 
+            :class="isActive(item.to) ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-200'" 
+          />
           {{ item.label }}
         </NuxtLink>
       </nav>
-      <div class="border-t border-white/10 p-4">
-        <div class="flex items-center justify-between rounded-lg bg-white/5 p-3">
-          <div class="min-w-0">
-            <p class="text-xs text-white/45">حساب کاربری</p>
-            <span class="block truncate text-sm font-medium">{{ user.username }}</span>
+
+      <div class="border-t border-slate-800/80 p-4">
+        <div class="flex items-center justify-between rounded-xl bg-slate-900/80 border border-slate-800/80 p-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs ring-1 ring-emerald-500/30">
+              {{ user.username.slice(0, 1).toUpperCase() }}
+            </div>
+            <div class="min-w-0">
+              <span class="block truncate text-xs font-semibold text-slate-200">{{ user.username }}</span>
+              <p class="text-[11px] text-slate-400">کاربر فعال</p>
+            </div>
           </div>
-          <button @click="logout" class="icon-button text-white/55 hover:bg-white/10 hover:text-white" title="خروج">
-            <Icon name="lucide:log-out" class="h-5 w-5" />
+          <button @click="logout" class="icon-button h-8 w-8 text-slate-400 hover:bg-rose-500/20 hover:text-rose-400" title="خروج">
+            <Icon name="lucide:log-out" class="h-4 w-4" />
           </button>
         </div>
       </div>
     </aside>
 
-    <header class="fixed inset-x-0 top-9 z-40 border-b border-[#1d362c]/10 bg-[#fffdf9]/95 backdrop-blur lg:hidden">
+    <!-- Mobile Header -->
+    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-md lg:hidden">
       <div class="flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-9 w-9 items-center justify-center bg-[#173f35] text-[#d7b66b]" style="border-radius: 8px">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-sm">
             <Icon name="lucide:wallet-cards" class="h-5 w-5" />
           </div>
-          <h1 class="font-bold text-gray-950">خرج‌یار</h1>
+          <h1 class="font-bold text-slate-900">خرج‌یار</h1>
         </div>
-        <button @click="logout" class="icon-button" title="خروج">
+        <button @click="logout" class="icon-button text-slate-500 hover:text-rose-600 hover:bg-rose-50" title="خروج">
           <Icon name="lucide:log-out" class="h-5 w-5" />
         </button>
       </div>
     </header>
 
-    <main class="min-h-[calc(100dvh-2.25rem)] pb-24 pt-16 lg:mr-64 lg:pb-0 lg:pt-0">
+    <!-- Main Content Area -->
+    <main class="min-h-[calc(100dvh-2.25rem)] pb-28 pt-16 lg:mr-64 lg:pb-10 lg:pt-0">
       <div class="p-4 sm:p-6 lg:p-8 xl:p-10">
         <slot />
       </div>
     </main>
 
-    <nav class="fixed inset-x-3 bottom-[calc(.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-gray-200 bg-white/95 p-1.5 shadow-lg backdrop-blur lg:hidden" style="border-radius: 8px">
-      <NuxtLink v-for="item in navItems" :key="item.to" :to="item.to" class="flex min-h-12 flex-col items-center justify-center gap-1 text-xs font-medium" :class="isActive(item.to) ? 'bg-primary-50 text-primary-700' : 'text-gray-400'" style="border-radius: 6px">
+    <!-- Mobile Bottom Floating Navigation Dock -->
+    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200/80 bg-white/95 p-1.5 shadow-xl shadow-slate-900/10 backdrop-blur-xl rounded-2xl lg:hidden">
+      <NuxtLink 
+        v-for="item in navItems" 
+        :key="item.to" 
+        :to="item.to" 
+        class="flex min-h-12 flex-col items-center justify-center gap-1 text-[11px] font-medium rounded-xl transition-all"
+        :class="isActive(item.to) ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-400 hover:text-slate-700'"
+      >
         <Icon :name="item.icon" class="h-5 w-5" />
-        {{ item.mobileLabel }}
+        <span>{{ item.mobileLabel }}</span>
       </NuxtLink>
     </nav>
 
     <Toast />
   </div>
-  <div v-else class="flex min-h-screen items-center justify-center bg-[#f6f7f4]">
-    <div class="h-8 w-8 animate-spin rounded-full border-4 border-primary-600 border-t-transparent"></div>
+  <div v-else class="flex min-h-screen items-center justify-center bg-slate-50">
+    <div class="h-9 w-9 animate-spin rounded-full border-3 border-emerald-600 border-t-transparent"></div>
   </div>
 </template>

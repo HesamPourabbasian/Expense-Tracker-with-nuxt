@@ -53,71 +53,71 @@ async function handleSubmit() {
   <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
     <div class="modal-panel">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-lg font-bold text-gray-900">تراکنش جدید</h2>
-        <button @click="emit('close')" class="icon-button" aria-label="بستن پنجره">
-          <Icon name="bx:bx-x" class="w-5 h-5 text-gray-500" />
+        <h2 class="text-base font-extrabold text-slate-900">تراکنش جدید</h2>
+        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره">
+          <Icon name="lucide:x" class="w-4 h-4" />
         </button>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div v-if="error" class="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
+        <div v-if="error" class="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
-        <div class="flex rounded-xl border border-gray-200 overflow-hidden">
+        <div class="grid grid-cols-2 p-1 gap-1 rounded-xl bg-slate-100/90 border border-slate-200/90">
           <button
             type="button"
             @click="form.type = 'income'"
-            class="flex-1 py-2.5 text-sm font-medium transition-colors"
-            :class="form.type === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'"
-          >درآمد</button>
+            class="py-2 text-xs font-bold rounded-lg transition-all"
+            :class="form.type === 'income' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          >درآمد (+)</button>
           <button
             type="button"
             @click="form.type = 'expense'"
-            class="flex-1 py-2.5 text-sm font-medium border-r border-gray-200 transition-colors"
-            :class="form.type === 'expense' ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-50'"
-          >هزینه</button>
+            class="py-2 text-xs font-bold rounded-lg transition-all"
+            :class="form.type === 'expense' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
+          >هزینه (-)</button>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">مبلغ (تومان)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">مبلغ (تومان)</label>
           <input
             v-model.number="form.amount"
             type="number"
             min="1"
-            class="form-control"
-            placeholder="مبلغ را وارد کنید"
+            class="form-control font-bold"
+            placeholder="مبلغ به تومان"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">تاریخ (شمسی)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">تاریخ (شمسی)</label>
           <input
             v-model="form.date"
             type="text"
-            class="form-control text-left"
+            class="form-control text-left font-mono"
             dir="ltr"
             placeholder="1405/05/10"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">توضیحات</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات</label>
           <input
             v-model="form.description"
             type="text"
             class="form-control"
-            placeholder="توضیحات اختیاری"
+            placeholder="عنوان یا توضیحات تراکنش..."
           />
         </div>
 
-        <label v-if="form.type === 'expense'" class="flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50/60 p-3 cursor-pointer select-none">
+        <label v-if="form.type === 'expense'" class="flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50/70 p-3 cursor-pointer select-none transition hover:bg-amber-50">
           <input
             v-model="form.isUnnecessary"
             type="checkbox"
             class="h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
           />
-          <div class="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-900">
+          <div class="flex items-center gap-1.5 text-xs font-bold text-amber-900">
             <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
             <span>هزینه غیرضروری (قابل پس‌انداز)</span>
           </div>
@@ -126,9 +126,10 @@ async function handleSubmit() {
         <button
           type="submit"
           :disabled="loading"
-          class="w-full py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-300 text-white rounded-xl font-medium text-sm transition-colors"
+          class="primary-button w-full mt-2"
         >
-          {{ loading ? 'در حال ذخیره...' : 'ذخیره تراکنش' }}
+          <span v-if="loading">در حال ذخیره...</span>
+          <span v-else>ذخیره تراکنش</span>
         </button>
       </form>
     </div>

@@ -29,54 +29,62 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-[#f3f1eb] p-4 sm:p-6">
-    <div class="w-full max-w-md">
+  <div class="relative flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-slate-900 p-4 sm:p-6 overflow-hidden">
+    <!-- Ambient Background Glows -->
+    <div class="absolute -top-32 -right-32 h-96 w-96 rounded-full bg-emerald-600/20 blur-[120px] pointer-events-none"></div>
+    <div class="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-teal-600/20 blur-[120px] pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-md">
       <div class="mb-8 text-center">
-        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center border border-[#315b4c] bg-[#173f35] text-[#d7b66b] shadow-lg" style="border-radius: 10px">
-          <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3 11h3.75a2 2 0 0 1 1.6.8l.45.6a4 4 0 0 0 6.4 0l.45-.6a2 2 0 0 1 1.6-.8H21M3 7h18" />
-            <rect width="18" height="18" x="3" y="3" rx="2" />
-          </svg>
+        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-xl shadow-emerald-500/25 ring-1 ring-white/20">
+          <Icon name="lucide:wallet-cards" class="h-8 w-8" />
         </div>
-        <h1 class="text-3xl font-bold tracking-tight text-[#17231f]">خرج‌یار</h1>
-        <p class="mt-2 text-sm leading-6 text-gray-500">دفتر خصوصی مدیریت زندگی مالی شما</p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-white">خرج‌یار</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-400">سامانه مدرن مدیریت دارایی و زندگی مالی شما</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-5 border bg-[#fffdf9] p-5 shadow-xl shadow-gray-900/5 sm:p-8" style="border-color: rgba(29, 54, 44, .12); border-radius: 10px">
-        <div v-if="error" class="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
+      <form @submit.prevent="handleLogin" class="space-y-5 rounded-3xl border border-slate-800 bg-slate-950/80 p-6 sm:p-8 shadow-2xl backdrop-blur-2xl ring-1 ring-white/10">
+        <div v-if="error" class="bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">نام کاربری</label>
-          <input
-            v-model="form.username"
-            type="text"
-            autocomplete="username"
-            autofocus
-            class="form-control"
-            placeholder="نام کاربری خود را وارد کنید"
-          />
+          <label class="block text-xs font-bold text-slate-300 mb-2">نام کاربری</label>
+          <div class="relative">
+            <input
+              v-model="form.username"
+              type="text"
+              autocomplete="username"
+              autofocus
+              class="w-full rounded-xl border border-slate-800 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20"
+              placeholder="نام کاربری خود را وارد کنید"
+            />
+          </div>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">رمز عبور</label>
-          <input
-            v-model="form.password"
-            type="password"
-            autocomplete="current-password"
-            class="form-control"
-            placeholder="رمز عبور خود را وارد کنید"
-          />
+          <label class="block text-xs font-bold text-slate-300 mb-2">رمز عبور</label>
+          <div class="relative">
+            <input
+              v-model="form.password"
+              type="password"
+              autocomplete="current-password"
+              class="w-full rounded-xl border border-slate-800 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20"
+              placeholder="رمز عبور خود را وارد کنید"
+            />
+          </div>
         </div>
 
         <button
           type="submit"
           :disabled="loading"
-          class="primary-button w-full"
+          class="primary-button w-full h-12 text-sm font-bold mt-2"
         >
-          <span v-if="loading">در حال ورود...</span>
-          <span v-else>ورود</span>
+          <span v-if="loading" class="flex items-center gap-2">
+            <Icon name="lucide:loader-2" class="h-4 w-4 animate-spin" />
+            در حال ورود...
+          </span>
+          <span v-else>ورود به حساب کاربری</span>
         </button>
       </form>
     </div>

@@ -42,12 +42,16 @@ async function handleUpdated() {
 <template>
   <div class="page-shell">
     <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:justify-between">
-      <div class="min-w-0"><h1 class="page-heading">حساب‌های بانکی</h1><p class="page-kicker">موجودی و تراکنش‌های هر حساب را مدیریت کن.</p></div>
+      <div class="min-w-0">
+        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">مدیریت موجودی</p>
+        <h1 class="page-heading">حساب‌های بانکی</h1>
+        <p class="page-kicker">موجودی و گردش مالی هر حساب را مدیریت کن.</p>
+      </div>
       <button
         @click="showCreateModal = true"
         class="primary-button w-full sm:w-auto"
       >
-        <Icon name="bx:bx-plus" class="w-4 h-4" />
+        <Icon name="lucide:plus" class="w-4 h-4" />
         حساب جدید
       </button>
     </div>
@@ -56,42 +60,56 @@ async function handleUpdated() {
       <article
         v-for="account in accounts"
         :key="account.id"
-        class="surface group p-5 transition hover:-translate-y-0.5 hover:border-gray-300 hover:shadow-md"
+        class="surface group relative p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover hover:border-emerald-500/30"
       >
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex min-w-0 flex-1 items-center gap-3">
-            <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-primary-50">
-              <Icon :name="account.icon" class="w-6 h-6 text-primary-600" />
+        <div class="flex items-center justify-between mb-5">
+          <div class="flex min-w-0 flex-1 items-center gap-3.5">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20 group-hover:bg-emerald-600 group-hover:text-white transition-all">
+              <Icon :name="account.icon" class="w-6 h-6" />
             </div>
             <div class="min-w-0">
-              <h3 class="truncate font-semibold text-gray-900">{{ account.name }}</h3>
-              <p class="text-xs text-gray-400">{{ account._count?.transactions || 0 }} تراکنش</p>
+              <h3 class="truncate font-bold text-slate-900 group-hover:text-emerald-700 transition">{{ account.name }}</h3>
+              <p class="text-xs text-slate-400 font-medium">{{ account._count?.transactions || 0 }} تراکنش ثبت‌شده</p>
             </div>
           </div>
           <div class="flex items-center gap-1 opacity-100 transition sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
             <button
               @click="editAccount(account)"
-              class="p-2 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors"
+              class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700"
+              title="ویرایش"
             >
-              <Icon name="bx:bx-edit" class="w-4 h-4" />
+              <Icon name="lucide:pencil" class="w-4 h-4" />
             </button>
             <button
               @click="deleteAccount(account.id)"
-              class="p-2 rounded-lg hover:bg-red-50 text-gray-400 hover:text-red-500 transition-colors"
+              class="icon-button h-9 w-9 text-slate-400 hover:text-rose-600 hover:bg-rose-50"
+              title="حذف"
             >
-              <Icon name="bx:bx-trash" class="w-4 h-4" />
+              <Icon name="lucide:trash-2" class="w-4 h-4" />
             </button>
           </div>
         </div>
-        <NuxtLink :to="`/accounts/${account.id}`" class="mt-6 block border-t border-gray-100 pt-4">
-          <div class="flex items-end justify-between gap-2"><div class="min-w-0"><p class="text-sm text-gray-400">موجودی فعلی</p><p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p></div><Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" /></div>
+
+        <NuxtLink :to="`/accounts/${account.id}`" class="mt-6 block border-t border-slate-100 pt-4">
+          <div class="flex items-end justify-between gap-2">
+            <div class="min-w-0">
+              <p class="text-xs font-medium text-slate-400">موجودی فعلی</p>
+              <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="(account.balance || 0) >= 0 ? 'text-slate-900' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p>
+            </div>
+            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100/80 text-slate-400 transition group-hover:bg-emerald-600 group-hover:text-white">
+              <Icon name="lucide:arrow-up-left" class="h-4 w-4" />
+            </div>
+          </div>
         </NuxtLink>
       </article>
     </div>
 
     <div v-else class="empty-state">
-      <Icon name="bx:bx-bank" class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-      <p class="text-gray-500">هنوز حسابی ایجاد نشده</p>
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+        <Icon name="lucide:landmark" class="w-7 h-7" />
+      </div>
+      <h3 class="font-bold text-slate-800">هنوز حسابی ایجاد نشده</h3>
+      <p class="mt-1 text-xs text-slate-400">برای مدیریت درآمد و هزینه‌های خود، اولین حساب بانکی‌ات را بساز.</p>
     </div>
 
     <AccountCreateModal v-if="showCreateModal" @close="showCreateModal = false" @created="handleCreated" />

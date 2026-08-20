@@ -51,52 +51,78 @@ async function submit() {
   <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
     <div class="modal-panel max-w-lg">
       <div class="mb-6 flex items-center justify-between">
-        <div><p class="text-sm font-semibold text-primary-700">ثبت در دفتر دارایی</p><h2 class="mt-1 text-xl font-bold text-gray-950">معامله رمزارز</h2></div>
-        <button class="icon-button" aria-label="بستن پنجره" @click="emit('close')"><Icon name="lucide:x" class="h-5 w-5" /></button>
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-emerald-700">ثبت در دفتر دارایی</p>
+          <h2 class="mt-1 text-base font-extrabold text-slate-900">معامله رمزارز</h2>
+        </div>
+        <button class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره" @click="emit('close')">
+          <Icon name="lucide:x" class="h-4 w-4" />
+        </button>
       </div>
 
-      <form class="space-y-5" @submit.prevent="submit">
-        <div v-if="error" role="alert" class="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{{ error }}</div>
+      <form class="space-y-4" @submit.prevent="submit">
+        <div v-if="error" role="alert" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-xs font-semibold text-rose-700">{{ error }}</div>
 
-        <div class="segmented flex w-full">
-          <button type="button" class="flex-1" :class="form.type === 'BUY' ? 'bg-primary-700 text-white' : 'text-gray-500'" @click="form.type = 'BUY'">خرید</button>
-          <button type="button" class="flex-1" :class="form.type === 'SELL' ? 'bg-rose-600 text-white' : 'text-gray-500'" @click="form.type = 'SELL'">فروش</button>
+        <div class="grid grid-cols-2 p-1 gap-1 rounded-xl bg-slate-100/90 border border-slate-200/90">
+          <button type="button" class="py-2 text-xs font-bold rounded-lg transition-all" :class="form.type === 'BUY' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'" @click="form.type = 'BUY'">خرید</button>
+          <button type="button" class="py-2 text-xs font-bold rounded-lg transition-all" :class="form.type === 'SELL' ? 'bg-rose-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'" @click="form.type = 'SELL'">فروش</button>
         </div>
 
         <div>
-          <label class="mb-2 block text-sm font-medium text-gray-700">انتخاب رمزارز</label>
+          <label class="mb-2 block text-xs font-bold text-slate-700">انتخاب رمزارز</label>
           <div class="grid grid-cols-3 gap-2 sm:grid-cols-6">
-            <button v-for="asset in assets" :key="asset.symbol" type="button" class="flex min-h-20 flex-col items-center justify-center gap-1.5 border bg-white p-2 transition" :class="form.symbol === asset.symbol ? 'border-primary-600 ring-2 ring-primary-500/10' : 'border-gray-200 hover:border-gray-300'" style="border-radius: 8px" @click="form.symbol = asset.symbol">
+            <button 
+              v-for="asset in assets" 
+              :key="asset.symbol" 
+              type="button" 
+              class="flex min-h-18 flex-col items-center justify-center gap-1.5 rounded-xl border p-2 transition" 
+              :class="form.symbol === asset.symbol ? 'border-emerald-500 bg-emerald-50 text-emerald-700 ring-2 ring-emerald-500/20 font-bold' : 'border-slate-200 bg-slate-50/50 hover:bg-white text-slate-600 hover:border-slate-300'" 
+              @click="form.symbol = asset.symbol"
+            >
               <Icon :name="asset.icon" class="h-6 w-6" :style="{ color: asset.color }" />
-              <span class="text-xs font-bold text-gray-700">{{ asset.symbol }}</span>
+              <span class="text-[11px] font-bold">{{ asset.symbol }}</span>
             </button>
           </div>
-          <p v-if="form.type === 'SELL'" class="mt-2 text-xs text-gray-500">موجودی قابل فروش: <bdi class="money font-semibold">{{ holding?.quantity || 0 }} {{ form.symbol }}</bdi></p>
+          <p v-if="form.type === 'SELL'" class="mt-2 text-xs font-medium text-slate-500">موجودی قابل فروش: <bdi class="money font-bold text-slate-800">{{ holding?.quantity || 0 }} {{ form.symbol }}</bdi></p>
         </div>
 
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-700">مقدار {{ selectedAsset.name }}</label>
-            <input v-model.number="form.quantity" class="form-control text-left" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00">
+            <label class="mb-1.5 block text-xs font-bold text-slate-700">مقدار {{ selectedAsset.name }}</label>
+            <input v-model.number="form.quantity" class="form-control text-left font-mono font-bold" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0.00">
           </div>
           <div>
-            <div class="mb-1.5 flex items-center justify-between gap-2"><label class="text-sm font-medium text-gray-700">قیمت هر واحد (ریال)</label><button v-if="marketPrice" type="button" class="text-xs font-semibold text-primary-700" @click="form.price = marketPrice">قیمت لحظه‌ای</button></div>
-            <input v-model.number="form.price" class="form-control text-left" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0">
+            <div class="mb-1.5 flex items-center justify-between gap-2">
+              <label class="text-xs font-bold text-slate-700">قیمت واحد (ریال)</label>
+              <button v-if="marketPrice" type="button" class="text-[11px] font-bold text-emerald-700 hover:underline" @click="form.price = marketPrice">نرخ لحظه‌ای</button>
+            </div>
+            <input v-model.number="form.price" class="form-control text-left font-mono font-bold" dir="ltr" type="number" inputmode="decimal" min="0" step="any" placeholder="0">
           </div>
         </div>
 
-        <div class="rounded-lg border border-[#d7b66b]/35 bg-[#f8f4e9] p-4">
-          <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-sm text-gray-500">ارزش کل معامله</span><strong class="money text-lg text-gray-950">{{ new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 }).format(total) }} ریال</strong></div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="text-xs font-medium text-slate-500">ارزش کل معامله:</span>
+            <strong class="money text-base font-black text-slate-900">{{ new Intl.NumberFormat('fa-IR', { maximumFractionDigits: 0 }).format(total) }} ریال</strong>
+          </div>
         </div>
 
         <div>
-          <label class="mb-1.5 block text-sm font-medium text-gray-700">یادداشت</label>
-          <input v-model="form.note" class="form-control" maxlength="300" placeholder="نام صرافی یا توضیح اختیاری">
+          <label class="mb-1.5 block text-xs font-bold text-slate-700">یادداشت</label>
+          <input v-model="form.note" class="form-control" maxlength="300" placeholder="نام صرافی، شماره پیگیری یا یادداشت اختیاری">
         </div>
 
-        <button class="primary-button w-full" :class="form.type === 'SELL' ? 'bg-rose-600 hover:bg-rose-700' : ''" type="submit" :disabled="saving">
-          <Icon :name="form.type === 'BUY' ? 'lucide:arrow-down-right' : 'lucide:arrow-up-left'" class="h-5 w-5" />
-          {{ saving ? 'در حال ثبت...' : form.type === 'BUY' ? 'ثبت خرید' : 'ثبت فروش' }}
+        <button 
+          class="primary-button w-full mt-2" 
+          :class="form.type === 'SELL' ? 'bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 shadow-rose-600/20' : ''" 
+          type="submit" 
+          :disabled="saving"
+        >
+          <span v-if="saving">در حال ثبت...</span>
+          <span v-else class="flex items-center gap-1.5">
+            <Icon :name="form.type === 'BUY' ? 'lucide:arrow-down-left' : 'lucide:arrow-up-right'" class="h-4 w-4" />
+            {{ form.type === 'BUY' ? 'ثبت خرید رمزارز' : 'ثبت فروش رمزارز' }}
+          </span>
         </button>
       </form>
     </div>

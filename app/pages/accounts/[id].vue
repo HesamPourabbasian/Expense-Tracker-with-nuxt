@@ -137,124 +137,128 @@ async function handleUpdated() {
   <div v-if="account" class="page-shell">
     <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
       <div class="flex items-center gap-3">
-        <NuxtLink to="/accounts" class="icon-button">
+        <NuxtLink to="/accounts" class="icon-button" title="بازگشت به حساب‌ها">
           <Icon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
-        <div class="flex min-w-0 items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50">
-            <Icon :name="account.icon" class="h-5 w-5 text-primary-600" />
+        <div class="flex min-w-0 items-center gap-3.5">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20 shadow-xs">
+            <Icon :name="account.icon" class="h-6 w-6" />
           </div>
           <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
-            <p class="text-sm" :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
-              موجودی: <bdi class="money">{{ formatCurrency(account.balance || 0) }}</bdi>
+            <p class="text-xs sm:text-sm font-medium mt-0.5" :class="(account.balance || 0) >= 0 ? 'text-slate-500' : 'text-rose-600'">
+              موجودی کل: <bdi class="money font-extrabold text-slate-900">{{ formatCurrency(account.balance || 0) }}</bdi>
             </p>
           </div>
         </div>
       </div>
       <button
         @click="showTransactionModal = true"
-        class="primary-button"
+        class="primary-button self-start sm:self-auto"
       >
-        <Icon name="bx:bx-plus" class="w-4 h-4" />
+        <Icon name="lucide:plus" class="w-4 h-4" />
         تراکنش جدید
       </button>
     </div>
 
     <div class="segmented">
-       <button @click="setFilter('')" :class="!filterType ? 'bg-primary-50 text-primary-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">همه</button>
-       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>
-       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-red-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">هزینه</button>
-       <button @click="setFilter('unnecessary')" class="flex items-center gap-1" :class="filterType === 'unnecessary' ? 'bg-amber-100 text-amber-900 font-semibold' : 'text-gray-600 hover:bg-gray-50'">
-         <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
+       <button @click="setFilter('')" :class="!filterType ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">همه</button>
+       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">درآمد</button>
+       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">هزینه</button>
+       <button @click="setFilter('unnecessary')" class="flex items-center gap-1.5" :class="filterType === 'unnecessary' ? 'bg-amber-500 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">
+         <Icon name="bx:bxs-star" class="h-4 w-4" :class="filterType === 'unnecessary' ? 'text-white' : 'text-amber-500'" />
          قابل پس‌انداز
        </button>
     </div>
 
     <div v-if="status === 'pending'" class="empty-state">
-      <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-primary-600" />
-      <p class="text-gray-500">در حال دریافت تراکنش‌ها</p>
+      <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-emerald-600" />
+      <p class="text-sm font-medium text-slate-500 mt-2">در حال دریافت تراکنش‌ها...</p>
     </div>
 
-    <div v-else-if="groupedTransactions.length" class="space-y-4">
+    <div v-else-if="groupedTransactions.length" class="space-y-5">
       <div
         v-for="group in groupedTransactions"
         :key="group.key"
         class="surface overflow-hidden"
       >
-        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 bg-gray-50/75 px-4 py-3 sm:px-5">
-          <div class="flex items-center gap-2">
-            <Icon name="lucide:calendar" class="h-4 w-4 text-primary-700" />
-            <span class="text-sm font-bold text-gray-900">{{ group.label }}</span>
-            <span class="rounded-full bg-gray-200/70 px-2 py-0.5 text-xs font-medium text-gray-600">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/80 px-5 py-3.5">
+          <div class="flex items-center gap-2.5">
+            <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+              <Icon name="lucide:calendar" class="h-4 w-4" />
+            </div>
+            <span class="text-sm font-bold text-slate-900">{{ group.label }}</span>
+            <span class="rounded-full bg-slate-200/80 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
               {{ group.transactions.length }} تراکنش
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
-            <span v-if="group.totalIncome > 0" class="text-emerald-600">
-              درآمد: <bdi class="money">+{{ formatCurrency(group.totalIncome) }}</bdi>
+            <span v-if="group.totalIncome > 0" class="text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">
+              درآمد: <bdi class="money font-bold">+{{ formatCurrency(group.totalIncome) }}</bdi>
             </span>
-            <span v-if="group.totalExpense > 0" class="text-rose-600">
-              هزینه: <bdi class="money">-{{ formatCurrency(group.totalExpense) }}</bdi>
+            <span v-if="group.totalExpense > 0" class="text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
+              هزینه: <bdi class="money font-bold">-{{ formatCurrency(group.totalExpense) }}</bdi>
             </span>
-            <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-700 bg-amber-100/70 px-2 py-0.5 rounded-md">
-              <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-500" />
-              قابل پس‌انداز: <bdi class="money">{{ formatCurrency(group.totalUnnecessary) }}</bdi>
+            <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-200">
+              <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-600" />
+              قابل پس‌انداز: <bdi class="money font-bold">{{ formatCurrency(group.totalUnnecessary) }}</bdi>
             </span>
           </div>
         </div>
 
-        <div class="divide-y divide-gray-100">
+        <div class="divide-y divide-slate-100">
           <div
             v-for="t in group.transactions"
             :key="t.id"
-            class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
-            :class="t.isUnnecessary ? 'bg-amber-50/20' : ''"
+            class="transaction-row flex items-center justify-between gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70"
+            :class="t.isUnnecessary ? 'bg-amber-50/25' : ''"
           >
-            <div class="transaction-details flex min-w-0 items-center gap-3">
+            <div class="transaction-details flex min-w-0 items-center gap-3.5">
               <div
-                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                :class="t.type === 'income' ? 'bg-emerald-50' : (t.isUnnecessary ? 'bg-amber-50' : 'bg-red-50')"
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition"
+                :class="t.type === 'income' 
+                  ? 'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-500/20' 
+                  : (t.isUnnecessary ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-500/20' : 'bg-rose-50 text-rose-600 ring-1 ring-rose-500/20')"
               >
                 <Icon
-                  :name="t.type === 'income' ? 'bx:bx-plus' : (t.isUnnecessary ? 'bx:bxs-star' : 'bx:bx-minus')"
+                  :name="t.type === 'income' ? 'lucide:arrow-down-left' : (t.isUnnecessary ? 'bx:bxs-star' : 'lucide:arrow-up-right')"
                   class="h-5 w-5"
-                  :class="t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-500' : 'text-red-600')"
                 />
               </div>
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
-                  <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
+                  <p class="break-words text-sm font-bold text-slate-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
                   <span
                     v-if="t.isUnnecessary"
-                    class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-800"
+                    class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800 border border-amber-200/60"
                   >
                     <Icon name="bx:bxs-star" class="h-3 w-3 text-amber-500" />
                     غیرضروری
                   </span>
                 </div>
-                <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
+                <p class="text-xs text-slate-400 font-medium mt-0.5">{{ toJalali(t.date) }}</p>
               </div>
             </div>
+
             <div class="transaction-actions flex items-center gap-3">
-              <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-700' : 'text-red-600')">
+              <p class="money whitespace-nowrap text-sm sm:text-base font-extrabold" :class="t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-700' : 'text-rose-600')">
                 {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
               </p>
               <div class="flex items-center gap-1">
                 <button
                   v-if="t.type === 'expense'"
                   @click="toggleUnnecessary(t)"
-                  class="icon-button h-10 w-10 transition"
-                  :class="t.isUnnecessary ? 'text-amber-500 hover:bg-amber-50' : 'text-gray-300 hover:text-amber-500 hover:bg-amber-50'"
+                  class="icon-button h-9 w-9 transition"
+                  :class="t.isUnnecessary ? 'text-amber-500 bg-amber-50 hover:bg-amber-100' : 'text-slate-300 hover:text-amber-500 hover:bg-amber-50'"
                   :title="t.isUnnecessary ? 'حذف از هزینه‌های غیرضروری' : 'علامت‌گذاری به‌عنوان هزینه غیرضروری (قابل پس‌انداز)'"
                 >
                   <Icon :name="t.isUnnecessary ? 'bx:bxs-star' : 'bx:bx-star'" class="h-5 w-5" />
                 </button>
-                <button @click="openEdit(t)" class="icon-button h-10 w-10" title="ویرایش">
-                  <Icon name="bx:bx-edit" class="w-4 h-4" />
+                <button @click="openEdit(t)" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش">
+                  <Icon name="lucide:pencil" class="w-4 h-4" />
                 </button>
-                <button @click="deleteTransaction(t.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500" title="حذف">
-                  <Icon name="bx:bx-trash" class="w-4 h-4" />
+                <button @click="deleteTransaction(t.id)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
+                  <Icon name="lucide:trash-2" class="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -264,17 +268,20 @@ async function handleUpdated() {
     </div>
 
     <div v-else class="empty-state">
-      <Icon name="bx:bx-receipt" class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-      <p class="text-gray-500">تراکنشی یافت نشد</p>
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+        <Icon name="lucide:receipt" class="w-7 h-7" />
+      </div>
+      <h3 class="font-bold text-slate-800">تراکنشی یافت نشد</h3>
+      <p class="mt-1 text-xs text-slate-400">برای این حساب هنوز تراکنشی ثبت نشده است.</p>
     </div>
 
-    <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3">
-      <button class="primary-button bg-white text-gray-700 ring-1 ring-inset ring-gray-200 shadow-none hover:bg-gray-50 disabled:hover:bg-white" :disabled="page === 1" @click="setPage(page - 1)">
+    <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3 pt-2">
+      <button class="primary-button bg-white text-slate-700 ring-1 ring-inset ring-slate-200 shadow-none hover:bg-slate-50 disabled:opacity-40" :disabled="page === 1" @click="setPage(page - 1)">
         <Icon name="lucide:chevron-right" class="h-4 w-4" />
         قبلی
       </button>
-      <p class="text-sm text-gray-500">صفحه {{ page }} از {{ pagination.totalPages }}</p>
-      <button class="primary-button bg-white text-gray-700 ring-1 ring-inset ring-gray-200 shadow-none hover:bg-gray-50 disabled:hover:bg-white" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
+      <p class="text-xs font-bold text-slate-500">صفحه {{ page }} از {{ pagination.totalPages }}</p>
+      <button class="primary-button bg-white text-slate-700 ring-1 ring-inset ring-slate-200 shadow-none hover:bg-slate-50 disabled:opacity-40" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
         بعدی
         <Icon name="lucide:chevron-left" class="h-4 w-4" />
       </button>

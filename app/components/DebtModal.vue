@@ -51,80 +51,81 @@ async function handleSubmit() {
   <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
     <div class="modal-panel">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-lg font-bold text-gray-900">بدهی جدید</h2>
-        <button @click="emit('close')" class="icon-button" aria-label="بستن پنجره">
-          <Icon name="bx:bx-x" class="w-5 h-5 text-gray-500" />
+        <h2 class="text-base font-extrabold text-slate-900">ثبت تعهد جدید</h2>
+        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره">
+          <Icon name="lucide:x" class="w-4 h-4" />
         </button>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div v-if="error" class="bg-red-50 text-red-600 text-sm rounded-xl px-4 py-3">
+        <div v-if="error" class="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
-        <div class="flex rounded-xl border border-gray-200 overflow-hidden">
+        <div class="grid grid-cols-2 p-1 gap-1 rounded-xl bg-slate-100/90 border border-slate-200/90">
           <button
             type="button"
             @click="form.type = 'I_OWE'"
-            class="flex-1 py-2.5 text-sm font-medium transition-colors"
-            :class="form.type === 'I_OWE' ? 'bg-orange-50 text-orange-700' : 'text-gray-600 hover:bg-gray-50'"
+            class="py-2 text-xs font-bold rounded-lg transition-all"
+            :class="form.type === 'I_OWE' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
           >بدهی من</button>
           <button
             type="button"
             @click="form.type = 'OWED_TO_ME'"
-            class="flex-1 py-2.5 text-sm font-medium border-r border-gray-200 transition-colors"
-            :class="form.type === 'OWED_TO_ME' ? 'bg-teal-50 text-teal-700' : 'text-gray-600 hover:bg-gray-50'"
+            class="py-2 text-xs font-bold rounded-lg transition-all"
+            :class="form.type === 'OWED_TO_ME' ? 'bg-teal-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'"
           >طلب من</button>
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">نام شخص</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">طرف حساب (نام شخص / شرکت)</label>
           <input
             v-model="form.person"
             type="text"
-            class="form-control"
-            placeholder="نام شخص را وارد کنید"
+            class="form-control font-bold"
+            placeholder="مثال: علی رضایی"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">مبلغ (تومان)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">مبلغ (تومان)</label>
           <input
             v-model.number="form.amount"
             type="number"
             min="1"
-            class="form-control"
-            placeholder="مبلغ را وارد کنید"
+            class="form-control font-bold"
+            placeholder="مبلغ به تومان"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">تاریخ (شمسی)</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">تاریخ سررسید / ثبت (شمسی)</label>
           <input
             v-model="form.date"
             type="text"
-            class="form-control text-left"
+            class="form-control text-left font-mono"
             dir="ltr"
             placeholder="1405/05/10"
           />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">توضیحات</label>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات تکمیلی</label>
           <textarea
             v-model="form.description"
-            rows="3"
-            class="form-control resize-none"
-            placeholder="توضیحات تکمیلی..."
+            rows="2"
+            class="form-control resize-none text-sm"
+            placeholder="جزئیات و یادداشت این بدهی یا طلب..."
           ></textarea>
         </div>
 
         <button
           type="submit"
           :disabled="loading"
-          class="w-full py-2.5 bg-primary-600 hover:bg-primary-700 disabled:bg-primary-300 text-white rounded-xl font-medium text-sm transition-colors"
+          class="primary-button w-full mt-2"
         >
-          {{ loading ? 'در حال ذخیره...' : 'ذخیره بدهی' }}
+          <span v-if="loading">در حال ذخیره...</span>
+          <span v-else>ذخیره تعهد</span>
         </button>
       </form>
     </div>

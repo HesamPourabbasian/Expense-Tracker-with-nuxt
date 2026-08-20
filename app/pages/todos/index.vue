@@ -110,107 +110,148 @@ async function deleteTask(id: number) {
   <div class="page-shell">
     <header class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
       <div>
-        <p class="mb-1 text-sm font-semibold text-primary-700">تمرکز و عملکرد</p>
+        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">برنامه‌ریزی و بهره‌وری</p>
         <h1 class="page-heading">برنامه روزانه</h1>
-        <p class="page-kicker">کارهای هر روز را ثبت کن و روند انجام آن‌ها را زیر نظر داشته باش.</p>
+        <p class="page-kicker">اهداف و وظایف روزانه را ثبت و مسیر موفقیت را گام به گام دنبال کن.</p>
       </div>
 
-      <div class="surface flex w-full items-center justify-between p-1 sm:w-auto">
-        <button class="icon-button" title="روز قبل" @click="changeDay(-1)"><Icon name="lucide:chevron-right" class="h-5 w-5" /></button>
-        <div class="min-w-0 px-2 text-center sm:min-w-56">
-          <p class="truncate text-sm font-bold text-gray-900">{{ formattedDate }}</p>
-          <button v-if="!isToday" class="mt-0.5 text-xs font-semibold text-primary-700" @click="goToday">بازگشت به امروز</button>
-          <p v-else class="mt-0.5 text-xs text-gray-400">امروز</p>
+      <div class="surface flex w-full items-center justify-between p-1.5 sm:w-auto gap-1 border-slate-200">
+        <button class="icon-button h-9 w-9 text-slate-600 hover:text-slate-900" title="روز قبل" @click="changeDay(-1)">
+          <Icon name="lucide:chevron-right" class="h-4 w-4" />
+        </button>
+        <div class="min-w-0 px-3 text-center sm:min-w-56">
+          <p class="truncate text-sm font-extrabold text-slate-900">{{ formattedDate }}</p>
+          <button v-if="!isToday" class="mt-0.5 text-xs font-bold text-emerald-700 hover:underline" @click="goToday">بازگشت به امروز</button>
+          <p v-else class="mt-0.5 text-[11px] font-bold text-emerald-700">امروز</p>
         </div>
-        <button class="icon-button" title="روز بعد" @click="changeDay(1)"><Icon name="lucide:chevron-left" class="h-5 w-5" /></button>
+        <button class="icon-button h-9 w-9 text-slate-600 hover:text-slate-900" title="روز بعد" @click="changeDay(1)">
+          <Icon name="lucide:chevron-left" class="h-4 w-4" />
+        </button>
       </div>
     </header>
 
-    <section class="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_18rem]">
+    <section class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_19rem]">
       <div class="space-y-4">
-        <form class="surface p-4 sm:p-5" @submit.prevent="addTask">
+        <!-- Add Task Form -->
+        <form class="surface p-5 shadow-sm hover:shadow-card transition-all" @submit.prevent="addTask">
           <div class="flex flex-col gap-3 sm:flex-row">
             <div class="relative min-w-0 flex-1">
-              <Icon name="lucide:plus" class="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-primary-700" />
+              <Icon name="lucide:plus" class="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
               <input v-model="newTask" class="form-control pr-12" type="text" maxlength="160" placeholder="امروز چه کاری باید انجام شود؟">
             </div>
             <button class="primary-button w-full sm:w-auto" type="submit" :disabled="saving || !newTask.trim()">
-              <Icon name="lucide:arrow-up" class="h-4 w-4" />
-              {{ saving ? 'در حال افزودن' : 'افزودن کار' }}
+              <Icon name="lucide:plus" class="h-4 w-4" />
+              {{ saving ? 'در حال افزودن...' : 'افزودن کار' }}
             </button>
           </div>
-          <button type="button" class="mt-3 flex min-h-10 items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-800" @click="showDetails = !showDetails">
-            <Icon name="lucide:align-left" class="h-4 w-4" />
-            {{ showDetails ? 'بستن توضیحات' : 'افزودن توضیحات' }}
+          <button type="button" class="mt-3 flex min-h-8 items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-emerald-700 transition" @click="showDetails = !showDetails">
+            <Icon name="lucide:align-left" class="h-3.5 w-3.5" />
+            {{ showDetails ? 'بستن توضیحات اختیاری' : '+ افزودن توضیحات اختیاری' }}
           </button>
-          <textarea v-if="showDetails" v-model="newDescription" class="form-control mt-2 resize-none" rows="2" maxlength="500" placeholder="جزئیات اختیاری این کار" />
+          <textarea v-if="showDetails" v-model="newDescription" class="form-control mt-2.5 resize-none" rows="2" maxlength="500" placeholder="جزئیات تکمیلی این کار..." />
         </form>
 
-        <div v-if="status === 'pending'" class="space-y-2">
-          <div v-for="item in 3" :key="item" class="h-20 animate-pulse rounded-lg bg-gray-200" />
+        <div v-if="status === 'pending'" class="space-y-3">
+          <div v-for="item in 3" :key="item" class="h-20 animate-pulse rounded-2xl bg-slate-200" />
         </div>
 
-        <div v-else-if="data?.todos.length" class="surface divide-y divide-gray-100 overflow-hidden">
-          <article v-for="todo in data.todos" :key="todo.id" class="group p-4 sm:p-5" :class="todo.completed ? 'bg-primary-50/30' : ''">
+        <div v-else-if="data?.todos.length" class="surface divide-y divide-slate-100 overflow-hidden">
+          <article v-for="todo in data.todos" :key="todo.id" class="group p-4 sm:p-5 transition hover:bg-slate-50/70" :class="todo.completed ? 'bg-emerald-50/30' : ''">
             <div v-if="editingId === todo.id" class="space-y-3">
-              <input v-model="editTitle" class="form-control" maxlength="160" @keyup.enter="saveEdit(todo.id)">
-              <textarea v-model="editDescription" class="form-control resize-none" rows="2" maxlength="500" placeholder="توضیحات" />
+              <input v-model="editTitle" class="form-control font-bold" maxlength="160" @keyup.enter="saveEdit(todo.id)">
+              <textarea v-model="editDescription" class="form-control resize-none text-sm" rows="2" maxlength="500" placeholder="توضیحات..." />
               <div class="flex flex-wrap justify-end gap-2">
-                <button class="min-h-10 px-4 text-sm font-semibold text-gray-500" @click="editingId = null">انصراف</button>
-                <button class="primary-button" @click="saveEdit(todo.id)">ذخیره تغییرات</button>
+                <button class="min-h-9 px-4 text-xs font-bold text-slate-500 hover:text-slate-800" @click="editingId = null">انصراف</button>
+                <button class="primary-button min-h-9 text-xs px-4" @click="saveEdit(todo.id)">ذخیره تغییرات</button>
               </div>
             </div>
 
-            <div v-else class="grid grid-cols-[auto_minmax(0,1fr)] gap-3 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
-              <button class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center border-2 transition sm:mt-0" :class="todo.completed ? 'border-primary-700 bg-primary-700 text-white' : 'border-gray-300 bg-white text-transparent hover:border-primary-500'" style="border-radius: 7px" :aria-label="todo.completed ? 'بازگرداندن به انجام نشده' : 'علامت‌گذاری به عنوان انجام شده'" @click="toggleTask(todo)">
-                <Icon name="lucide:check" class="h-4 w-4" />
+            <div v-else class="grid grid-cols-[auto_minmax(0,1fr)] gap-3.5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
+              <button 
+                class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 transition-all sm:mt-0" 
+                :class="todo.completed ? 'border-emerald-600 bg-emerald-600 text-white shadow-xs' : 'border-slate-300 bg-white text-transparent hover:border-emerald-500'" 
+                :aria-label="todo.completed ? 'بازگرداندن به انجام نشده' : 'علامت‌گذاری به عنوان انجام شده'" 
+                @click="toggleTask(todo)"
+              >
+                <Icon name="lucide:check" class="h-4 w-4 stroke-[3]" />
               </button>
 
               <div class="min-w-0">
-                <h2 class="break-words text-sm font-semibold leading-6 sm:text-base" :class="todo.completed ? 'text-gray-400 line-through' : 'text-gray-900'">{{ todo.title }}</h2>
-                <p v-if="todo.description" class="mt-1 break-words text-sm leading-6" :class="todo.completed ? 'text-gray-300' : 'text-gray-500'">{{ todo.description }}</p>
+                <h2 class="break-words text-sm font-bold leading-6 sm:text-base transition" :class="todo.completed ? 'text-slate-400 line-through' : 'text-slate-900'">{{ todo.title }}</h2>
+                <p v-if="todo.description" class="mt-0.5 break-words text-xs leading-5" :class="todo.completed ? 'text-slate-300' : 'text-slate-500'">{{ todo.description }}</p>
               </div>
 
-              <div class="col-span-2 flex justify-end gap-1 border-t border-gray-100 pt-2 sm:col-span-1 sm:border-0 sm:pt-0 sm:opacity-0 sm:transition sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
-                <button class="icon-button h-10 w-10" title="ویرایش" @click="startEdit(todo)"><Icon name="lucide:pencil" class="h-4 w-4" /></button>
-                <button class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-600" title="حذف" @click="deleteTask(todo.id)"><Icon name="lucide:trash-2" class="h-4 w-4" /></button>
+              <div class="col-span-2 flex justify-end gap-1 border-t border-slate-100 pt-2 sm:col-span-1 sm:border-0 sm:pt-0 sm:opacity-0 sm:transition sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                <button class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش" @click="startEdit(todo)"><Icon name="lucide:pencil" class="h-4 w-4" /></button>
+                <button class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف" @click="deleteTask(todo.id)"><Icon name="lucide:trash-2" class="h-4 w-4" /></button>
               </div>
             </div>
           </article>
         </div>
 
         <div v-else class="empty-state">
-          <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-lg bg-primary-50 text-primary-700"><Icon name="lucide:notebook-pen" class="h-7 w-7" /></div>
-          <h2 class="font-bold text-gray-900">برنامه این روز خالی است</h2>
-          <p class="mt-2 max-w-sm text-sm leading-6 text-gray-500">اولین کار را اضافه کن تا مسیر پیشرفت این روز ساخته شود.</p>
+          <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+            <Icon name="lucide:check-square-2" class="h-7 w-7" />
+          </div>
+          <h2 class="font-bold text-slate-800">برنامه این روز خالی است</h2>
+          <p class="mt-1 text-xs text-slate-400">اولین کار را اضافه کن تا درصد پیشرفت روزانه‌ات محاسبه شود.</p>
         </div>
       </div>
 
+      <!-- Performance Sidebar -->
       <aside class="space-y-4 lg:sticky lg:top-8 lg:self-start">
-        <div class="surface p-5">
+        <div class="surface p-6">
           <div class="mb-5 flex items-center justify-between">
-            <div><h2 class="font-bold text-gray-950">عملکرد روز</h2><p class="mt-1 text-sm text-gray-400">درصد انجام برنامه</p></div>
-            <Icon name="lucide:activity" class="h-5 w-5 text-[#c9a45b]" />
+            <div>
+              <h2 class="font-extrabold text-slate-900">عملکرد امروز</h2>
+              <p class="mt-0.5 text-xs text-slate-400 font-medium">درصد تکمیل اهداف روز</p>
+            </div>
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+              <Icon name="lucide:activity" class="h-4 w-4" />
+            </div>
           </div>
 
           <div class="relative mx-auto h-36 w-36">
             <svg class="h-full w-full -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#e8e6df" stroke-width="7" />
-              <circle cx="50" cy="50" r="40" fill="none" stroke="#176f55" stroke-width="7" stroke-linecap="round" stroke-dasharray="251.2" :stroke-dashoffset="circleOffset" class="transition-all duration-500" />
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#f1f5f9" stroke-width="8" />
+              <circle 
+                cx="50" 
+                cy="50" 
+                r="40" 
+                fill="none" 
+                stroke="#10b981" 
+                stroke-width="8" 
+                stroke-linecap="round" 
+                stroke-dasharray="251.2" 
+                :stroke-dashoffset="circleOffset" 
+                class="transition-all duration-700 ease-out" 
+              />
             </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center"><strong class="money text-3xl text-gray-950">{{ data?.summary.percentage || 0 }}٪</strong><span class="mt-1 text-xs text-gray-400">تکمیل شده</span></div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <strong class="money text-3xl font-black text-slate-900">{{ data?.summary.percentage || 0 }}٪</strong>
+              <span class="mt-0.5 text-[11px] font-bold text-slate-400">تکمیل شده</span>
+            </div>
           </div>
 
-          <div class="mt-6 grid grid-cols-3 divide-x-reverse divide-x divide-gray-100 border-t border-gray-100 pt-5 text-center">
-            <div><strong class="money block text-lg text-gray-950">{{ data?.summary.total || 0 }}</strong><span class="text-xs text-gray-400">همه</span></div>
-            <div><strong class="money block text-lg text-primary-700">{{ data?.summary.completed || 0 }}</strong><span class="text-xs text-gray-400">انجام‌شده</span></div>
-            <div><strong class="money block text-lg text-amber-700">{{ data?.summary.pending || 0 }}</strong><span class="text-xs text-gray-400">باقی‌مانده</span></div>
+          <div class="mt-6 grid grid-cols-3 divide-x-reverse divide-x divide-slate-100 border-t border-slate-100 pt-5 text-center">
+            <div>
+              <strong class="money block text-lg font-extrabold text-slate-900">{{ data?.summary.total || 0 }}</strong>
+              <span class="text-[11px] font-medium text-slate-400">همه</span>
+            </div>
+            <div>
+              <strong class="money block text-lg font-extrabold text-emerald-600">{{ data?.summary.completed || 0 }}</strong>
+              <span class="text-[11px] font-medium text-slate-400">انجام‌شده</span>
+            </div>
+            <div>
+              <strong class="money block text-lg font-extrabold text-amber-600">{{ data?.summary.pending || 0 }}</strong>
+              <span class="text-[11px] font-medium text-slate-400">باقی‌مانده</span>
+            </div>
           </div>
         </div>
 
-        <div class="surface border-[#d7b66b]/40 bg-[#173f35] p-5 text-white">
-          <Icon name="lucide:quote" class="mb-4 h-5 w-5 text-[#d7b66b]" />
-          <p class="text-sm leading-7 text-white/80">پیشرفت بزرگ، نتیجه تکرار قدم‌های کوچک و کامل‌شده است.</p>
+        <div class="surface relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-950 via-[#07241c] to-slate-950 p-6 text-white shadow-md ring-1 ring-white/10">
+          <Icon name="lucide:quote" class="mb-3 h-5 w-5 text-emerald-400 opacity-80" />
+          <p class="text-xs leading-6 text-slate-300 font-medium">پیشرفت‌های بزرگ، حاصل تکرار منظم کارهای کوچک و روزمره هستند.</p>
         </div>
       </aside>
     </section>

@@ -35,18 +35,19 @@ onUnmounted(() => clearInterval(timer))
 </script>
 
 <template>
-  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-white/10 bg-[#102d26] px-4 text-white">
+  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-slate-800 bg-slate-950/95 px-4 text-white backdrop-blur-md">
     <div class="flex w-full max-w-7xl items-center justify-between gap-3 text-xs">
-      <span class="flex items-center gap-1.5 font-medium text-white/70">
-        <svg class="h-3.5 w-3.5 text-[#f5c451]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
-          <circle cx="12" cy="10" r="3" />
-        </svg>
-        زمان ایران
-      </span>
-      <div class="flex min-w-0 items-center gap-2 sm:gap-4">
-        <span class="truncate text-white/65">{{ date || 'تاریخ ایران' }}</span>
-        <time class="shrink-0 font-bold tabular-nums text-white" datetime="">{{ time || '--:--:--' }}</time>
+      <div class="flex items-center gap-2 font-medium text-slate-400">
+        <span class="relative flex h-2 w-2">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+        </span>
+        <span class="font-semibold text-slate-300">ایران</span>
+      </div>
+      <div class="flex min-w-0 items-center gap-2 sm:gap-4 text-xs">
+        <span class="truncate text-slate-400">{{ date || 'در حال دریافت...' }}</span>
+        <span class="text-slate-600">|</span>
+        <time class="shrink-0 font-mono font-bold tracking-wider text-emerald-400" dir="ltr">{{ time || '--:--:--' }}</time>
       </div>
     </div>
   </div>
