@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { BankAccount, PaginatedTransactions, Transaction } from '~/types'
+import moment from 'jalali-moment'
 
 const route = useRoute()
 const accountId = route.params.id as string
 
-const { toJalali, formatCurrency } = useFormat()
+const { toJalali, formatCurrency, getPersianMonthName } = useFormat()
 const toast = useToast()
 
 const showTransactionModal = ref(false)
@@ -20,6 +21,49 @@ const { data: transactionData, status, refresh: refreshTransactions } = await us
 
 const transactions = computed(() => transactionData.value?.transactions)
 const pagination = computed(() => transactionData.value?.pagination)
+
+const groupedTransactions = computed(() => {
+  if (!transactions.value?.length) return []
+
+  const groups: {
+    key: string
+    label: string
+    transactions: Transaction[]
+    totalIncome: number
+    totalExpense: number
+  }[] = []
+
+  const groupMap = new Map<string, typeof groups[0]>()
+
+  for (const t of transactions.value) {
+    const m = moment(t.date)
+    const jYear = Number(m.format('jYYYY'))
+    const jMonth = Number(m.format('jMM'))
+    const key = `${jYear}-${String(jMonth).padStart(2, '0')}`
+
+    let group = groupMap.get(key)
+    if (!group) {
+      group = {
+        key,
+        label: `${getPersianMonthName(jMonth)} ${jYear}`,
+        transactions: [],
+        totalIncome: 0,
+        totalExpense: 0
+      }
+      groupMap.set(key, group)
+      groups.push(group)
+    }
+
+    group.transactions.push(t)
+    if (t.type === 'income') {
+      group.totalIncome += t.amount
+    } else {
+      group.totalExpense += t.amount
+    }
+  }
+
+  return groups
+})
 
 function setFilter(type: string) {
   filterType.value = type
@@ -103,39 +147,65 @@ async function handleUpdated() {
       <p class="text-gray-500">در حال دریافت تراکنش‌ها</p>
     </div>
 
-    <div v-else-if="transactions?.length" class="surface divide-y divide-gray-100 overflow-hidden">
+    <div v-else-if="groupedTransactions.length" class="space-y-4">
       <div
-        v-for="t in transactions"
-        :key="t.id"
-        class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
+        v-for="group in groupedTransactions"
+        :key="group.key"
+        class="surface overflow-hidden"
       >
-        <div class="transaction-details flex min-w-0 items-center gap-3">
-          <div
-            class="w-10 h-10 rounded-xl flex items-center justify-center"
-            :class="t.type === 'income' ? 'bg-emerald-50' : 'bg-red-50'"
-          >
-            <Icon
-              :name="t.type === 'income' ? 'bx:bx-plus' : 'bx:bx-minus'"
-              class="w-5 h-5"
-              :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'"
-            />
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 bg-gray-50/75 px-4 py-3 sm:px-5">
+          <div class="flex items-center gap-2">
+            <Icon name="lucide:calendar" class="h-4 w-4 text-primary-700" />
+            <span class="text-sm font-bold text-gray-900">{{ group.label }}</span>
+            <span class="rounded-full bg-gray-200/70 px-2 py-0.5 text-xs font-medium text-gray-600">
+              {{ group.transactions.length }} تراکنش
+            </span>
           </div>
-          <div class="min-w-0">
-            <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
-            <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
+          <div class="flex items-center gap-3 text-xs font-semibold">
+            <span v-if="group.totalIncome > 0" class="text-emerald-600">
+              درآمد: <bdi class="money">+{{ formatCurrency(group.totalIncome) }}</bdi>
+            </span>
+            <span v-if="group.totalExpense > 0" class="text-rose-600">
+              هزینه: <bdi class="money">-{{ formatCurrency(group.totalExpense) }}</bdi>
+            </span>
           </div>
         </div>
-        <div class="transaction-actions flex items-center gap-3">
-          <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
-            {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
-          </p>
-          <div class="flex items-center gap-1">
-            <button @click="openEdit(t)" class="icon-button h-10 w-10">
-              <Icon name="bx:bx-edit" class="w-4 h-4" />
-            </button>
-            <button @click="deleteTransaction(t.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500">
-              <Icon name="bx:bx-trash" class="w-4 h-4" />
-            </button>
+
+        <div class="divide-y divide-gray-100">
+          <div
+            v-for="t in group.transactions"
+            :key="t.id"
+            class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
+          >
+            <div class="transaction-details flex min-w-0 items-center gap-3">
+              <div
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+                :class="t.type === 'income' ? 'bg-emerald-50' : 'bg-red-50'"
+              >
+                <Icon
+                  :name="t.type === 'income' ? 'bx:bx-plus' : 'bx:bx-minus'"
+                  class="h-5 w-5"
+                  :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'"
+                />
+              </div>
+              <div class="min-w-0">
+                <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
+                <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
+              </div>
+            </div>
+            <div class="transaction-actions flex items-center gap-3">
+              <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
+                {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
+              </p>
+              <div class="flex items-center gap-1">
+                <button @click="openEdit(t)" class="icon-button h-10 w-10" title="ویرایش">
+                  <Icon name="bx:bx-edit" class="w-4 h-4" />
+                </button>
+                <button @click="deleteTransaction(t.id)" class="icon-button h-10 w-10 hover:bg-red-50 hover:text-red-500" title="حذف">
+                  <Icon name="bx:bx-trash" class="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
