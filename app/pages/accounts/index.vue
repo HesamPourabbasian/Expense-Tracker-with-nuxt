@@ -60,7 +60,7 @@ async function handleUpdated() {
       <article
         v-for="account in accounts"
         :key="account.id"
-        class="surface group relative p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-card-hover hover:border-emerald-500/30"
+        class="surface group relative p-6 border-slate-200 hover:border-emerald-500/40 transition-colors duration-150"
       >
         <div class="flex items-center justify-between mb-5">
           <div class="flex min-w-0 flex-1 items-center gap-3.5">

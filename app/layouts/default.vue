@@ -76,10 +76,10 @@ function isActive(path: string) {
     </aside>
 
     <!-- Mobile Header -->
-    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-md lg:hidden">
+    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200 bg-white/95 lg:hidden transform-gpu">
       <div class="flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-sm">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
             <Icon name="lucide:wallet-cards" class="h-5 w-5" />
           </div>
           <h1 class="font-bold text-slate-900">خرج‌یار</h1>
@@ -98,13 +98,13 @@ function isActive(path: string) {
     </main>
 
     <!-- Mobile Bottom Floating Navigation Dock -->
-    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200/80 bg-white/95 p-1.5 shadow-xl shadow-slate-900/10 backdrop-blur-xl rounded-2xl lg:hidden">
+    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/5 rounded-2xl lg:hidden transform-gpu">
       <NuxtLink 
         v-for="item in navItems" 
         :key="item.to" 
         :to="item.to" 
-        class="flex min-h-12 flex-col items-center justify-center gap-1 text-[11px] font-medium rounded-xl transition-all"
-        :class="isActive(item.to) ? 'bg-emerald-50 text-emerald-700 font-bold shadow-xs' : 'text-slate-400 hover:text-slate-700'"
+        class="flex min-h-12 flex-col items-center justify-center gap-1 text-[11px] font-medium rounded-xl transition-colors duration-150"
+        :class="isActive(item.to) ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-400 hover:text-slate-700'"
       >
         <Icon :name="item.icon" class="h-5 w-5" />
         <span>{{ item.mobileLabel }}</span>

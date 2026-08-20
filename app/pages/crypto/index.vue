@@ -108,7 +108,7 @@ async function deleteTrade(id: number) {
         <p class="mt-2 text-xs text-slate-400 font-medium">بر اساس آخرین نرخ بازار ایران</p>
       </div>
 
-      <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
           <p class="text-xs font-medium text-slate-500">بهای تمام‌شده</p>
           <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
@@ -118,22 +118,22 @@ async function deleteTrade(id: number) {
         <p class="money mt-1 max-w-full break-words text-xl font-extrabold text-slate-900">{{ formatRial(totalInvested) }}</p>
       </div>
 
-      <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
           <p class="text-xs font-medium text-slate-500">سود محقق‌نشده</p>
           <div class="flex h-9 w-9 items-center justify-center rounded-xl" :class="totalUnrealized >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'">
             <Icon name="lucide:chart-no-axes-combined" class="h-4 w-4" />
           </div>
         </div>
-        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="totalUnrealized >= 0 ? 'text-emerald-700' : 'text-rose-600'">{{ formatRial(totalUnrealized) }}</p>
+        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="totalUnrealized >= 0 ? 'text-emerald-600' : 'text-rose-600'">{{ formatRial(totalUnrealized) }}</p>
       </div>
 
-      <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
           <p class="text-xs font-medium text-slate-500">سود تحقق‌یافته</p>
           <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600">{{ data?.summary.tradeCount || 0 }} معامله</span>
         </div>
-        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="(data?.summary.realizedProfit || 0) >= 0 ? 'text-emerald-700' : 'text-rose-600'">{{ formatRial(data?.summary.realizedProfit || 0) }}</p>
+        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="(data?.summary.realizedProfit || 0) >= 0 ? 'text-emerald-600' : 'text-rose-600'">{{ formatRial(data?.summary.realizedProfit || 0) }}</p>
       </div>
     </section>
 
@@ -175,7 +175,7 @@ async function deleteTrade(id: number) {
         <div v-for="item in 3" :key="item" class="h-44 animate-pulse rounded-2xl bg-slate-200" />
       </div>
       <div v-else-if="holdingsWithMarket.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <article v-for="holding in holdingsWithMarket" :key="holding.symbol" class="surface p-6 hover:-translate-y-1 hover:shadow-card-hover transition-all">
+        <article v-for="holding in holdingsWithMarket" :key="holding.symbol" class="surface p-6">
           <div class="flex items-start justify-between gap-4">
             <div class="flex min-w-0 items-center gap-3.5">
               <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100/90 shadow-xs">

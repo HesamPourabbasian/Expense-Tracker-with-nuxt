@@ -83,7 +83,7 @@ async function handleUpdated() {
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
           <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 ring-1 ring-amber-500/20">
             <Icon name="lucide:arrow-up-right" class="w-5 h-5" />
@@ -94,7 +94,7 @@ async function handleUpdated() {
         <p class="money mt-1.5 max-w-full break-words text-xl sm:text-2xl font-extrabold text-amber-700">{{ formatCurrency(totalIOwe) }}</p>
       </div>
 
-      <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+      <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
           <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
             <Icon name="lucide:arrow-down-left" class="w-5 h-5" />

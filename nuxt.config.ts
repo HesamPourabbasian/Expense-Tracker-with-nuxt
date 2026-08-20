@@ -45,15 +45,18 @@ export default defineNuxtConfig({
   },
   googleFonts: {
     families: {
-      'Vazirmatn': [300, 400, 500, 600, 700]
-    }
+      'Vazirmatn': [400, 500, 600, 700, 800]
+    },
+    display: 'swap',
+    prefetch: true,
+    preconnect: true
   },
   app: {
     pageTransition: { name: 'page-fade', mode: 'out-in' },
     head: {
       htmlAttrs: { dir: 'rtl', lang: 'fa' },
       title: 'خرج‌یار | مدیریت مالی شخصی',
-      meta: [{ name: 'theme-color', content: '#176f55' }]
+      meta: [{ name: 'theme-color', content: '#059669' }]
     }
   },
   runtimeConfig: {

@@ -56,8 +56,7 @@ function nextMonth() {
     <template v-else-if="dashboard">
       <section class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         <!-- Hero Total Assets Card -->
-        <div class="surface relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-950 via-[#07241c] to-slate-950 p-6 text-white shadow-xl shadow-emerald-950/20 sm:p-7 md:col-span-2 xl:col-span-1 ring-1 ring-white/10">
-          <div class="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-emerald-500/10 blur-3xl pointer-events-none"></div>
+        <div class="surface relative overflow-hidden border-slate-800 bg-gradient-to-br from-slate-950 via-[#07241c] to-slate-950 p-6 text-white shadow-xl shadow-emerald-950/10 sm:p-7 md:col-span-2 xl:col-span-1 ring-1 ring-white/10">
           <div class="mb-7 flex items-center justify-between">
             <span class="text-xs font-semibold text-slate-300">کل دارایی در دسترس</span>
             <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30">
@@ -72,7 +71,7 @@ function nextMonth() {
         </div>
 
         <!-- Monthly Income Card -->
-        <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+        <div class="surface p-6">
           <div class="mb-6 flex items-center justify-between">
             <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 ring-1 ring-emerald-500/20">
               <Icon name="lucide:trending-up" class="h-5 w-5" />
@@ -85,7 +84,7 @@ function nextMonth() {
         </div>
 
         <!-- Monthly Expense Card -->
-        <div class="surface p-6 hover:-translate-y-0.5 hover:shadow-card-hover">
+        <div class="surface p-6">
           <div class="mb-6 flex items-center justify-between">
             <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600 ring-1 ring-rose-500/20">
               <Icon name="lucide:trending-down" class="h-5 w-5" />

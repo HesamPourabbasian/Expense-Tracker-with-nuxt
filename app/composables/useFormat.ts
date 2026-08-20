@@ -1,12 +1,19 @@
 import moment from 'jalali-moment'
 
+const numberFormatter = new Intl.NumberFormat('fa-IR')
+
+const PERSIAN_MONTHS = [
+  'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
+  'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
+] as const
+
 export function useFormat() {
   function formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('fa-IR').format(amount) + ' تومان'
+    return numberFormatter.format(amount || 0) + ' تومان'
   }
 
   function formatNumber(amount: number): string {
-    return new Intl.NumberFormat('fa-IR').format(amount)
+    return numberFormatter.format(amount || 0)
   }
 
   function toJalali(date: Date | string): string {
@@ -19,11 +26,7 @@ export function useFormat() {
   }
 
   function getPersianMonthName(month: number): string {
-    const months = [
-      'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
-      'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
-    ]
-    return months[month - 1] ?? ''
+    return PERSIAN_MONTHS[month - 1] ?? ''
   }
 
   function getCurrentJalaliMonth(): { year: number; month: number } {

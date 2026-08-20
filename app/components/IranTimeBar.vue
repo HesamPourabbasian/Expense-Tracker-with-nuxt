@@ -20,22 +20,33 @@ const timeFormatter = new Intl.DateTimeFormat('fa-IR', {
 
 function updateTime() {
   const now = new Date()
-  date.value = dateFormatter.format(now)
   time.value = timeFormatter.format(now)
 }
 
+function updateDate() {
+  const now = new Date()
+  date.value = dateFormatter.format(now)
+}
+
 let timer: ReturnType<typeof setInterval> | undefined
+let dateTimer: ReturnType<typeof setInterval> | undefined
+
+updateDate()
 updateTime()
 
 onMounted(() => {
   timer = setInterval(updateTime, 1000)
+  dateTimer = setInterval(updateDate, 60000)
 })
 
-onUnmounted(() => clearInterval(timer))
+onUnmounted(() => {
+  clearInterval(timer)
+  clearInterval(dateTimer)
+})
 </script>
 
 <template>
-  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-slate-800 bg-slate-950/95 px-4 text-white backdrop-blur-md">
+  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-slate-800/80 bg-slate-950 px-4 text-white will-change-transform transform-gpu">
     <div class="flex w-full max-w-7xl items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2 font-medium text-slate-400">
         <span class="relative flex h-2 w-2">

@@ -133,7 +133,7 @@ async function deleteTask(id: number) {
     <section class="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_19rem]">
       <div class="space-y-4">
         <!-- Add Task Form -->
-        <form class="surface p-5 shadow-sm hover:shadow-card transition-all" @submit.prevent="addTask">
+        <form class="surface p-5 shadow-sm" @submit.prevent="addTask">
           <div class="flex flex-col gap-3 sm:flex-row">
             <div class="relative min-w-0 flex-1">
               <Icon name="lucide:plus" class="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
@@ -144,7 +144,7 @@ async function deleteTask(id: number) {
               {{ saving ? 'در حال افزودن...' : 'افزودن کار' }}
             </button>
           </div>
-          <button type="button" class="mt-3 flex min-h-8 items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-emerald-700 transition" @click="showDetails = !showDetails">
+          <button type="button" class="mt-3 flex min-h-8 items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-emerald-700 transition-colors duration-150" @click="showDetails = !showDetails">
             <Icon name="lucide:align-left" class="h-3.5 w-3.5" />
             {{ showDetails ? 'بستن توضیحات اختیاری' : '+ افزودن توضیحات اختیاری' }}
           </button>
@@ -156,7 +156,7 @@ async function deleteTask(id: number) {
         </div>
 
         <div v-else-if="data?.todos.length" class="surface divide-y divide-slate-100 overflow-hidden">
-          <article v-for="todo in data.todos" :key="todo.id" class="group p-4 sm:p-5 transition hover:bg-slate-50/70" :class="todo.completed ? 'bg-emerald-50/30' : ''">
+          <article v-for="todo in data.todos" :key="todo.id" class="group p-4 sm:p-5 transition-colors duration-150 hover:bg-slate-50" :class="todo.completed ? 'bg-emerald-50/30' : ''">
             <div v-if="editingId === todo.id" class="space-y-3">
               <input v-model="editTitle" class="form-control font-bold" maxlength="160" @keyup.enter="saveEdit(todo.id)">
               <textarea v-model="editDescription" class="form-control resize-none text-sm" rows="2" maxlength="500" placeholder="توضیحات..." />
@@ -168,8 +168,8 @@ async function deleteTask(id: number) {
 
             <div v-else class="grid grid-cols-[auto_minmax(0,1fr)] gap-3.5 sm:grid-cols-[auto_minmax(0,1fr)_auto] sm:items-center">
               <button 
-                class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 transition-all sm:mt-0" 
-                :class="todo.completed ? 'border-emerald-600 bg-emerald-600 text-white shadow-xs' : 'border-slate-300 bg-white text-transparent hover:border-emerald-500'" 
+                class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border-2 transition-colors duration-150 sm:mt-0" 
+                :class="todo.completed ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white text-transparent hover:border-emerald-500'" 
                 :aria-label="todo.completed ? 'بازگرداندن به انجام نشده' : 'علامت‌گذاری به عنوان انجام شده'" 
                 @click="toggleTask(todo)"
               >

@@ -8,11 +8,11 @@ const { toasts } = useToast()
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="pointer-events-auto flex items-center gap-3 border px-4 py-3 text-sm font-medium shadow-xl backdrop-blur-xl rounded-2xl transition-all"
+        class="pointer-events-auto flex items-center gap-3 border px-4 py-3 text-sm font-medium shadow-xl rounded-2xl transform-gpu"
         :class="{
-          'bg-emerald-950/90 text-emerald-100 border-emerald-500/40 shadow-emerald-950/20': toast.type === 'success',
-          'bg-rose-950/90 text-rose-100 border-rose-500/40 shadow-rose-950/20': toast.type === 'error',
-          'bg-slate-900/90 text-slate-100 border-slate-700/60 shadow-slate-950/20': toast.type === 'info'
+          'bg-emerald-950 text-emerald-100 border-emerald-500/40 shadow-emerald-950/20': toast.type === 'success',
+          'bg-rose-950 text-rose-100 border-rose-500/40 shadow-rose-950/20': toast.type === 'error',
+          'bg-slate-900 text-slate-100 border-slate-700/60 shadow-slate-950/20': toast.type === 'info'
         }"
       >
         <Icon
@@ -32,17 +32,17 @@ const { toasts } = useToast()
 
 <style scoped>
 .toast-enter-active {
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.2s ease-out, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .toast-leave-active {
-  transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+  transition: opacity 0.15s ease-in, transform 0.15s ease-in;
 }
 .toast-enter-from {
   opacity: 0;
-  transform: translateY(12px) scale(0.96);
+  transform: translate3d(0, 10px, 0);
 }
 .toast-leave-to {
   opacity: 0;
-  transform: translateY(-8px) scale(0.96);
+  transform: translate3d(0, -6px, 0);
 }
 </style>

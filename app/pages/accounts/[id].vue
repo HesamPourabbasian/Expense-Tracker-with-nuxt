@@ -37,10 +37,11 @@ const groupedTransactions = computed(() => {
   const groupMap = new Map<string, typeof groups[0]>()
 
   for (const t of transactions.value) {
-    const m = moment(t.date)
-    const jYear = Number(m.format('jYYYY'))
-    const jMonth = Number(m.format('jMM'))
-    const key = `${jYear}-${String(jMonth).padStart(2, '0')}`
+    const formatted = moment(t.date).format('jYYYY-jMM')
+    const [jYearStr, jMonthStr] = formatted.split('-')
+    const jYear = Number(jYearStr)
+    const jMonth = Number(jMonthStr)
+    const key = formatted
 
     let group = groupMap.get(key)
     if (!group) {
