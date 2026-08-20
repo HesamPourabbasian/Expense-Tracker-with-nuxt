@@ -9,7 +9,8 @@ const form = reactive({
   type: props.transaction.type as 'income' | 'expense',
   amount: props.transaction.amount,
   description: props.transaction.description || '',
-  date: moment(props.transaction.date).format('jYYYY/jMM/jDD')
+  date: moment(props.transaction.date).format('jYYYY/jMM/jDD'),
+  isUnnecessary: Boolean(props.transaction.isUnnecessary)
 })
 
 const error = ref('')
@@ -31,7 +32,8 @@ async function handleSubmit() {
         type: form.type,
         amount: form.amount,
         description: form.description || null,
-        date: gregorianDate.toISOString()
+        date: gregorianDate.toISOString(),
+        isUnnecessary: form.type === 'expense' ? form.isUnnecessary : false
       }
     })
     emit('updated')
@@ -101,6 +103,18 @@ async function handleSubmit() {
             class="form-control"
           />
         </div>
+
+        <label v-if="form.type === 'expense'" class="flex items-center gap-2.5 rounded-xl border border-amber-200 bg-amber-50/60 p-3 cursor-pointer select-none">
+          <input
+            v-model="form.isUnnecessary"
+            type="checkbox"
+            class="h-4 w-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+          />
+          <div class="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-amber-900">
+            <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
+            <span>هزینه غیرضروری (قابل پس‌انداز)</span>
+          </div>
+        </label>
 
         <button
           type="submit"

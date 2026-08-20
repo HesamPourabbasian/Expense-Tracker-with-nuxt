@@ -12,10 +12,12 @@ export interface BankAccount {
   updatedAt: string
   _count?: { transactions: number }
   balance?: number
+  unnecessaryExpense?: number
 }
 
 export interface BankAccountWithBalance extends BankAccount {
   balance: number
+  unnecessaryExpense?: number
 }
 
 export interface Transaction {
@@ -26,6 +28,7 @@ export interface Transaction {
   amount: number
   description: string | null
   date: string
+  isUnnecessary: boolean
   createdAt: string
   bankAccount?: { name: string; icon: string }
 }

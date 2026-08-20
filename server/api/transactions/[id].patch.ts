@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Transaction not found' })
   }
 
-  const { type, amount, description, date } = body
+  const { type, amount, description, date, isUnnecessary } = body
 
   if (type && !['income', 'expense'].includes(type)) {
     throw createError({ statusCode: 400, statusMessage: 'Type must be income or expense' })
@@ -26,7 +26,8 @@ export default defineEventHandler(async (event) => {
       ...(type && { type }),
       ...(amount && { amount }),
       ...(description !== undefined && { description: description || null }),
-      ...(date && { date: new Date(date) })
+      ...(date && { date: new Date(date) }),
+      ...(isUnnecessary !== undefined && { isUnnecessary: Boolean(isUnnecessary) })
     }
   })
 

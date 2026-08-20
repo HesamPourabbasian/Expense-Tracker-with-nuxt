@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     where: { userId: user.id },
     include: {
       _count: { select: { transactions: true } },
-      transactions: { select: { type: true, amount: true } }
+      transactions: { select: { type: true, amount: true, isUnnecessary: true } }
     },
     orderBy: { createdAt: 'desc' }
   })
@@ -14,6 +14,9 @@ export default defineEventHandler(async (event) => {
     ...account,
     balance: transactions.reduce((total, transaction) => (
       total + (transaction.type === 'income' ? transaction.amount : -transaction.amount)
+    ), 0),
+    unnecessaryExpense: transactions.reduce((total, transaction) => (
+      total + (transaction.type === 'expense' && transaction.isUnnecessary ? transaction.amount : 0)
     ), 0)
   }))
 })

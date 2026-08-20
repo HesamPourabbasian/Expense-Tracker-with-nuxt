@@ -3,7 +3,7 @@ import prisma from '~~/server/utils/prisma'
 export default defineEventHandler(async (event) => {
   const user = event.context.user
   const body = await readBody(event)
-  const { bankAccountId, type, amount, description, date } = body
+  const { bankAccountId, type, amount, description, date, isUnnecessary } = body
 
   if (!bankAccountId || !type || !amount || !date) {
     throw createError({ statusCode: 400, statusMessage: 'Missing required fields' })
@@ -29,7 +29,8 @@ export default defineEventHandler(async (event) => {
       type,
       amount,
       description: description || null,
-      date: new Date(date)
+      date: new Date(date),
+      isUnnecessary: Boolean(isUnnecessary)
     }
   })
 

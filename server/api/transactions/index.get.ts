@@ -17,8 +17,14 @@ export default defineEventHandler(async (event) => {
     where.bankAccountId = bankAccountId
   }
   
-  if (query.type && ['income', 'expense'].includes(String(query.type))) {
+  if (query.type === 'unnecessary') {
+    where.isUnnecessary = true
+  } else if (query.type && ['income', 'expense'].includes(String(query.type))) {
     where.type = query.type
+  }
+
+  if (query.isUnnecessary !== undefined) {
+    where.isUnnecessary = query.isUnnecessary === 'true' || query.isUnnecessary === true
   }
 
   const [total, transactions] = await prisma.$transaction([
