@@ -31,6 +31,7 @@ const groupedTransactions = computed(() => {
     transactions: Transaction[]
     totalIncome: number
     totalExpense: number
+    totalUnnecessary: number
   }[] = []
 
   const groupMap = new Map<string, typeof groups[0]>()
@@ -48,7 +49,8 @@ const groupedTransactions = computed(() => {
         label: `${getPersianMonthName(jMonth)} ${jYear}`,
         transactions: [],
         totalIncome: 0,
-        totalExpense: 0
+        totalExpense: 0,
+        totalUnnecessary: 0
       }
       groupMap.set(key, group)
       groups.push(group)
@@ -59,6 +61,9 @@ const groupedTransactions = computed(() => {
       group.totalIncome += t.amount
     } else {
       group.totalExpense += t.amount
+      if (t.isUnnecessary) {
+        group.totalUnnecessary += t.amount
+      }
     }
   }
 
@@ -78,6 +83,26 @@ function setPage(nextPage: number) {
 
 function openEdit(t: Transaction) {
   editTransaction.value = t
+}
+
+async function toggleUnnecessary(t: Transaction) {
+  const previousState = t.isUnnecessary
+  t.isUnnecessary = !previousState
+  try {
+    await $fetch(`/api/transactions/${t.id}`, {
+      method: 'PATCH',
+      body: { isUnnecessary: !previousState }
+    })
+    toast.success(
+      !previousState
+        ? 'تراکنش به عنوان هزینه غیرضروری (قابل پس‌انداز) علامت‌گذاری شد'
+        : 'تراکنش از هزینه‌های غیرضروری خارج شد'
+    )
+    await refreshAccount()
+  } catch (e: any) {
+    t.isUnnecessary = previousState
+    toast.error('خطا در به‌روزرسانی وضعیت تراکنش')
+  }
 }
 
 async function deleteTransaction(id: number) {
@@ -121,9 +146,15 @@ async function handleUpdated() {
           </div>
           <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
-            <p class="text-sm" :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
-              موجودی: <bdi class="money">{{ formatCurrency(account.balance || 0) }}</bdi>
-            </p>
+            <div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+              <p :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
+                موجودی: <bdi class="money font-semibold">{{ formatCurrency(account.balance || 0) }}</bdi>
+              </p>
+              <span v-if="(account.unnecessaryExpense || 0) > 0" class="inline-flex items-center gap-1 font-semibold text-amber-700">
+                <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
+                قابل پس‌انداز: <bdi class="money">{{ formatCurrency(account.unnecessaryExpense || 0) }}</bdi>
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -136,10 +167,31 @@ async function handleUpdated() {
       </button>
     </div>
 
+    <!-- Potential Savings Card -->
+    <div v-if="(account.unnecessaryExpense || 0) > 0" class="surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-amber-200/90 bg-amber-50/50 p-4">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+          <Icon name="bx:bxs-star" class="h-6 w-6" />
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-amber-950">پتانسیل پس‌انداز حساب</h2>
+          <p class="text-xs text-amber-800/80">مجموع هزینه‌های ستاره‌دار غیرضروری که می‌توانستید ذخیره کنید.</p>
+        </div>
+      </div>
+      <div class="flex items-baseline gap-1.5 self-start sm:self-auto">
+        <span class="text-xs text-amber-800">مجموع:</span>
+        <span class="money text-base sm:text-lg font-bold text-amber-900">{{ formatCurrency(account.unnecessaryExpense || 0) }}</span>
+      </div>
+    </div>
+
     <div class="segmented">
-       <button @click="setFilter('')" :class="!filterType ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-50'">همه</button>
-       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>
-       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-red-50 text-red-700' : 'text-gray-600 hover:bg-gray-50'">هزینه</button>
+       <button @click="setFilter('')" :class="!filterType ? 'bg-primary-50 text-primary-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">همه</button>
+       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>
+       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-red-50 text-red-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">هزینه</button>
+       <button @click="setFilter('unnecessary')" class="flex items-center gap-1" :class="filterType === 'unnecessary' ? 'bg-amber-100 text-amber-900 font-semibold' : 'text-gray-600 hover:bg-gray-50'">
+         <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
+         قابل پس‌انداز
+       </button>
     </div>
 
     <div v-if="status === 'pending'" class="empty-state">
@@ -161,12 +213,16 @@ async function handleUpdated() {
               {{ group.transactions.length }} تراکنش
             </span>
           </div>
-          <div class="flex items-center gap-3 text-xs font-semibold">
+          <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
             <span v-if="group.totalIncome > 0" class="text-emerald-600">
               درآمد: <bdi class="money">+{{ formatCurrency(group.totalIncome) }}</bdi>
             </span>
             <span v-if="group.totalExpense > 0" class="text-rose-600">
               هزینه: <bdi class="money">-{{ formatCurrency(group.totalExpense) }}</bdi>
+            </span>
+            <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-700 bg-amber-100/70 px-2 py-0.5 rounded-md">
+              <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-500" />
+              قابل پس‌انداز: <bdi class="money">{{ formatCurrency(group.totalUnnecessary) }}</bdi>
             </span>
           </div>
         </div>
@@ -176,28 +232,47 @@ async function handleUpdated() {
             v-for="t in group.transactions"
             :key="t.id"
             class="transaction-row flex items-center justify-between gap-3 p-4 transition hover:bg-gray-50"
+            :class="t.isUnnecessary ? 'bg-amber-50/20' : ''"
           >
             <div class="transaction-details flex min-w-0 items-center gap-3">
               <div
                 class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                :class="t.type === 'income' ? 'bg-emerald-50' : 'bg-red-50'"
+                :class="t.type === 'income' ? 'bg-emerald-50' : (t.isUnnecessary ? 'bg-amber-50' : 'bg-red-50')"
               >
                 <Icon
-                  :name="t.type === 'income' ? 'bx:bx-plus' : 'bx:bx-minus'"
+                  :name="t.type === 'income' ? 'bx:bx-plus' : (t.isUnnecessary ? 'bx:bxs-star' : 'bx:bx-minus')"
                   class="h-5 w-5"
-                  :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'"
+                  :class="t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-500' : 'text-red-600')"
                 />
               </div>
               <div class="min-w-0">
-                <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
+                <div class="flex flex-wrap items-center gap-2">
+                  <p class="break-words text-sm font-medium leading-6 text-gray-900">{{ t.description || (t.type === 'income' ? 'درآمد' : 'هزینه') }}</p>
+                  <span
+                    v-if="t.isUnnecessary"
+                    class="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-800"
+                  >
+                    <Icon name="bx:bxs-star" class="h-3 w-3 text-amber-500" />
+                    غیرضروری
+                  </span>
+                </div>
                 <p class="text-xs text-gray-400">{{ toJalali(t.date) }}</p>
               </div>
             </div>
             <div class="transaction-actions flex items-center gap-3">
-              <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-red-600'">
+              <p class="money whitespace-nowrap text-sm font-bold" :class="t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-700' : 'text-red-600')">
                 {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
               </p>
               <div class="flex items-center gap-1">
+                <button
+                  v-if="t.type === 'expense'"
+                  @click="toggleUnnecessary(t)"
+                  class="icon-button h-10 w-10 transition"
+                  :class="t.isUnnecessary ? 'text-amber-500 hover:bg-amber-50' : 'text-gray-300 hover:text-amber-500 hover:bg-amber-50'"
+                  :title="t.isUnnecessary ? 'حذف از هزینه‌های غیرضروری' : 'علامت‌گذاری به‌عنوان هزینه غیرضروری (قابل پس‌انداز)'"
+                >
+                  <Icon :name="t.isUnnecessary ? 'bx:bxs-star' : 'bx:bx-star'" class="h-5 w-5" />
+                </button>
                 <button @click="openEdit(t)" class="icon-button h-10 w-10" title="ویرایش">
                   <Icon name="bx:bx-edit" class="w-4 h-4" />
                 </button>
@@ -213,7 +288,7 @@ async function handleUpdated() {
 
     <div v-else class="empty-state">
       <Icon name="bx:bx-receipt" class="w-12 h-12 text-gray-300 mx-auto mb-3" />
-      <p class="text-gray-500">تراکنشی ثبت نشده</p>
+      <p class="text-gray-500">تراکنشی یافت نشد</p>
     </div>
 
     <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3">

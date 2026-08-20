@@ -9,6 +9,10 @@ const { formatCurrency } = useFormat()
 
 const { data: accounts, refresh } = await useFetch<BankAccount[]>('/api/accounts')
 
+const totalUnnecessaryAcrossAccounts = computed(() => {
+  return accounts.value?.reduce((sum, a) => sum + (a.unnecessaryExpense || 0), 0) || 0
+})
+
 function editAccount(account: BankAccount) {
   selectedAccount.value = account
   showEditModal.value = true
@@ -52,6 +56,23 @@ async function handleUpdated() {
       </button>
     </div>
 
+    <!-- Summary of Unnecessary Expenses Across Accounts -->
+    <div v-if="totalUnnecessaryAcrossAccounts > 0" class="surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-amber-200/90 bg-amber-50/50 p-4">
+      <div class="flex items-center gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
+          <Icon name="bx:bxs-star" class="h-6 w-6" />
+        </div>
+        <div>
+          <h2 class="text-sm font-bold text-amber-950">کل پتانسیل پس‌انداز حساب‌ها</h2>
+          <p class="text-xs text-amber-800/80">مجموع هزینه‌های ستاره‌دار غیرضروری در تمام حساب‌های بانکی</p>
+        </div>
+      </div>
+      <div class="flex items-baseline gap-1.5 self-start sm:self-auto">
+        <span class="text-xs text-amber-800">مجموع:</span>
+        <span class="money text-base sm:text-lg font-bold text-amber-900">{{ formatCurrency(totalUnnecessaryAcrossAccounts) }}</span>
+      </div>
+    </div>
+
     <div v-if="accounts?.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
       <article
         v-for="account in accounts"
@@ -84,7 +105,17 @@ async function handleUpdated() {
           </div>
         </div>
         <NuxtLink :to="`/accounts/${account.id}`" class="mt-6 block border-t border-gray-100 pt-4">
-          <div class="flex items-end justify-between gap-2"><div class="min-w-0"><p class="text-sm text-gray-400">موجودی فعلی</p><p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p></div><Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" /></div>
+          <div class="flex items-end justify-between gap-2">
+            <div class="min-w-0">
+              <p class="text-sm text-gray-400">موجودی فعلی</p>
+              <p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p>
+              <p v-if="(account.unnecessaryExpense || 0) > 0" class="mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700">
+                <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-500 shrink-0" />
+                <span>قابل پس‌انداز: <bdi class="money">{{ formatCurrency(account.unnecessaryExpense || 0) }}</bdi></span>
+              </p>
+            </div>
+            <Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" />
+          </div>
         </NuxtLink>
       </article>
     </div>
