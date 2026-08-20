@@ -1,320 +1,267 @@
-# خرج‌یار
+# خرج‌یار (سامانه هوشمند مدیریت مالی شخصی و برنامه‌ریزی روزانه)
 
 <div align="center">
 
-**A private, Persian-first workspace for personal finance, daily planning, and cryptocurrency portfolio tracking.**
+**فضای کاری یکپارچه، امن و بومی برای مدیریت امور مالی، حساب‌های بانکی، برنامه روزانه و پورتفوی رمزارز**
 
 [![Nuxt](https://img.shields.io/badge/Nuxt-4.5-00DC82?logo=nuxt.js&logoColor=white)](https://nuxt.com/)
 [![Vue](https://img.shields.io/badge/Vue-3.5-42B883?logo=vue.js&logoColor=white)](https://vuejs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-7.9-2D3748?logo=prisma&logoColor=white)](https://www.prisma.io/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12+-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 </div>
 
-## Overview
+---
 
-خرج‌یار is a full-stack Nuxt application for managing personal finances in a responsive RTL interface. It combines bank and cash accounting, debt tracking, daily performance planning, and a local cryptocurrency portfolio ledger in one private workspace.
+## 📖 درباره پروژه
 
-The interface uses Persian dates and typography, displays current Iranian time, and is optimized for mobile, tablet, and desktop screens.
+**خرج‌یار** یک پلتفرم فول‌استک مدرن و سبک بر پایه **Nuxt** و **Vue 3** است که به شما کمک می‌کند کنترل کامل درآمدها، هزینه‌ها، پس‌انداز، بدهی‌ها، وظایف روزانه و دارایی‌های دیجیتال خود را در یک رابط کاربری راست‌چین (RTL) زیبا، سریع و امن به دست بگیرید.
 
-> [!IMPORTANT]
-> The cryptocurrency section is a **local portfolio ledger**. It records trades and calculates portfolio performance, but it does not connect to an exchange account or place real orders.
+تمام بخش‌های سامانه با تقویم هجری شمسی، ارقام فارسی (`tabular-nums`) و ساعت رسمی ایران یکپارچه شده‌اند.
 
-## Features
+> [!NOTE]
+> بخش رمزارز به عنوان یک **دفتر کل دارایی و محاسبه‌گر سود/زیان** عمل می‌کند و سفارشات را به صورت داخلی ثبت و تحلیل می‌نماید (بدون نیاز به اتصال مستقیم کلیدهای خصوصی به صرافی‌ها).
 
-### Personal Finance
+---
 
-- Multiple bank accounts with custom icons
-- Income and expense transactions for each account
-- Separate cash wallet and cash transaction history
-- Monthly dashboard based on the Jalali calendar
-- Bank, cash, income, expense, and net-balance summaries
-- Debt and receivable tracking
-- Pending and settled debt states
+## ✨ امکانات و قابلیت‌های کلیدی
 
-### Daily Planner
+### ۱. 🏦 حساب‌های بانکی و تراکنش‌ها
+- تعریف نامحدود حساب‌های بانکی با نام، نماد و آیکون اختصاصی.
+- ثبت تراکنش‌های درآمد و هزینه با تاریخ شمسی و توضیحات.
+- **تفکیک ماهانه تراکنش‌ها**: دسته‌بندی و نمایش خودکار گردش حساب بر اساس ماه‌های سال شمسی همراه با خلاصه مالی هر ماه.
+- **نشانه‌گذاری هزینه‌های غیرضروری**: امکان ستاره‌دار کردن هزینه‌هایی که می‌شد پس‌انداز شوند و محاسبه مجموع آن‌ها.
+- صفحه‌بندی (Pagination) روان همراه با فیلتر سریع تراکنش‌ها بر اساس درآمد یا هزینه.
 
-- Independent task list for every day
-- Previous and next day navigation
-- Persian calendar date display
-- Task descriptions, editing, completion, and deletion
-- Daily completion percentage
-- Completed, pending, and total task metrics
+### ۲. 💵 کیف پول نقدی (اسکناس و وجوه دستی)
+- بخش اختصاصی برای ثبت دریافت‌ها و پرداخت‌های نقدی فیزیکی.
+- محاسبه آنی موجودی نقدی و تفکیک جریان نقدینگی از حساب‌های بانکی.
+- تاریخچه کامل با امکان ویرایش و حذف تراکنش‌ها.
 
-### Cryptocurrency Portfolio
+### ۳. 🤝 بدهی‌ها و مطالبات (دفتر تعهدات مالی)
+- ثبت دقیق بدهی‌ها («بدهی من») و طلب‌ها («طلب من») با نام طرف‌حساب و توضیحات.
+- نمایش وضعیت پرداخت (در انتظار / تسویه شده) با کلید سریع تغییر وضعیت.
+- کارت‌های خلاصه آماری کل بدهی‌های باز و کل مطالبات دریافت‌نشده.
 
-- Local buy and sell records for:
-  - Bitcoin (`BTC`)
-  - Tether (`USDT`)
-  - Ethereum (`ETH`)
-  - Solana (`SOL`)
-  - Litecoin (`LTC`)
-  - Dogecoin (`DOGE`)
-- Dedicated asset icons and colors
-- Weighted average purchase price
-- Remaining cost basis
-- Realized and unrealized profit/loss
-- Overselling protection
-- Live Iranian market prices from the public Wallex API
-- Automatic market refresh every 60 seconds
-- Server-side quote caching and stale-data fallback
+### ۴. 📊 داشبورد هوشمند مالی
+- محاسبه خودکار **کل دارایی در دسترس** (ترکیب موجودی کلیه بانک‌ها و کیف پول نقدی).
+- محاسبه دقیق مجموع درآمد و هزینه ماه جاری به تفکیک بانکی و نقدی.
+- انتخاب‌گر تقویمی ماه‌های سال شمسی برای مشاهده آرشیو ماه‌های گذشته.
+- کارت‌های گرافیکی وضعیت هر حساب و موجودی لحظه‌ای.
 
-### Interface And Security
+### ۵. 📅 برنامه روزانه و بهره‌وری (تودو لیست)
+- ثبت و مدیریت وظایف روزانه با عنوان و جزئیات تکمیلی.
+- روزشمار سریع (حرکت میان روزهای قبل، بعد و دکمه بازگشت به امروز).
+- **نمودار پیشرفت دایره‌ای**: نمایش گرافیکی درصد انجام کارهای روز.
+- شمارنده‌های تفکیکی کارهای کل، انجام‌شده و باقی‌مانده.
 
-- Responsive Persian RTL interface
-- Mobile bottom navigation and desktop sidebar
-- Iranian date and `Asia/Tehran` clock on every page
-- Password hashing with Argon2
-- Signed, HTTP-only, expiring session cookies
-- Per-user ownership checks on application data
-- Local Iconify collections for reliable icon rendering
+### ۶. 🪙 دفتر دارایی و معاملات رمزارز (Crypto Portfolio)
+- ثبت معاملات خرید و فروش برای رمزارزهای شاخص:
+  - بیت‌کوین (`BTC`)
+  - تتر (`USDT`)
+  - اتریوم (`ETH`)
+  - سولانا (`SOL`)
+  - لایت‌کوین (`LTC`)
+  - دوج‌کوین (`DOGE`)
+- محاسبه میانگین وزنی قیمت خرید (Weighted Average Cost Basis).
+- محاسبه ارزش کل لحظه‌ای سبد، بهای تمام‌شده، سود/زیان محقق‌نشده (Unrealized PnL) و سود تحقق‌یافته (Realized PnL).
+- دریافت زنده قیمت‌های بازار بر حسب ریال با به‌روزرسانی خودکار هر ۶۰ ثانیه و کش سروری.
+- سیستم جلوگیری از فروش بیش از موجودی (Overselling Protection).
 
-## Currency Units
+### ۷. 🎨 رابط کاربری و عملکرد
+- پالت رنگی زمردی-تیره با استانداردهای طراحی مدرن فین‌تک.
+- نوار ساعت و تاریخ زنده ایران در بالای صفحه با پالس وضعیت.
+- سایدبار شیک دسکتاپ و داک شناور پایین در موبایل و تبلت.
+- بهینه‌سازی کامل نرخ فریم (۶۰/۱۲۰ FPS) بدون لگ و پرش در اسکرول.
+- سیستم اعلان‌های شناور شیشه‌ای (Toast Notifications).
 
-The application intentionally uses two units:
+---
 
-| Area | Unit | Reason |
+## 💱 واحدهای پولی در سامانه
+
+جهت سهولت کاربری، واحدها طبق عرف کشور تفکیک شده‌اند:
+
+| بخش | واحد پولی | توضیحات |
 | --- | --- | --- |
-| Bank, cash, debt, and dashboard | Toman (`تومان`) | Common personal-finance convention in Iran |
-| Cryptocurrency trades and live valuation | Iranian rial (`ریال`) | Live Wallex toman quotes are converted to true IRR by multiplying by 10 |
+| **بانک‌ها، نقد، بدهی و داشبورد** | **تومان** (`تومان`) | مبالغ به صورت تومان وارد و نمایش داده می‌شوند. |
+| **دفتر رمزارز و نرخ بازار** | **ریال** (`ریال`) | قیمت‌های رمزارز به صورت ریال دقیق ذخیره و محاسبه می‌شوند. |
 
-Do not enter toman values in crypto transaction fields. Crypto purchase and sale prices are stored and displayed in rial.
+---
 
-## Technology Stack
+## 🛠️ پشته فناوری (Tech Stack)
 
-| Layer | Technology |
-| --- | --- |
-| Application | Nuxt 4, Vue 3, TypeScript |
-| Styling | Tailwind CSS, Vazirmatn |
-| Database | PostgreSQL |
-| ORM | Prisma ORM 7 with `@prisma/adapter-pg` |
-| Authentication | Argon2 and signed cookies |
-| Dates | Jalali Moment and `Intl.DateTimeFormat` |
-| Icons | Nuxt Icon and local Iconify collections |
-| Market data | Wallex public markets API |
+- **فریم‌ورک اصلی:** [Nuxt 4 / 3](https://nuxt.com/) (حالت SSR و Nitro Server Engine)
+- **موتور فرانت‌اند:** [Vue 3](https://vuejs.org/) با Composition API و `<script setup lang="ts">`
+- **زبان:** TypeScript
+- **استایل‌دهی:** [Tailwind CSS](https://tailwindcss.com/) با فونت فارسی استاندارد **وزیرمتن (Vazirmatn)**
+- **پایگاه داده:** [PostgreSQL](https://www.postgresql.org/)
+- **مدیریت پایگاه داده و ORM:** [Prisma ORM 7](https://www.prisma.io/) با درایور آداپتور `@prisma/adapter-pg`
+- **احراز هویت و امنیت:** هش کلمه عبور با **Argon2**، کوکی‌های امضا‌شده، رمزنگاری‌شده و HTTP-only
+- **تاریخ و زمان:** Jalali-Moment و `Intl.DateTimeFormat`
+- **آیکون‌ها:** Nuxt Icon به همراه پکیج‌های لوکال آیکونیفای (Lucide, Tabler, MDI, Boxicons)
 
-## Requirements
+---
 
-- Node.js `22.19+`, `24.11+`, or `26+`
-- npm
-- PostgreSQL 12 or newer
+## 📋 پیش‌نیازها
 
-Node.js 25 is not in Nuxt's declared support range. Use an active supported release for development and deployment.
+برای اجرای پروژه روی سیستم خود به موارد زیر نیاز دارید:
+- **Node.js**: نسخه‌های `22.19+` یا `24.11+` (طبق استاندارد پشتیبانی Nuxt)
+- **مدیریت پکیج**: `npm` یا `pnpm`
+- **پایگاه داده**: PostgreSQL نسخه ۱۲ به بالا
 
-## Getting Started
+---
 
-### 1. Clone The Repository
+## 🚀 راهنمای نصب و راه‌اندازی سریع
 
+### ۱. دریافت مخزن پروژه
 ```bash
 git clone https://github.com/HesamPourabbasian/Expense-Tracker-with-nuxt.git
 cd Expense-Tracker-with-nuxt
 ```
 
-### 2. Install Dependencies
-
+### ۲. نصب بسته‌ها
 ```bash
 npm install
 ```
 
-### 3. Create A PostgreSQL Database
-
+### ۳. ساخت دیتابیس در PostgreSQL
+در محیط ترمینال یا پلتفرم دیتابیس خود یک دیتابیس بسازید:
 ```bash
 createdb expense_tracker
 ```
-
-You can also create it with `psql`:
-
-```bash
-psql -U postgres -c 'CREATE DATABASE expense_tracker;'
+یا از طریق `psql`:
+```sql
+CREATE DATABASE expense_tracker;
 ```
 
-### 4. Configure The Environment
-
+### ۴. تنظیم متغیرهای محیطی (`.env`)
+فایل نمونه را کپی کنید:
 ```bash
 cp .env.example .env
 ```
-
-Update `.env`:
-
+سپس فایل `.env` را ویرایش و اطلاعات اتصال و کاربر اولیه را وارد نمایید:
 ```dotenv
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/expense_tracker?schema=public"
-NUXT_SESSION_SECRET="replace-with-a-long-random-secret"
-SEED_USERNAME="your-admin-username"
-SEED_PASSWORD="choose-a-strong-password"
+NUXT_SESSION_SECRET="your-super-long-and-random-secret-key"
+SEED_USERNAME="admin"
+SEED_PASSWORD="YourStrongPassword123"
 ```
+> [!TIP]
+> برای تولید کلید امن تصادفی برای `NUXT_SESSION_SECRET` می‌توانید از دستور زیر استفاده کنید:
+> ```bash
+> openssl rand -base64 48
+> ```
 
-Generate a session secret with OpenSSL:
-
-```bash
-openssl rand -base64 48
-```
-
-For a passwordless local PostgreSQL installation on macOS, use its Unix socket:
-
-```dotenv
-DATABASE_URL="postgresql://your-user@localhost/expense_tracker?host=%2Ftmp"
-```
-
-### 5. Apply Database Migrations
-
+### ۵. اجرای مایگریشن‌های دیتابیس
 ```bash
 npm run db:migrate
 ```
 
-This creates all required tables, indexes, and foreign keys.
-
-### 6. Create The Initial User
-
-If `SEED_USERNAME` and `SEED_PASSWORD` are present in `.env`:
-
+### ۶. ایجاد کاربر مدیر اولیه (Seed)
 ```bash
 npm run db:seed
 ```
 
-You can also provide the values for one command:
-
-```bash
-SEED_USERNAME="admin" SEED_PASSWORD="a-strong-password" npm run db:seed
-```
-
-No default credentials are included in the repository.
-
-### 7. Start Development
-
+### ۷. اجرای محیط توسعه
 ```bash
 npm run dev
 ```
+اکنون برنامه در آدرس [http://localhost:3000](http://localhost:3000) در دسترس است.
 
-Open [http://localhost:3000](http://localhost:3000).
+---
 
-## Available Scripts
+## 📜 اسکریپت‌های موجود
 
-| Command | Description |
+| دستور | کارکرد |
 | --- | --- |
-| `npm run dev` | Start the Nuxt development server |
-| `npm run build` | Create a production build |
-| `npm run preview` | Preview the production build locally |
-| `npm run generate` | Generate a static Nuxt output where supported |
-| `npm run typecheck` | Run Nuxt and Vue TypeScript checks |
-| `npm run db:migrate` | Create and apply development migrations |
-| `npm run db:seed` | Create the initial user from environment variables |
-| `npm run db:reset` | Delete local database data and reapply migrations |
+| `npm run dev` | اجرای سرور توسعه با قابلیت Hot-Reload |
+| `npm run build` | تولید نسخه کامپایل‌شده پروداکشن (Production Build) |
+| `npm run preview` | تست و مشاهده بیلد پروداکشن روی سیستم محلی |
+| `npm run typecheck` | بررسی و اعتبارسنجی کامل تایپ‌های TypeScript و تمپلیت‌ها |
+| `npm run db:migrate` | اعمال مایگریشن‌های Prisma روی دیتابیس |
+| `npm run db:seed` | ساخت حساب کاربری مدیر از روی فایل `.env` |
+| `npm run db:reset` | حذف کامل داده‌ها و اجرای دوباره تمام مایگریشن‌ها |
 
 > [!CAUTION]
-> `npm run db:reset` is destructive. It removes all users, transactions, tasks, debts, and crypto records in the configured database.
+> اجرای دستور `npm run db:reset` تمام داده‌ها و تراکنش‌های موجود در پایگاه‌داده را پاک می‌کند.
 
-## Project Structure
+---
+
+## 📁 ساختار پوشه‌بندی پروژه
 
 ```text
-.
 ├── app/
-│   ├── assets/css/          # Global Tailwind layers and design tokens
-│   ├── components/          # Modals, notifications, and shared UI
-│   ├── composables/         # Auth, formatting, constants, and toast state
-│   ├── layouts/             # Authenticated application shell
-│   ├── middleware/          # Client-side route protection
-│   ├── pages/               # Dashboard and feature routes
-│   ├── types/               # Shared TypeScript interfaces
-│   └── utils/               # Formatting and application constants
+│   ├── assets/css/          # فایل استایل سراسری Tailwind و توکن‌های طراحی
+│   ├── components/          # کامپوننت‌های اشتراکی، مودال‌ها و توست‌ها
+│   ├── composables/         # لاجیک‌های مشترک (useAuth, useFormat, useToast, ...)
+│   ├── layouts/             # قالب اصلی برنامه با سایدبار و ناوبری موبایل
+│   ├── middleware/          # میدل‌ویر کلاینت برای محافظت از مسیرها
+│   ├── pages/               # صفحات برنامه (داشبورد، حساب‌ها، نقد، بدهی، تسک، رمزارز)
+│   ├── types/               # تعاریف و تایپ‌های مشترک TypeScript
+│   └── utils/               # توابع کمکی و ثوابت سیستم
 ├── prisma/
-│   ├── migrations/          # Versioned PostgreSQL migrations
-│   ├── schema.prisma        # Prisma data model
-│   └── seed.ts              # Environment-driven initial user seed
-├── public/                  # Static public files
+│   ├── migrations/          # تاریخچه مایگریشن‌های پایگاه داده PostgreSQL
+│   ├── schema.prisma        # اسکیما و مدل‌های ارتباطی دیتابیس
+│   └── seed.ts              # اسکریپت ایجاد کاربر اولیه
 ├── server/
-│   ├── api/                 # Authenticated Nitro API routes
-│   ├── middleware/          # Server-side API authentication
-│   └── utils/               # Prisma, sessions, auth, and crypto accounting
-├── nuxt.config.ts           # Nuxt modules, fonts, theme, and runtime config
-├── prisma.config.ts         # Prisma CLI datasource and migration config
-└── package.json             # Scripts and dependencies
+│   ├── api/                 # اندپوینت‌های بک‌اند Nitro (REST API)
+│   ├── middleware/          # میدل‌ویر سرور برای بررسی کوکی احراز هویت
+│   └── utils/               # ابزارهای سرور (Prisma Client, Session, Crypto Calc)
+├── nuxt.config.ts           # پیکربندی ماژول‌ها، فونت، تایپ‌ها و متای Nuxt
+├── prisma.config.ts         # تنظیمات کلاینت و ابزار CLI پریزما
+└── package.json             # لیست پکیج‌ها و اسکریپت‌های اجرایی
 ```
 
-## Main Routes
+---
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Monthly financial dashboard |
-| `/accounts` | Bank account management |
-| `/accounts/:id` | Account transaction history |
-| `/cash` | Cash wallet management |
-| `/debts` | Debts and receivables |
-| `/todos` | Daily planner and performance |
-| `/crypto` | Cryptocurrency portfolio ledger |
-| `/login` | User authentication |
+## 🌐 مرجع مسیرها و APIهای سرور
 
-## API Reference
+تمام اندپوینت‌ها تحت احراز هویت امن کاربر اجرا می‌شوند و دسترسی هر کاربر محدود به داده‌های شخصی خود است.
 
-All feature endpoints require an authenticated session unless noted otherwise.
+### احراز هویت (Authentication)
+- `POST /api/auth/login` - ورود کاربر و تنظیم کوکی نشست
+- `POST /api/auth/logout` - خروج و ابطال نشست
+- `GET /api/auth/me` - دریافت مشخصات کاربر لاگین شده
 
-### Authentication
+### امور مالی و حساب‌ها (Financials)
+- `GET /api/dashboard?year=1405&month=5` - دریافت خلاصه مالی ماهانه داشبورد
+- `GET, POST /api/accounts` - لیست و ایجاد حساب بانکی
+- `GET, PATCH, DELETE /api/accounts/:id` - جزئیات، ویرایش و حذف حساب بانکی
+- `GET, POST /api/transactions` - لیست و ثبت تراکنش بانکی (پشتیبانی از `bankAccountId`، `type`، `page`)
+- `PATCH, DELETE /api/transactions/:id` - ویرایش، تغییر وضعیت هزینه غیرضروری یا حذف تراکنش بانکی
+- `GET, POST /api/cash/transactions` - لیست و ایجاد تراکنش نقدی
+- `PATCH, DELETE /api/cash/transactions/:id` - ویرایش و حذف تراکنش نقدی
+- `GET, POST /api/debts` - لیست و ایجاد بدهی یا طلب
+- `PATCH, DELETE /api/debts/:id` - ویرایش وضعیت پرداخت یا حذف بدهی
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `POST` | `/api/auth/login` | Authenticate with username and password |
-| `POST` | `/api/auth/logout` | Clear the active session |
-| `GET` | `/api/auth/me` | Return the current user |
+### برنامه روزانه (Todos)
+- `GET /api/todos?date=YYYY-MM-DD` - دریافت تسک‌ها و درصد پیشرفت روز مشخص
+- `POST /api/todos` - ایجاد تسک جدید
+- `PATCH /api/todos/:id` - ویرایش مشخصات یا تغییر وضعیت انجام تسک
+- `DELETE /api/todos/:id` - حذف تسک
 
-### Financial Data
+### پورتفوی رمزارز (Crypto Portfolio)
+- `GET /api/crypto` - دریافت سبد دارایی، سود/زیان و معاملات
+- `POST /api/crypto` - ثبت معامله خرید یا فروش
+- `DELETE /api/crypto/:id` - حذف رکورد معامله
+- `GET /api/crypto/prices` - دریافت قیمت‌های لحظه‌ای بازار ایران
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET`, `POST` | `/api/accounts` | List or create bank accounts |
-| `GET`, `PATCH`, `DELETE` | `/api/accounts/:id` | Read, update, or delete an account |
-| `GET`, `POST` | `/api/transactions` | List or create bank transactions |
-| `PATCH`, `DELETE` | `/api/transactions/:id` | Update or delete a bank transaction |
-| `GET`, `POST` | `/api/cash/transactions` | List or create cash transactions |
-| `PATCH`, `DELETE` | `/api/cash/transactions/:id` | Update or delete a cash transaction |
-| `GET`, `POST` | `/api/debts` | List or create debts and receivables |
-| `PATCH`, `DELETE` | `/api/debts/:id` | Update or delete a debt record |
-| `GET` | `/api/dashboard?year=1405&month=5` | Return a Jalali monthly summary |
+---
 
-### Daily Planner
+## 🔒 امنیت و حریم خصوصی
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/todos?date=YYYY-MM-DD` | Return tasks and daily performance |
-| `POST` | `/api/todos` | Create a task |
-| `PATCH` | `/api/todos/:id` | Edit or complete a task |
-| `DELETE` | `/api/todos/:id` | Delete a task |
+- کلمات عبور با الگوریتم قدرتمند **Argon2** هش شده و هیچ‌گاه در پاسخ‌های API ارسال نمی‌شوند.
+- نشست‌ها از طریق کوکی‌های امضاشده امن با ویژگی‌های `HttpOnly`، `SameSite` و طول عمر مشخص مدیریت می‌شوند.
+- کلیه کوئری‌های دیتابیس به شناسه کاربر احراز هویت شده محدود هستند (Multi-tenant Isolation).
+- از ارسال اطلاعات حساس، فایل‌های `.env` و اطلاعات دیتابیس به گیت خودداری فرمایید.
 
-### Cryptocurrency
+---
 
-| Method | Endpoint | Description |
-| --- | --- | --- |
-| `GET` | `/api/crypto` | Return holdings, trades, and profit/loss |
-| `POST` | `/api/crypto` | Record a local buy or sell transaction |
-| `DELETE` | `/api/crypto/:id` | Delete a transaction when accounting remains valid |
-| `GET` | `/api/crypto/prices` | Return cached live prices in Iranian rial |
+## 🚢 استقرار در پروداکشن (Production Deployment)
 
-## Cryptocurrency Pricing
-
-The server fetches public `TMN` market quotes from Wallex and converts them to Iranian rial:
-
-```text
-IRR price = Wallex TMN price × 10
-```
-
-Quotes are cached in memory for 60 seconds. If a refresh fails after at least one successful request, the API returns the last cached response with `stale: true`. If no cached response exists, it returns HTTP `502`.
-
-Live market data is informational and may differ from the final execution price on an exchange. The trade form allows the fetched value to be adjusted before saving.
-
-## Database Models
-
-| Model | Purpose |
-| --- | --- |
-| `User` | Credentials and ownership root |
-| `BankAccount` | User-created financial accounts |
-| `Transaction` | Bank income and expenses |
-| `CashTransaction` | Cash income and expenses |
-| `Debt` | Debts and receivables |
-| `Todo` | Daily tasks and completion state |
-| `CryptoTrade` | Local cryptocurrency buy and sell records |
-
-## Production
-
-Build the application:
+جهت اجرای برنامه روی سرور پروداکشن:
 
 ```bash
 npm ci
@@ -322,38 +269,16 @@ npx prisma migrate deploy
 npm run build
 ```
 
-Start the generated Node server:
+سپس سرور تولید شده توسط Nitro را اجرا کنید:
 
 ```bash
 node .output/server/index.mjs
 ```
 
-Production requirements:
+*(پیشنهاد می‌شود از مدیر فرایند مانند **PM2** یا داکر برای اجرای مداوم سرویس در کنار وب‌سرور معکوس مانند Nginx همراه با گواهی SSL استفاده کنید).*
 
-- Set a strong, unique `NUXT_SESSION_SECRET`.
-- Set `DATABASE_URL` to the production PostgreSQL instance.
-- Run `npx prisma migrate deploy` before starting the new application version.
-- Serve the application behind HTTPS so secure session cookies are enabled.
-- Use a supported Node.js release.
+---
 
-## Verification
+## 📄 لایسنس
 
-Run these checks before opening a pull request or deploying:
-
-```bash
-npm run typecheck
-npm run build
-npx prisma migrate status
-```
-
-## Security Notes
-
-- Passwords are hashed with Argon2 and are never returned by the API.
-- Session cookies are HTTP-only, signed, same-site, and expire after seven days.
-- CRUD operations scope records to the authenticated user.
-- Do not commit `.env`, production connection strings, or seed credentials.
-- The live price endpoint uses public market data and does not require an exchange API key.
-
-## License
-
-No license file is currently included. Add a license before distributing or accepting external contributions.
+این پروژه برای استفاده شخصی یا سازمانی توسعه داده شده است. می‌توانید لایسنس مورد نظر خود (مانند MIT) را به مخزن اضافه کنید.
