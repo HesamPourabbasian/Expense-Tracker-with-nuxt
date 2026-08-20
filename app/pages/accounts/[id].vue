@@ -167,23 +167,6 @@ async function handleUpdated() {
       </button>
     </div>
 
-    <!-- Potential Savings Card -->
-    <div v-if="(account.unnecessaryExpense || 0) > 0" class="surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-amber-200/90 bg-amber-50/50 p-4">
-      <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-          <Icon name="bx:bxs-star" class="h-6 w-6" />
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-amber-950">پتانسیل پس‌انداز حساب</h2>
-          <p class="text-xs text-amber-800/80">مجموع هزینه‌های ستاره‌دار غیرضروری که می‌توانستید ذخیره کنید.</p>
-        </div>
-      </div>
-      <div class="flex items-baseline gap-1.5 self-start sm:self-auto">
-        <span class="text-xs text-amber-800">مجموع:</span>
-        <span class="money text-base sm:text-lg font-bold text-amber-900">{{ formatCurrency(account.unnecessaryExpense || 0) }}</span>
-      </div>
-    </div>
-
     <div class="segmented">
        <button @click="setFilter('')" :class="!filterType ? 'bg-primary-50 text-primary-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">همه</button>
        <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-50 text-emerald-700 font-semibold' : 'text-gray-600 hover:bg-gray-50'">درآمد</button>

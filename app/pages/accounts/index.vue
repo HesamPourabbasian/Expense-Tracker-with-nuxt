@@ -9,10 +9,6 @@ const { formatCurrency } = useFormat()
 
 const { data: accounts, refresh } = await useFetch<BankAccount[]>('/api/accounts')
 
-const totalUnnecessaryAcrossAccounts = computed(() => {
-  return accounts.value?.reduce((sum, a) => sum + (a.unnecessaryExpense || 0), 0) || 0
-})
-
 function editAccount(account: BankAccount) {
   selectedAccount.value = account
   showEditModal.value = true
@@ -54,23 +50,6 @@ async function handleUpdated() {
         <Icon name="bx:bx-plus" class="w-4 h-4" />
         حساب جدید
       </button>
-    </div>
-
-    <!-- Summary of Unnecessary Expenses Across Accounts -->
-    <div v-if="totalUnnecessaryAcrossAccounts > 0" class="surface flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-amber-200/90 bg-amber-50/50 p-4">
-      <div class="flex items-center gap-3">
-        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-600">
-          <Icon name="bx:bxs-star" class="h-6 w-6" />
-        </div>
-        <div>
-          <h2 class="text-sm font-bold text-amber-950">کل پتانسیل پس‌انداز حساب‌ها</h2>
-          <p class="text-xs text-amber-800/80">مجموع هزینه‌های ستاره‌دار غیرضروری در تمام حساب‌های بانکی</p>
-        </div>
-      </div>
-      <div class="flex items-baseline gap-1.5 self-start sm:self-auto">
-        <span class="text-xs text-amber-800">مجموع:</span>
-        <span class="money text-base sm:text-lg font-bold text-amber-900">{{ formatCurrency(totalUnnecessaryAcrossAccounts) }}</span>
-      </div>
     </div>
 
     <div v-if="accounts?.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
