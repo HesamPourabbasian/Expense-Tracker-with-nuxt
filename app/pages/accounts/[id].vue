@@ -146,15 +146,9 @@ async function handleUpdated() {
           </div>
           <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
-            <div class="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
-              <p :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
-                موجودی: <bdi class="money font-semibold">{{ formatCurrency(account.balance || 0) }}</bdi>
-              </p>
-              <span v-if="(account.unnecessaryExpense || 0) > 0" class="inline-flex items-center gap-1 font-semibold text-amber-700">
-                <Icon name="bx:bxs-star" class="h-4 w-4 text-amber-500" />
-                قابل پس‌انداز: <bdi class="money">{{ formatCurrency(account.unnecessaryExpense || 0) }}</bdi>
-              </span>
-            </div>
+            <p class="text-sm" :class="(account.balance || 0) >= 0 ? 'text-gray-500' : 'text-red-500'">
+              موجودی: <bdi class="money">{{ formatCurrency(account.balance || 0) }}</bdi>
+            </p>
           </div>
         </div>
       </div>

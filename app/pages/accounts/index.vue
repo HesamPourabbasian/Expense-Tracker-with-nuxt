@@ -84,17 +84,7 @@ async function handleUpdated() {
           </div>
         </div>
         <NuxtLink :to="`/accounts/${account.id}`" class="mt-6 block border-t border-gray-100 pt-4">
-          <div class="flex items-end justify-between gap-2">
-            <div class="min-w-0">
-              <p class="text-sm text-gray-400">موجودی فعلی</p>
-              <p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p>
-              <p v-if="(account.unnecessaryExpense || 0) > 0" class="mt-2 flex items-center gap-1 text-xs font-semibold text-amber-700">
-                <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-500 shrink-0" />
-                <span>قابل پس‌انداز: <bdi class="money">{{ formatCurrency(account.unnecessaryExpense || 0) }}</bdi></span>
-              </p>
-            </div>
-            <Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" />
-          </div>
+          <div class="flex items-end justify-between gap-2"><div class="min-w-0"><p class="text-sm text-gray-400">موجودی فعلی</p><p class="money mt-1 max-w-full break-words text-lg font-bold sm:text-xl" :class="(account.balance || 0) >= 0 ? 'text-gray-950' : 'text-rose-600'">{{ formatCurrency(account.balance || 0) }}</p></div><Icon name="lucide:arrow-up-left" class="h-5 w-5 shrink-0 text-gray-300 transition group-hover:text-primary-600" /></div>
         </NuxtLink>
       </article>
     </div>
