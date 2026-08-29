@@ -1,5 +1,6 @@
 import prisma from '~~/server/utils/prisma'
 import moment from 'jalali-moment'
+import { calculateAccountBalance } from '~~/server/utils/account'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
@@ -24,7 +25,13 @@ export default defineEventHandler(async (event) => {
       where: { userId: user.id },
       include: {
         transactions: {
-          select: { type: true, amount: true }
+          select: {
+            type: true,
+            amount: true,
+            bankAccountId: true,
+            sourceAccountId: true,
+            destinationAccountId: true
+          }
         }
       }
     }),
@@ -43,9 +50,7 @@ export default defineEventHandler(async (event) => {
   ])
 
   const bankAccounts = accounts.map(account => {
-    const balance = account.transactions.reduce((acc, t) => {
-      return acc + (t.type === 'income' ? t.amount : -t.amount)
-    }, 0)
+    const balance = calculateAccountBalance(account.transactions, account.id)
     return {
       id: account.id,
       name: account.name,
