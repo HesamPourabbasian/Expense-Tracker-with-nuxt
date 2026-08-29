@@ -229,6 +229,8 @@ npm run dev
 - `GET /api/dashboard?year=1405&month=5` - دریافت خلاصه مالی ماهانه داشبورد
 - `GET, POST /api/accounts` - لیست و ایجاد حساب بانکی
 - `GET, PATCH, DELETE /api/accounts/:id` - جزئیات، ویرایش و حذف حساب بانکی
+- `POST /api/accounts/transfer` - انتقال وجه و مدیریت نقدینگی بین حساب‌ها
+- `PATCH, DELETE /api/accounts/transfer/:id` - ویرایش یا حذف انتقال وجه
 - `GET, POST /api/transactions` - لیست و ثبت تراکنش بانکی (پشتیبانی از `bankAccountId`، `type`، `page`)
 - `PATCH, DELETE /api/transactions/:id` - ویرایش، تغییر وضعیت هزینه غیرضروری یا حذف تراکنش بانکی
 - `GET, POST /api/cash/transactions` - لیست و ایجاد تراکنش نقدی
