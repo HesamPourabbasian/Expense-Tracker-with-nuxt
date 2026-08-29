@@ -25,7 +25,7 @@ model BankAccount {
   id        Int      @id @default(autoincrement())
   userId    Int
   name      String
-  icon      String   @default("bx:bx-bank")
+  icon      String   @default("lucide:landmark")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

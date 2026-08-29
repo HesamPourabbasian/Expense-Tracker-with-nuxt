@@ -9,6 +9,8 @@ const form = reactive({
   icon: props.account.icon
 })
 
+onKeyStroke('Escape', () => emit('close'))
+
 const error = ref('')
 const loading = ref(false)
 

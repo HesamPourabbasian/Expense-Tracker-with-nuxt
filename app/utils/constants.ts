@@ -1,16 +1,20 @@
 export const bankIcons = [
-  { value: 'bx:bx-bank', label: 'بانک' },
-  { value: 'bx:bx-wallet', label: 'کیف پول' },
-  { value: 'bx:bx-money', label: 'پول' },
-  { value: 'bx:bx-credit-card', label: 'کارت بانکی' },
-  { value: 'bx:bx-pie-chart-alt', label: 'نمودار' },
-  { value: 'bx:bx-savings', label: 'پس‌انداز' },
-  { value: 'bx:bx-safe', label: 'صندوق' },
-  { value: 'bx:bx-dollar', label: 'دلار' },
-  { value: 'bx:bx-gift', label: 'هدیه' },
-  { value: 'bx:bx-briefcase', label: 'کیف کاری' },
-  { value: 'bx:bx-home', label: 'خانه' },
-  { value: 'bx:bx-car', label: 'خودرو' }
+  { value: 'lucide:landmark', label: 'بانک' },
+  { value: 'lucide:credit-card', label: 'کارت بانکی' },
+  { value: 'lucide:wallet', label: 'کیف پول' },
+  { value: 'lucide:wallet-cards', label: 'چندکارته' },
+  { value: 'lucide:piggy-bank', label: 'پس‌انداز' },
+  { value: 'lucide:vault', label: 'صندوق' },
+  { value: 'lucide:coins', label: 'نقد و سکه' },
+  { value: 'lucide:hand-coins', label: 'تنخواه' },
+  { value: 'lucide:building-2', label: 'شرکتی' },
+  { value: 'lucide:briefcase', label: 'کاری' },
+  { value: 'lucide:badge-dollar-sign', label: 'ارزی' },
+  { value: 'lucide:trending-up', label: 'سرمایه‌گذاری' },
+  { value: 'lucide:gem', label: 'طلا و دارایی' },
+  { value: 'lucide:shield-check', label: 'ذخیره امن' },
+  { value: 'lucide:receipt', label: 'جاری' },
+  { value: 'lucide:gift', label: 'هدیه' }
 ]
 
 export const PERSIAN_MONTHS = [

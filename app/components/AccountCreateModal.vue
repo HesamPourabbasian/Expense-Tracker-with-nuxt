@@ -3,8 +3,10 @@ const emit = defineEmits(['close', 'created'])
 
 const form = reactive({
   name: '',
-  icon: 'bx:bx-bank'
+  icon: 'lucide:landmark'
 })
+
+onKeyStroke('Escape', () => emit('close'))
 
 const error = ref('')
 const loading = ref(false)
