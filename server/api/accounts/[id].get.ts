@@ -1,4 +1,5 @@
 import prisma from '~~/server/utils/prisma'
+import { calculateAccountBalance } from '~~/server/utils/account'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
@@ -12,7 +13,16 @@ export default defineEventHandler(async (event) => {
     where: { id, userId: user.id },
     include: {
       _count: { select: { transactions: true } },
-      transactions: { select: { type: true, amount: true, isUnnecessary: true } }
+      transactions: {
+        select: {
+          type: true,
+          amount: true,
+          isUnnecessary: true,
+          bankAccountId: true,
+          sourceAccountId: true,
+          destinationAccountId: true
+        }
+      }
     }
   })
 
@@ -23,9 +33,7 @@ export default defineEventHandler(async (event) => {
   const { transactions, ...details } = account
   return {
     ...details,
-    balance: transactions.reduce((total, transaction) => (
-      total + (transaction.type === 'income' ? transaction.amount : -transaction.amount)
-    ), 0),
+    balance: calculateAccountBalance(transactions, account.id),
     unnecessaryExpense: transactions.reduce((total, transaction) => (
       total + (transaction.type === 'expense' && transaction.isUnnecessary ? transaction.amount : 0)
     ), 0)
