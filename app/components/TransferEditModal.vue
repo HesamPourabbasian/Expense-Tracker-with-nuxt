@@ -9,6 +9,8 @@ const props = defineProps<{
 const emit = defineEmits(['close', 'updated'])
 const { formatCurrency } = useFormat()
 
+onKeyStroke('Escape', () => emit('close'))
+
 const { data: accounts } = await useFetch<BankAccountWithBalance[]>('/api/accounts')
 
 const form = reactive({
