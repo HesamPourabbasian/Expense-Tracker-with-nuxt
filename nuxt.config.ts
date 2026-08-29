@@ -9,12 +9,28 @@ export default defineNuxtConfig({
     '@pinia/nuxt'
   ],
   icon: {
-    serverBundle: {
-      collections: ['bx', 'carbon', 'heroicons', 'line-md', 'lucide', 'mdi', 'ri', 'tabler']
-    },
+    serverBundle: 'local',
     clientBundle: {
       scan: true,
-      sizeLimitKb: 0
+      sizeLimitKb: 0,
+      icons: [
+        'lucide:landmark',
+        'lucide:credit-card',
+        'lucide:wallet',
+        'lucide:wallet-cards',
+        'lucide:piggy-bank',
+        'lucide:vault',
+        'lucide:coins',
+        'lucide:hand-coins',
+        'lucide:building-2',
+        'lucide:briefcase',
+        'lucide:badge-dollar-sign',
+        'lucide:trending-up',
+        'lucide:gem',
+        'lucide:shield-check',
+        'lucide:receipt',
+        'lucide:gift'
+      ]
     }
   },
   css: ['~/assets/css/main.css'],

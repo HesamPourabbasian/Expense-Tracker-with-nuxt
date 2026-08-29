@@ -58,20 +58,22 @@ function isActive(path: string) {
       </nav>
 
       <div class="border-t border-slate-800/80 p-4">
-        <div class="flex items-center justify-between rounded-xl bg-slate-900/80 border border-slate-800/80 p-3">
-          <div class="flex items-center gap-3 min-w-0">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs ring-1 ring-emerald-500/30">
-              {{ user?.username ? user.username.slice(0, 1).toUpperCase() : 'U' }}
+        <ClientOnly>
+          <div class="flex items-center justify-between rounded-xl bg-slate-900/80 border border-slate-800/80 p-3">
+            <div class="flex items-center gap-3 min-w-0">
+              <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs ring-1 ring-emerald-500/30">
+                {{ user?.username ? user.username.slice(0, 1).toUpperCase() : 'U' }}
+              </div>
+              <div class="min-w-0">
+                <span class="block truncate text-xs font-semibold text-slate-200">{{ user?.username || 'کاربر' }}</span>
+                <p class="text-[11px] text-slate-400">کاربر فعال</p>
+              </div>
             </div>
-            <div class="min-w-0">
-              <span class="block truncate text-xs font-semibold text-slate-200">{{ user?.username || 'کاربر' }}</span>
-              <p class="text-[11px] text-slate-400">کاربر فعال</p>
-            </div>
+            <button @click="logout" class="icon-button h-8 w-8 text-slate-400 hover:bg-rose-500/20 hover:text-rose-400" title="خروج">
+              <Icon name="lucide:log-out" class="h-4 w-4" />
+            </button>
           </div>
-          <button @click="logout" class="icon-button h-8 w-8 text-slate-400 hover:bg-rose-500/20 hover:text-rose-400" title="خروج">
-            <Icon name="lucide:log-out" class="h-4 w-4" />
-          </button>
-        </div>
+        </ClientOnly>
       </div>
     </aside>
 
