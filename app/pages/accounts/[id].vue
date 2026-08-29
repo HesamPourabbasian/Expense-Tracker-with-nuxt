@@ -347,10 +347,12 @@ async function handleUpdated() {
 
     <div v-else class="empty-state">
       <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
-        <Icon name="lucide:receipt" class="w-7 h-7" />
+        <Icon :name="filterType === 'transfer' ? 'lucide:arrow-left-right' : 'lucide:receipt'" class="w-7 h-7" />
       </div>
-      <h3 class="font-bold text-slate-800">تراکنشی یافت نشد</h3>
-      <p class="mt-1 text-xs text-slate-400">برای این حساب هنوز تراکنشی با این فیلتر ثبت نشده است.</p>
+      <h3 class="font-bold text-slate-800">{{ filterType === 'transfer' ? 'انتقالی یافت نشد' : 'تراکنشی یافت نشد' }}</h3>
+      <p class="mt-1 text-xs text-slate-400">
+        {{ filterType === 'transfer' ? 'هنوز انتقال وجهی برای این حساب ثبت نشده است.' : 'برای این حساب هنوز تراکنشی با این فیلتر ثبت نشده است.' }}
+      </p>
     </div>
 
     <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3 pt-2">
