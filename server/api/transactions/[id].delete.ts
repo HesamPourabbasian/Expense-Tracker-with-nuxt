@@ -9,6 +9,15 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404, statusMessage: 'Transaction not found' })
   }
 
-  await prisma.transaction.delete({ where: { id } })
+  if (transaction.relatedTransactionId) {
+    await prisma.transaction.deleteMany({
+      where: {
+        id: { in: [transaction.id, transaction.relatedTransactionId] },
+        userId: user.id
+      }
+    })
+  } else {
+    await prisma.transaction.delete({ where: { id } })
+  }
   return { success: true }
 })
