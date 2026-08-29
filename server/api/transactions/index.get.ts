@@ -19,8 +19,8 @@ export default defineEventHandler(async (event) => {
   
   if (query.type === 'unnecessary') {
     where.isUnnecessary = true
-  } else if (query.type && ['income', 'expense'].includes(String(query.type))) {
-    where.type = query.type
+  } else if (query.type && ['income', 'expense', 'transfer', 'TRANSFER'].includes(String(query.type))) {
+    where.type = String(query.type).toLowerCase()
   }
 
   if (query.isUnnecessary !== undefined) {
@@ -31,7 +31,11 @@ export default defineEventHandler(async (event) => {
     prisma.transaction.count({ where }),
     prisma.transaction.findMany({
       where,
-      include: { bankAccount: { select: { name: true, icon: true } } },
+      include: {
+        bankAccount: { select: { id: true, name: true, icon: true } },
+        sourceAccount: { select: { id: true, name: true, icon: true } },
+        destinationAccount: { select: { id: true, name: true, icon: true } }
+      },
       orderBy: [{ date: 'desc' }, { id: 'desc' }],
       skip: (page - 1) * pageSize,
       take: pageSize
