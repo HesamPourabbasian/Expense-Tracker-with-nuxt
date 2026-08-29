@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const path = getRequestURL(event).pathname
 
-  if (path.startsWith('/api/auth/login') || path.startsWith('/api/auth/me') || path.startsWith('/api/_nuxt_icon/')) {
+  if (path.startsWith('/api/auth/login') || path.startsWith('/api/auth/me') || path.startsWith('/api/_nuxt_icon')) {
     return
   }
 

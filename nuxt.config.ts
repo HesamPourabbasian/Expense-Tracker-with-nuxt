@@ -8,6 +8,15 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     '@pinia/nuxt'
   ],
+  icon: {
+    serverBundle: {
+      collections: ['bx', 'carbon', 'heroicons', 'line-md', 'lucide', 'mdi', 'ri', 'tabler']
+    },
+    clientBundle: {
+      scan: true,
+      sizeLimitKb: 0
+    }
+  },
   css: ['~/assets/css/main.css'],
   tailwindcss: {
     config: {
