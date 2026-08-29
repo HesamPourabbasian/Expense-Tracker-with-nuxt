@@ -1,3 +1,11 @@
+/**
+ * Calculates the net balance of a bank account by evaluating income, expense, and transfer records.
+ * Transfers decrease the source account and increase the destination account without altering global net worth.
+ *
+ * @param transactions Array of transaction objects with type, amount, and account identifiers
+ * @param targetAccountId The specific account ID for which the balance is being computed
+ * @returns Net calculated balance in Tomans
+ */
 export function calculateAccountBalance(
   transactions: {
     type: string
@@ -20,6 +28,13 @@ export function calculateAccountBalance(
   }, 0)
 }
 
+/**
+ * Fetches transactions and computes the live balance for a given account within a Prisma query or transaction context.
+ *
+ * @param accountId Target bank account ID
+ * @param prismaClient Prisma client instance or active transaction handle (tx)
+ * @returns Promise resolving to current available balance
+ */
 export async function getAccountCurrentBalance(
   accountId: number,
   prismaClient: any
