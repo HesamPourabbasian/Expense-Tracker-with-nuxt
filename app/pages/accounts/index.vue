@@ -4,6 +4,7 @@ import type { BankAccount } from '~/types'
 const toast = useToast()
 const showCreateModal = ref(false)
 const showEditModal = ref(false)
+const showTransferModal = ref(false)
 const selectedAccount = ref<BankAccount | null>(null)
 const { formatCurrency } = useFormat()
 
@@ -31,6 +32,12 @@ async function handleCreated() {
   toast.success('حساب جدید ایجاد شد')
 }
 
+async function handleTransferCreated() {
+  showTransferModal.value = false
+  await refresh()
+  toast.success('انتقال وجه با موفقیت انجام شد')
+}
+
 async function handleUpdated() {
   showEditModal.value = false
   selectedAccount.value = null
@@ -45,15 +52,24 @@ async function handleUpdated() {
       <div class="min-w-0">
         <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">مدیریت موجودی</p>
         <h1 class="page-heading">حساب‌های بانکی</h1>
-        <p class="page-kicker">موجودی و گردش مالی هر حساب را مدیریت کن.</p>
+        <p class="page-kicker">موجودی، گردش مالی و انتقال بین حساب‌ها را مدیریت کن.</p>
       </div>
-      <button
-        @click="showCreateModal = true"
-        class="primary-button w-full sm:w-auto"
-      >
-        <Icon name="lucide:plus" class="w-4 h-4" />
-        حساب جدید
-      </button>
+      <div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+        <button
+          @click="showTransferModal = true"
+          class="primary-button bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20 text-white w-full sm:w-auto"
+        >
+          <Icon name="lucide:arrow-left-right" class="w-4 h-4" />
+          مدیریت نقدینگی
+        </button>
+        <button
+          @click="showCreateModal = true"
+          class="primary-button w-full sm:w-auto"
+        >
+          <Icon name="lucide:plus" class="w-4 h-4" />
+          حساب جدید
+        </button>
+      </div>
     </div>
 
     <div v-if="accounts?.length" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -114,5 +130,6 @@ async function handleUpdated() {
 
     <AccountCreateModal v-if="showCreateModal" @close="showCreateModal = false" @created="handleCreated" />
     <AccountEditModal v-if="showEditModal && selectedAccount" :account="selectedAccount" @close="showEditModal = false" @updated="handleUpdated" />
+    <TransferModal v-if="showTransferModal" @close="showTransferModal = false" @created="handleTransferCreated" />
   </div>
 </template>
