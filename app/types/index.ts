@@ -24,13 +24,27 @@ export interface Transaction {
   id: number
   userId: number
   bankAccountId: number
-  type: 'income' | 'expense'
+  type: 'income' | 'expense' | 'transfer'
   amount: number
   description: string | null
   date: string
   isUnnecessary: boolean
+  sourceAccountId?: number | null
+  destinationAccountId?: number | null
+  relatedTransactionId?: number | null
   createdAt: string
-  bankAccount?: { name: string; icon: string }
+  updatedAt?: string
+  bankAccount?: { id?: number; name: string; icon: string }
+  sourceAccount?: { id: number; name: string; icon: string } | null
+  destinationAccount?: { id: number; name: string; icon: string } | null
+}
+
+export interface TransferPayload {
+  sourceAccountId: number
+  destinationAccountId: number
+  amount: number
+  date: string
+  description?: string | null
 }
 
 export interface PaginatedTransactions {
