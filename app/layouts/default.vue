@@ -25,7 +25,7 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div v-if="user" class="min-h-[calc(100dvh-2.25rem)] bg-slate-50">
+  <div class="min-h-[calc(100dvh-2.25rem)] bg-slate-50">
     <!-- Desktop Sidebar -->
     <aside class="hidden border-l border-slate-800 bg-[#090e17] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col shadow-xl">
       <div class="flex h-20 items-center gap-3 border-b border-slate-800/80 px-6">
@@ -61,10 +61,10 @@ function isActive(path: string) {
         <div class="flex items-center justify-between rounded-xl bg-slate-900/80 border border-slate-800/80 p-3">
           <div class="flex items-center gap-3 min-w-0">
             <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-400 font-bold text-xs ring-1 ring-emerald-500/30">
-              {{ user.username.slice(0, 1).toUpperCase() }}
+              {{ user?.username ? user.username.slice(0, 1).toUpperCase() : 'U' }}
             </div>
             <div class="min-w-0">
-              <span class="block truncate text-xs font-semibold text-slate-200">{{ user.username }}</span>
+              <span class="block truncate text-xs font-semibold text-slate-200">{{ user?.username || 'کاربر' }}</span>
               <p class="text-[11px] text-slate-400">کاربر فعال</p>
             </div>
           </div>
@@ -112,8 +112,5 @@ function isActive(path: string) {
     </nav>
 
     <Toast />
-  </div>
-  <div v-else class="flex min-h-screen items-center justify-center bg-slate-50">
-    <div class="h-9 w-9 animate-spin rounded-full border-3 border-emerald-600 border-t-transparent"></div>
   </div>
 </template>
