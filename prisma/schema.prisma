@@ -7,11 +7,11 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
   password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   bankAccounts     BankAccount[]
   transactions     Transaction[]
@@ -22,36 +22,47 @@ model User {
 }
 
 model BankAccount {
-  id        Int       @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   userId    Int
   name      String
-  icon      String    @default("bx:bx-bank")
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  icon      String   @default("bx:bx-bank")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  transactions Transaction[]
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactions  Transaction[] @relation("AccountTransactions")
+  transfersFrom Transaction[] @relation("SourceTransfers")
+  transfersTo   Transaction[] @relation("DestinationTransfers")
 
   @@index([userId])
 }
 
 model Transaction {
-  id            Int      @id @default(autoincrement())
-  userId        Int
-  bankAccountId Int
-  type          String
-  amount        Float
-  description   String?
-  date          DateTime
-  isUnnecessary Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  id                   Int      @id @default(autoincrement())
+  userId               Int
+  bankAccountId        Int
+  type                 String
+  amount               Float
+  description          String?
+  date                 DateTime
+  isUnnecessary        Boolean  @default(false)
+  sourceAccountId      Int?
+  destinationAccountId Int?
+  relatedTransactionId Int?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @default(now()) @updatedAt
 
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bankAccount BankAccount @relation(fields: [bankAccountId], references: [id], onDelete: Cascade)
+  user               User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bankAccount        BankAccount  @relation("AccountTransactions", fields: [bankAccountId], references: [id], onDelete: Cascade)
+  sourceAccount      BankAccount? @relation("SourceTransfers", fields: [sourceAccountId], references: [id], onDelete: Cascade)
+  destinationAccount BankAccount? @relation("DestinationTransfers", fields: [destinationAccountId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([bankAccountId])
   @@index([date])
+  @@index([sourceAccountId])
+  @@index([destinationAccountId])
+  @@index([relatedTransactionId])
 }
 
 model CashTransaction {
@@ -102,17 +113,17 @@ model Todo {
 }
 
 model CryptoTrade {
-  id           Int      @id @default(autoincrement())
-  userId       Int
-  asset        String
-  symbol       String
-  type         String
-  quantity     Float
-  price        Float
-  totalValue   Float
-  note         String?
-  date         DateTime
-  createdAt    DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  asset      String
+  symbol     String
+  type       String
+  quantity   Float
+  price      Float
+  totalValue Float
+  note       String?
+  date       DateTime
+  createdAt  DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
