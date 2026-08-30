@@ -98,39 +98,39 @@ async function handleSubmit() {
     <div class="modal-panel max-w-lg">
       <div class="flex items-center justify-between mb-6">
         <div class="flex items-center gap-2.5">
-          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 text-indigo-700 ring-1 ring-indigo-500/20">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-400 ring-1 ring-indigo-500/20">
             <Icon name="lucide:arrow-left-right" class="w-5 h-5" />
           </div>
           <div>
-            <h2 class="text-base font-extrabold text-slate-900">ویرایش انتقال وجه</h2>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">ویرایش انتقال وجه</h2>
             <p class="text-xs text-slate-400 font-medium">اصلاح جزئیات انتقال بین حساب‌ها</p>
           </div>
         </div>
-        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره">
+        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" aria-label="بستن پنجره">
           <Icon name="lucide:x" class="w-4 h-4" />
         </button>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div v-if="error" class="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl px-4 py-3">
+        <div v-if="error" class="bg-rose-50 dark:bg-rose-500/15 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
         <!-- Transfer Source & Destination Selector Grid -->
-        <div class="relative space-y-3.5 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+        <div class="relative space-y-3.5 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
           <!-- Source Account -->
           <div>
             <div class="flex items-center justify-between mb-1.5">
-              <label class="text-xs font-bold text-slate-700">حساب مبدأ (کسر از حساب)</label>
-              <span v-if="selectedSourceAccount" class="text-[11px] font-medium text-slate-500">
-                موجودی: <bdi class="money font-bold text-slate-800">{{ formatCurrency(selectedSourceAccount.balance || 0) }}</bdi>
+              <label class="text-xs font-bold text-slate-700 dark:text-slate-300">حساب مبدأ (کسر از حساب)</label>
+              <span v-if="selectedSourceAccount" class="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                موجودی: <bdi class="money font-bold text-slate-800 dark:text-slate-200">{{ formatCurrency(selectedSourceAccount.balance || 0) }}</bdi>
               </span>
             </div>
             <select
               v-model="form.sourceAccountId"
               class="form-control font-bold pr-3 pl-10"
             >
-              <option v-for="acc in accounts" :key="acc.id" :value="acc.id">
+              <option v-for="acc in accounts" :key="acc.id" :value="acc.id" class="dark:bg-slate-900">
                 {{ acc.name }} (موجودی: {{ formatCurrency(acc.balance || 0) }})
               </option>
             </select>
@@ -141,7 +141,7 @@ async function handleSubmit() {
             <button
               type="button"
               @click="swapAccounts"
-              class="flex h-8 w-8 items-center justify-center rounded-full bg-white border border-slate-200 text-indigo-600 shadow-xs hover:bg-indigo-50 hover:border-indigo-300 transition-transform active:scale-95"
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-indigo-600 dark:text-indigo-400 shadow-xs hover:bg-indigo-50 dark:hover:bg-indigo-950/60 hover:border-indigo-300 transition-transform active:scale-95"
               title="جابجایی مبدأ و مقصد"
             >
               <Icon name="lucide:arrow-down-up" class="w-4 h-4" />
@@ -151,16 +151,16 @@ async function handleSubmit() {
           <!-- Destination Account -->
           <div>
             <div class="flex items-center justify-between mb-1.5">
-              <label class="text-xs font-bold text-slate-700">حساب مقصد (افزایش به حساب)</label>
-              <span v-if="selectedDestinationAccount" class="text-[11px] font-medium text-slate-500">
-                موجودی: <bdi class="money font-bold text-slate-800">{{ formatCurrency(selectedDestinationAccount.balance || 0) }}</bdi>
+              <label class="text-xs font-bold text-slate-700 dark:text-slate-300">حساب مقصد (افزایش به حساب)</label>
+              <span v-if="selectedDestinationAccount" class="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                موجودی: <bdi class="money font-bold text-slate-800 dark:text-slate-200">{{ formatCurrency(selectedDestinationAccount.balance || 0) }}</bdi>
               </span>
             </div>
             <select
               v-model="form.destinationAccountId"
               class="form-control font-bold pr-3 pl-10"
             >
-              <option v-for="acc in accounts" :key="acc.id" :value="acc.id">
+              <option v-for="acc in accounts" :key="acc.id" :value="acc.id" class="dark:bg-slate-900">
                 {{ acc.name }} (موجودی: {{ formatCurrency(acc.balance || 0) }})
               </option>
             </select>
@@ -170,8 +170,8 @@ async function handleSubmit() {
         <!-- Transfer Amount -->
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-bold text-slate-700">مبلغ انتقال (تومان)</label>
-            <span v-if="form.amount > 0" class="text-xs font-bold text-indigo-600">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">مبلغ انتقال (تومان)</label>
+            <span v-if="form.amount > 0" class="text-xs font-bold text-indigo-600 dark:text-indigo-400">
               {{ formatCurrency(form.amount) }}
             </span>
           </div>
@@ -186,7 +186,7 @@ async function handleSubmit() {
 
         <!-- Date -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">تاریخ انتقال (شمسی)</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">تاریخ انتقال (شمسی)</label>
           <input
             v-model="form.date"
             type="text"
@@ -198,7 +198,7 @@ async function handleSubmit() {
 
         <!-- Description -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات (اختیاری)</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">توضیحات (اختیاری)</label>
           <input
             v-model="form.description"
             type="text"
@@ -210,7 +210,7 @@ async function handleSubmit() {
         <button
           type="submit"
           :disabled="loading"
-          class="primary-button w-full mt-2 bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20"
+          class="primary-button w-full mt-2 bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20 text-white"
         >
           <span v-if="loading">در حال ذخیره...</span>
           <span v-else>ذخیره تغییرات</span>

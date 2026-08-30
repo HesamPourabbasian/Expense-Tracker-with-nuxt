@@ -49,10 +49,10 @@ async function handleUpdated() {
   <div class="page-shell">
     <div class="flex flex-col items-stretch gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div class="min-w-0">
-        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700">پول نقد فیزیکی</p>
+        <p class="mb-1 text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">پول نقد فیزیکی</p>
         <h1 class="page-heading">کیف پول نقدی</h1>
-        <p class="text-xs sm:text-sm font-medium mt-1" :class="balance >= 0 ? 'text-slate-500' : 'text-rose-600'">
-          موجودی نقد: <bdi class="money font-extrabold text-slate-900">{{ formatCurrency(balance) }}</bdi>
+        <p class="text-xs sm:text-sm font-medium mt-1" :class="balance >= 0 ? 'text-slate-500 dark:text-slate-400' : 'text-rose-600 dark:text-rose-400'">
+          موجودی نقد: <bdi class="money font-extrabold text-slate-900 dark:text-white">{{ formatCurrency(balance) }}</bdi>
         </p>
       </div>
       <button
@@ -68,29 +68,29 @@ async function handleUpdated() {
     <div class="segmented">
       <button
         @click="filterType = ''"
-        :class="!filterType ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="!filterType ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >همه</button>
       <button
         @click="filterType = 'income'"
-        :class="filterType === 'income' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="filterType === 'income' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >درآمد</button>
       <button
         @click="filterType = 'expense'"
-        :class="filterType === 'expense' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="filterType === 'expense' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >هزینه</button>
     </div>
 
     <!-- Transactions -->
-    <div v-if="transactions?.length" class="surface divide-y divide-slate-100 overflow-hidden">
+    <div v-if="transactions?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
       <div
         v-for="t in transactions"
         :key="t.id"
-        class="transaction-row flex items-center justify-between gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70"
+        class="transaction-row flex items-center justify-between gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70 dark:hover:bg-slate-800/40"
       >
         <div class="transaction-details flex min-w-0 items-center gap-3.5">
           <div
             class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition"
-            :class="t.type === 'income' ? 'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-500/20' : 'bg-rose-50 text-rose-600 ring-1 ring-rose-500/20'"
+            :class="t.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/20' : 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 ring-1 ring-rose-500/20'"
           >
             <Icon
               :name="t.type === 'income' ? 'lucide:arrow-down-left' : 'lucide:arrow-up-right'"
@@ -98,19 +98,19 @@ async function handleUpdated() {
             />
           </div>
           <div class="min-w-0">
-            <p class="break-words text-sm font-bold text-slate-900">{{ t.description || (t.type === 'income' ? 'درآمد نقدی' : 'هزینه نقدی') }}</p>
-            <p class="text-xs text-slate-400 font-medium mt-0.5">{{ toJalali(t.date) }}</p>
+            <p class="break-words text-sm font-bold text-slate-900 dark:text-white">{{ t.description || (t.type === 'income' ? 'درآمد نقدی' : 'هزینه نقدی') }}</p>
+            <p class="text-xs text-slate-400 dark:text-slate-400 font-medium mt-0.5">{{ toJalali(t.date) }}</p>
           </div>
         </div>
         <div class="transaction-actions flex items-center gap-3">
-          <p class="money whitespace-nowrap text-sm sm:text-base font-extrabold" :class="t.type === 'income' ? 'text-emerald-600' : 'text-rose-600'">
+          <p class="money whitespace-nowrap text-sm sm:text-base font-extrabold" :class="t.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
             {{ t.type === 'income' ? '+' : '-' }} {{ formatCurrency(t.amount) }}
           </p>
           <div class="flex items-center gap-1">
-            <button @click="editTransaction = t" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش">
+            <button @click="editTransaction = t" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" title="ویرایش">
               <Icon name="lucide:pencil" class="w-4 h-4" />
             </button>
-            <button @click="deleteTransaction(t.id)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
+            <button @click="deleteTransaction(t.id)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400" title="حذف">
               <Icon name="lucide:trash-2" class="w-4 h-4" />
             </button>
           </div>
@@ -119,10 +119,10 @@ async function handleUpdated() {
     </div>
 
     <div v-else class="empty-state">
-      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mb-3">
         <Icon name="lucide:wallet" class="w-7 h-7" />
       </div>
-      <h3 class="font-bold text-slate-800">تراکنش نقدی ثبت نشده</h3>
+      <h3 class="font-bold text-slate-800 dark:text-slate-200">تراکنش نقدی ثبت نشده</h3>
       <p class="mt-1 text-xs text-slate-400">گردش پول نقد و اسکناس‌های خود را اینجا ثبت کن.</p>
     </div>
 

@@ -190,11 +190,11 @@ async function handleUpdated() {
     </div>
 
     <div class="segmented">
-       <button @click="setFilter('')" :class="!filterType ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">همه</button>
-       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">درآمد</button>
-       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">هزینه</button>
-       <button @click="setFilter('transfer')" :class="filterType === 'transfer' ? 'bg-indigo-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">انتقال</button>
-       <button @click="setFilter('unnecessary')" class="flex items-center gap-1.5" :class="filterType === 'unnecessary' ? 'bg-amber-500 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'">
+       <button @click="setFilter('')" :class="!filterType ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'">همه</button>
+       <button @click="setFilter('income')" :class="filterType === 'income' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'">درآمد</button>
+       <button @click="setFilter('expense')" :class="filterType === 'expense' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'">هزینه</button>
+       <button @click="setFilter('transfer')" :class="filterType === 'transfer' ? 'bg-indigo-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'">انتقال</button>
+       <button @click="setFilter('unnecessary')" class="flex items-center gap-1.5" :class="filterType === 'unnecessary' ? 'bg-amber-500 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'">
          <Icon name="bx:bxs-star" class="h-4 w-4" :class="filterType === 'unnecessary' ? 'text-white' : 'text-amber-500'" />
          قابل پس‌انداز
        </button>
@@ -202,7 +202,7 @@ async function handleUpdated() {
 
     <div v-if="status === 'pending'" class="empty-state">
       <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-emerald-600" />
-      <p class="text-sm font-medium text-slate-500 mt-2">در حال دریافت تراکنش‌ها...</p>
+      <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2">در حال دریافت تراکنش‌ها...</p>
     </div>
 
     <div v-else-if="groupedTransactions.length" class="space-y-5">
@@ -211,46 +211,46 @@ async function handleUpdated() {
         :key="group.key"
         class="surface overflow-hidden"
       >
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/80 px-5 py-3.5">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-800/60 px-5 py-3.5">
           <div class="flex items-center gap-2.5">
-            <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 text-emerald-700">
+            <div class="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400">
               <Icon name="lucide:calendar" class="h-4 w-4" />
             </div>
-            <span class="text-sm font-bold text-slate-900">{{ group.label }}</span>
-            <span class="rounded-full bg-slate-200/80 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
+            <span class="text-sm font-bold text-slate-900 dark:text-white">{{ group.label }}</span>
+            <span class="rounded-full bg-slate-200/80 dark:bg-slate-700 px-2.5 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-300">
               {{ group.transactions.length }} تراکنش
             </span>
           </div>
           <div class="flex flex-wrap items-center gap-3 text-xs font-semibold">
-            <span v-if="group.totalIncome > 0" class="text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">
+            <span v-if="group.totalIncome > 0" class="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-100 dark:border-emerald-900/40">
               درآمد: <bdi class="money font-bold">+{{ formatCurrency(group.totalIncome) }}</bdi>
             </span>
-            <span v-if="group.totalExpense > 0" class="text-rose-700 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-100">
+            <span v-if="group.totalExpense > 0" class="text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-lg border border-rose-100 dark:border-rose-900/40">
               هزینه: <bdi class="money font-bold">-{{ formatCurrency(group.totalExpense) }}</bdi>
             </span>
-            <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-900 bg-amber-100/90 px-2.5 py-1 rounded-lg border border-amber-200">
-              <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-600" />
+            <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-900 dark:text-amber-300 bg-amber-100/90 dark:bg-amber-950/50 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/40">
+              <Icon name="bx:bxs-star" class="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
               قابل پس‌انداز: <bdi class="money font-bold">{{ formatCurrency(group.totalUnnecessary) }}</bdi>
             </span>
           </div>
         </div>
 
-        <div class="divide-y divide-slate-100">
+        <div class="divide-y divide-slate-100 dark:divide-slate-800/70">
           <div
             v-for="t in group.transactions"
             :key="t.id"
-            class="transaction-row flex items-center justify-between gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70"
-            :class="t.isUnnecessary ? 'bg-amber-50/25' : (t.type === 'transfer' ? 'bg-indigo-50/15' : '')"
+            class="transaction-row flex items-center justify-between gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70 dark:hover:bg-slate-800/40"
+            :class="t.isUnnecessary ? 'bg-amber-50/25 dark:bg-amber-950/15' : (t.type === 'transfer' ? 'bg-indigo-50/15 dark:bg-indigo-950/15' : '')"
           >
             <div class="transaction-details flex min-w-0 items-center gap-3.5">
               <!-- Transaction Icon -->
               <div
                 class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition"
                 :class="t.type === 'transfer'
-                  ? (isOutgoingTransfer(t) ? 'bg-indigo-50 text-indigo-600 ring-1 ring-indigo-500/20' : 'bg-teal-50 text-teal-600 ring-1 ring-teal-500/20')
+                  ? (isOutgoingTransfer(t) ? 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 ring-1 ring-indigo-500/20' : 'bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 ring-1 ring-teal-500/20')
                   : (t.type === 'income' 
-                    ? 'bg-emerald-50 text-emerald-600 ring-1 ring-emerald-500/20' 
-                    : (t.isUnnecessary ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-500/20' : 'bg-rose-50 text-rose-600 ring-1 ring-rose-500/20'))"
+                    ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 ring-1 ring-emerald-500/20' 
+                    : (t.isUnnecessary ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 ring-1 ring-amber-500/20' : 'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 ring-1 ring-rose-500/20'))"
               >
                 <Icon
                   v-if="t.type === 'transfer'"
@@ -268,7 +268,7 @@ async function handleUpdated() {
               <div class="min-w-0">
                 <div class="flex flex-wrap items-center gap-2">
                   <!-- Title -->
-                  <p class="break-words text-sm font-bold text-slate-900">
+                  <p class="break-words text-sm font-bold text-slate-900 dark:text-white">
                     <template v-if="t.type === 'transfer'">
                       {{ t.description || (isOutgoingTransfer(t) ? `انتقال به ${t.destinationAccount?.name || 'حساب مقصد'}` : `دریافت از ${t.sourceAccount?.name || 'حساب مبدأ'}`) }}
                     </template>
@@ -280,31 +280,31 @@ async function handleUpdated() {
                   <!-- Transfer Badge -->
                   <span
                     v-if="t.type === 'transfer'"
-                    class="inline-flex items-center gap-1 rounded-md bg-indigo-100 px-2 py-0.5 text-[11px] font-bold text-indigo-800 border border-indigo-200/60"
+                    class="inline-flex items-center gap-1 rounded-md bg-indigo-100 dark:bg-indigo-950/60 px-2 py-0.5 text-[11px] font-bold text-indigo-800 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/50"
                   >
-                    <Icon name="lucide:arrow-left-right" class="h-3 w-3 text-indigo-600" />
+                    <Icon name="lucide:arrow-left-right" class="h-3 w-3 text-indigo-600 dark:text-indigo-400" />
                     انتقال وجه
                   </span>
 
                   <!-- Unnecessary Expense Badge -->
                   <span
                     v-if="t.isUnnecessary"
-                    class="inline-flex items-center gap-1 rounded-md bg-amber-100 px-2 py-0.5 text-[11px] font-bold text-amber-800 border border-amber-200/60"
+                    class="inline-flex items-center gap-1 rounded-md bg-amber-100 dark:bg-amber-950/60 px-2 py-0.5 text-[11px] font-bold text-amber-800 dark:text-amber-300 border border-amber-200/60 dark:border-amber-800/50"
                   >
-                    <Icon name="bx:bxs-star" class="h-3 w-3 text-amber-500" />
+                    <Icon name="bx:bxs-star" class="h-3 w-3 text-amber-500 dark:text-amber-400" />
                     غیرضروری
                   </span>
                 </div>
 
                 <!-- Subtitle / Direction & Date -->
-                <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400 font-medium">
+                <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400 dark:text-slate-400 font-medium">
                   <span>{{ toJalali(t.date) }}</span>
                   <template v-if="t.type === 'transfer'">
                     <span>•</span>
-                    <span v-if="isOutgoingTransfer(t)" class="text-indigo-600 font-semibold">
+                    <span v-if="isOutgoingTransfer(t)" class="text-indigo-600 dark:text-indigo-400 font-semibold">
                       به: {{ t.destinationAccount?.name || 'حساب مقصد' }}
                     </span>
-                    <span v-else class="text-teal-600 font-semibold">
+                    <span v-else class="text-teal-600 dark:text-teal-400 font-semibold">
                       از: {{ t.sourceAccount?.name || 'حساب مبدأ' }}
                     </span>
                   </template>
@@ -317,8 +317,8 @@ async function handleUpdated() {
               <p
                 class="money whitespace-nowrap text-sm sm:text-base font-extrabold"
                 :class="t.type === 'transfer'
-                  ? (isOutgoingTransfer(t) ? 'text-slate-800' : 'text-teal-600')
-                  : (t.type === 'income' ? 'text-emerald-600' : (t.isUnnecessary ? 'text-amber-700' : 'text-rose-600'))"
+                  ? (isOutgoingTransfer(t) ? 'text-slate-800 dark:text-slate-200' : 'text-teal-600 dark:text-teal-400')
+                  : (t.type === 'income' ? 'text-emerald-600 dark:text-emerald-400' : (t.isUnnecessary ? 'text-amber-700 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400'))"
               >
                 {{ t.type === 'transfer' ? (isOutgoingTransfer(t) ? '-' : '+') : (t.type === 'income' ? '+' : '-') }} {{ formatCurrency(t.amount) }}
               </p>
@@ -327,15 +327,15 @@ async function handleUpdated() {
                   v-if="t.type === 'expense'"
                   @click="toggleUnnecessary(t)"
                   class="icon-button h-9 w-9 transition"
-                  :class="t.isUnnecessary ? 'text-amber-500 bg-amber-50 hover:bg-amber-100' : 'text-slate-300 hover:text-amber-500 hover:bg-amber-50'"
+                  :class="t.isUnnecessary ? 'text-amber-500 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/40' : 'text-slate-300 dark:text-slate-600 hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30'"
                   :title="t.isUnnecessary ? 'حذف از هزینه‌های غیرضروری' : 'علامت‌گذاری به‌عنوان هزینه غیرضروری (قابل پس‌انداز)'"
                 >
                   <Icon :name="t.isUnnecessary ? 'bx:bxs-star' : 'bx:bx-star'" class="h-5 w-5" />
                 </button>
-                <button @click="openEdit(t)" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش">
+                <button @click="openEdit(t)" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" title="ویرایش">
                   <Icon name="lucide:pencil" class="w-4 h-4" />
                 </button>
-                <button @click="deleteTransaction(t)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
+                <button @click="deleteTransaction(t)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400" title="حذف">
                   <Icon name="lucide:trash-2" class="w-4 h-4" />
                 </button>
               </div>
@@ -346,22 +346,22 @@ async function handleUpdated() {
     </div>
 
     <div v-else class="empty-state">
-      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mb-3">
         <Icon :name="filterType === 'transfer' ? 'lucide:arrow-left-right' : 'lucide:receipt'" class="w-7 h-7" />
       </div>
-      <h3 class="font-bold text-slate-800">{{ filterType === 'transfer' ? 'انتقالی یافت نشد' : 'تراکنشی یافت نشد' }}</h3>
+      <h3 class="font-bold text-slate-800 dark:text-slate-200">{{ filterType === 'transfer' ? 'انتقالی یافت نشد' : 'تراکنشی یافت نشد' }}</h3>
       <p class="mt-1 text-xs text-slate-400">
         {{ filterType === 'transfer' ? 'هنوز انتقال وجهی برای این حساب ثبت نشده است.' : 'برای این حساب هنوز تراکنشی با این فیلتر ثبت نشده است.' }}
       </p>
     </div>
 
     <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3 pt-2">
-      <button class="primary-button bg-white text-slate-700 ring-1 ring-inset ring-slate-200 shadow-none hover:bg-slate-50 disabled:opacity-40" :disabled="page === 1" @click="setPage(page - 1)">
+      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === 1" @click="setPage(page - 1)">
         <Icon name="lucide:chevron-right" class="h-4 w-4" />
         قبلی
       </button>
-      <p class="text-xs font-bold text-slate-500">صفحه {{ page }} از {{ pagination.totalPages }}</p>
-      <button class="primary-button bg-white text-slate-700 ring-1 ring-inset ring-slate-200 shadow-none hover:bg-slate-50 disabled:opacity-40" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
+      <p class="text-xs font-bold text-slate-500 dark:text-slate-400">صفحه {{ page }} از {{ pagination.totalPages }}</p>
+      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
         بعدی
         <Icon name="lucide:chevron-left" class="h-4 w-4" />
       </button>

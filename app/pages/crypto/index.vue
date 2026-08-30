@@ -110,30 +110,30 @@ async function deleteTrade(id: number) {
 
       <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
-          <p class="text-xs font-medium text-slate-500">بهای تمام‌شده</p>
-          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">بهای تمام‌شده</p>
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
             <Icon name="lucide:layers-3" class="h-4 w-4" />
           </div>
         </div>
-        <p class="money mt-1 max-w-full break-words text-xl font-extrabold text-slate-900">{{ formatRial(totalInvested) }}</p>
+        <p class="money mt-1 max-w-full break-words text-xl font-extrabold text-slate-900 dark:text-white">{{ formatRial(totalInvested) }}</p>
       </div>
 
       <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
-          <p class="text-xs font-medium text-slate-500">سود محقق‌نشده</p>
-          <div class="flex h-9 w-9 items-center justify-center rounded-xl" :class="totalUnrealized >= 0 ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'">
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">سود محقق‌نشده</p>
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl" :class="totalUnrealized >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400'">
             <Icon name="lucide:chart-no-axes-combined" class="h-4 w-4" />
           </div>
         </div>
-        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="totalUnrealized >= 0 ? 'text-emerald-600' : 'text-rose-600'">{{ formatRial(totalUnrealized) }}</p>
+        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="totalUnrealized >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">{{ formatRial(totalUnrealized) }}</p>
       </div>
 
       <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
-          <p class="text-xs font-medium text-slate-500">سود تحقق‌یافته</p>
-          <span class="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600">{{ data?.summary.tradeCount || 0 }} معامله</span>
+          <p class="text-xs font-medium text-slate-500 dark:text-slate-400">سود تحقق‌یافته</p>
+          <span class="rounded-full bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-600 dark:text-slate-300">{{ data?.summary.tradeCount || 0 }} معامله</span>
         </div>
-        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="(data?.summary.realizedProfit || 0) >= 0 ? 'text-emerald-600' : 'text-rose-600'">{{ formatRial(data?.summary.realizedProfit || 0) }}</p>
+        <p class="money mt-1 max-w-full break-words text-xl font-extrabold" :class="(data?.summary.realizedProfit || 0) >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">{{ formatRial(data?.summary.realizedProfit || 0) }}</p>
       </div>
     </section>
 
@@ -145,7 +145,7 @@ async function deleteTrade(id: number) {
           <span class="relative inline-flex h-3 w-3 rounded-full" :class="market?.stale ? 'bg-amber-500' : market ? 'bg-emerald-500' : 'bg-rose-500'" />
         </span>
         <div>
-          <p class="text-sm font-bold text-slate-900">قیمت زنده بازار ایران</p>
+          <p class="text-sm font-bold text-slate-900 dark:text-white">قیمت زنده بازار ایران</p>
           <p class="mt-0.5 text-xs text-slate-400 font-medium">
             منبع: {{ market?.source || 'در حال دریافت' }}
             <span v-if="marketUpdatedAt"> · به‌روزرسانی {{ marketUpdatedAt }}</span>
@@ -154,7 +154,7 @@ async function deleteTrade(id: number) {
         </div>
       </div>
       <button 
-        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-slate-100 px-4 text-xs font-bold text-slate-700 hover:bg-slate-200 transition" 
+        class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-slate-100 dark:bg-slate-800 px-4 text-xs font-bold text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition" 
         :disabled="marketStatus === 'pending'" 
         @click="refreshMarket()"
       >
@@ -167,55 +167,55 @@ async function deleteTrade(id: number) {
     <section>
       <div class="mb-4 flex items-center justify-between">
         <div>
-          <h2 class="font-extrabold text-slate-900">دارایی‌های من</h2>
+          <h2 class="font-extrabold text-slate-900 dark:text-white">دارایی‌های من</h2>
           <p class="mt-0.5 text-xs text-slate-400 font-medium">موجودی و میانگین خرید رمزارزها</p>
         </div>
       </div>
       <div v-if="status === 'pending'" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <div v-for="item in 3" :key="item" class="h-44 animate-pulse rounded-2xl bg-slate-200" />
+        <div v-for="item in 3" :key="item" class="h-44 animate-pulse rounded-2xl bg-slate-200 dark:bg-slate-800" />
       </div>
       <div v-else-if="holdingsWithMarket.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <article v-for="holding in holdingsWithMarket" :key="holding.symbol" class="surface p-6">
           <div class="flex items-start justify-between gap-4">
             <div class="flex min-w-0 items-center gap-3.5">
-              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100/90 shadow-xs">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-slate-100/90 dark:bg-slate-800 shadow-xs">
                 <Icon :name="holding.icon" class="h-6 w-6" :style="{ color: holding.color }" />
               </div>
               <div class="min-w-0">
-                <h3 class="font-extrabold text-slate-900">{{ holding.asset }}</h3>
+                <h3 class="font-extrabold text-slate-900 dark:text-white">{{ holding.asset }}</h3>
                 <p class="text-xs font-bold text-slate-400">{{ holding.symbol }}</p>
               </div>
             </div>
-            <span class="rounded-lg px-2.5 py-1 text-xs font-bold" :class="holding.change24h >= 0 ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-600'">
+            <span class="rounded-lg px-2.5 py-1 text-xs font-bold" :class="holding.change24h >= 0 ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400' : 'bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400'">
               {{ holding.change24h >= 0 ? '+' : '' }}{{ holding.change24h }}٪
             </span>
           </div>
-          <p class="money mt-6 max-w-full break-words text-xl font-extrabold text-slate-900">{{ formatQuantity(holding.quantity) }} {{ holding.symbol }}</p>
-          <div class="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-4 text-xs font-medium">
+          <p class="money mt-6 max-w-full break-words text-xl font-extrabold text-slate-900 dark:text-white">{{ formatQuantity(holding.quantity) }} {{ holding.symbol }}</p>
+          <div class="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 dark:border-slate-800 pt-4 text-xs font-medium">
             <div>
               <p class="text-slate-400">قیمت لحظه‌ای</p>
-              <p class="money mt-1 font-bold text-slate-800">{{ holding.marketPrice ? formatRial(holding.marketPrice) : 'ناموجود' }}</p>
+              <p class="money mt-1 font-bold text-slate-800 dark:text-slate-200">{{ holding.marketPrice ? formatRial(holding.marketPrice) : 'ناموجود' }}</p>
             </div>
             <div>
               <p class="text-slate-400">ارزش کل دارایی</p>
-              <p class="money mt-1 font-bold text-slate-800">{{ formatRial(holding.marketValue) }}</p>
+              <p class="money mt-1 font-bold text-slate-800 dark:text-slate-200">{{ formatRial(holding.marketValue) }}</p>
             </div>
             <div>
               <p class="text-slate-400">میانگین خرید</p>
-              <p class="money mt-1 font-bold text-slate-800">{{ formatRial(holding.averagePrice) }}</p>
+              <p class="money mt-1 font-bold text-slate-800 dark:text-slate-200">{{ formatRial(holding.averagePrice) }}</p>
             </div>
             <div>
               <p class="text-slate-400">سود / زیان</p>
-              <p class="money mt-1 font-bold" :class="holding.unrealizedProfit >= 0 ? 'text-emerald-700' : 'text-rose-600'">{{ formatRial(holding.unrealizedProfit) }}</p>
+              <p class="money mt-1 font-bold" :class="holding.unrealizedProfit >= 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">{{ formatRial(holding.unrealizedProfit) }}</p>
             </div>
           </div>
         </article>
       </div>
       <div v-else class="empty-state min-h-48">
-        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 mb-3">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-500 mb-3">
           <Icon name="tabler:currency-bitcoin" class="h-8 w-8" />
         </div>
-        <h3 class="font-bold text-slate-800">هنوز رمزارزی در سبد نیست</h3>
+        <h3 class="font-bold text-slate-800 dark:text-slate-200">هنوز رمزارزی در سبد نیست</h3>
         <p class="mt-1 text-xs text-slate-400">با ثبت اولین خرید، سبد دارایی دیجیتال شما ساخته می‌شود.</p>
       </div>
     </section>
@@ -224,26 +224,26 @@ async function deleteTrade(id: number) {
     <section>
       <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h2 class="font-extrabold text-slate-900">تاریخچه معاملات</h2>
+          <h2 class="font-extrabold text-slate-900 dark:text-white">تاریخچه معاملات</h2>
           <p class="mt-0.5 text-xs text-slate-400 font-medium">همه خریدها و فروش‌های ثبت‌شده</p>
         </div>
         <div class="segmented">
-          <button :class="filter === 'ALL' ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'" @click="filter = 'ALL'">همه</button>
-          <button :class="filter === 'BUY' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'" @click="filter = 'BUY'">خرید</button>
-          <button :class="filter === 'SELL' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'" @click="filter = 'SELL'">فروش</button>
+          <button :class="filter === 'ALL' ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'" @click="filter = 'ALL'">همه</button>
+          <button :class="filter === 'BUY' ? 'bg-emerald-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'" @click="filter = 'BUY'">خرید</button>
+          <button :class="filter === 'SELL' ? 'bg-rose-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'" @click="filter = 'SELL'">فروش</button>
         </div>
       </div>
 
-      <div v-if="filteredTrades?.length" class="surface divide-y divide-slate-100 overflow-hidden">
-        <article v-for="trade in filteredTrades" :key="trade.id" class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:p-5 transition hover:bg-slate-50/70">
+      <div v-if="filteredTrades?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
+        <article v-for="trade in filteredTrades" :key="trade.id" class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:p-5 transition hover:bg-slate-50/70 dark:hover:bg-slate-800/40">
           <div class="flex min-w-0 items-center gap-3.5">
-            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100">
+            <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 dark:bg-slate-800">
               <Icon :name="assetMeta[trade.symbol]?.icon || 'tabler:coin'" class="h-6 w-6" :style="{ color: assetMeta[trade.symbol]?.color || '#059669' }" />
             </div>
             <div class="min-w-0">
               <div class="flex flex-wrap items-center gap-2">
-                <h3 class="font-bold text-slate-900">{{ trade.asset }}</h3>
-                <span class="rounded-md px-2 py-0.5 text-[11px] font-bold" :class="trade.type === 'BUY' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'">
+                <h3 class="font-bold text-slate-900 dark:text-white">{{ trade.asset }}</h3>
+                <span class="rounded-md px-2 py-0.5 text-[11px] font-bold" :class="trade.type === 'BUY' ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300' : 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300'">
                   {{ trade.type === 'BUY' ? 'خرید' : 'فروش' }}
                 </span>
               </div>
@@ -251,13 +251,13 @@ async function deleteTrade(id: number) {
             </div>
           </div>
           <div class="text-left">
-            <p class="money whitespace-nowrap text-sm font-extrabold text-slate-900">{{ formatQuantity(trade.quantity) }} {{ trade.symbol }}</p>
+            <p class="money whitespace-nowrap text-sm font-extrabold text-slate-900 dark:text-white">{{ formatQuantity(trade.quantity) }} {{ trade.symbol }}</p>
             <p class="money mt-0.5 whitespace-nowrap text-xs text-slate-400 font-medium">{{ formatRial(trade.totalValue) }}</p>
-            <p v-if="trade.type === 'SELL'" class="money mt-0.5 whitespace-nowrap text-xs font-bold" :class="(trade.realizedProfit || 0) >= 0 ? 'text-emerald-700' : 'text-rose-600'">
+            <p v-if="trade.type === 'SELL'" class="money mt-0.5 whitespace-nowrap text-xs font-bold" :class="(trade.realizedProfit || 0) >= 0 ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'">
               سود: {{ formatRial(trade.realizedProfit || 0) }}
             </p>
           </div>
-          <button class="icon-button col-span-2 h-9 w-9 justify-self-end text-slate-400 hover:bg-rose-50 hover:text-rose-600 sm:col-span-1" title="حذف معامله" @click="deleteTrade(trade.id)">
+          <button class="icon-button col-span-2 h-9 w-9 justify-self-end text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 sm:col-span-1" title="حذف معامله" @click="deleteTrade(trade.id)">
             <Icon name="lucide:trash-2" class="h-4 w-4" />
           </button>
         </article>

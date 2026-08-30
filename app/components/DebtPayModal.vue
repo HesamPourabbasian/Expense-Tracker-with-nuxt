@@ -100,34 +100,34 @@ async function handleSubmit() {
         <div class="flex items-center gap-3">
           <div
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl ring-1"
-            :class="debt.type === 'I_OWE' ? 'bg-amber-50 text-amber-600 ring-amber-500/20' : 'bg-teal-50 text-teal-600 ring-teal-500/20'"
+            :class="debt.type === 'I_OWE' ? 'bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 ring-amber-500/20' : 'bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 ring-teal-500/20'"
           >
             <Icon :name="debt.type === 'I_OWE' ? 'lucide:arrow-up-right' : 'lucide:arrow-down-left'" class="w-5 h-5" />
           </div>
           <div>
-            <h2 class="text-base font-extrabold text-slate-900">
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">
               {{ debt.type === 'I_OWE' ? 'این بدهی را چطور پرداخت کردید؟' : 'این طلب را کجا دریافت کردید؟' }}
             </h2>
-            <p class="text-xs text-slate-500 font-medium mt-0.5">
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">
               {{ debt.type === 'I_OWE' ? `پرداخت بدهی به ${debt.person}` : `دریافت طلب از ${debt.person}` }}
               •
-              <bdi class="money font-bold text-slate-800">{{ formatCurrency(debt.amount) }}</bdi>
+              <bdi class="money font-bold text-slate-800 dark:text-slate-200">{{ formatCurrency(debt.amount) }}</bdi>
             </p>
           </div>
         </div>
-        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره">
+        <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" aria-label="بستن پنجره">
           <Icon name="lucide:x" class="w-4 h-4" />
         </button>
       </div>
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
-        <div v-if="error" class="bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold rounded-xl px-4 py-3">
+        <div v-if="error" class="bg-rose-50 dark:bg-rose-500/15 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
         <!-- Account Selection Options -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-2">
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">
             {{ debt.type === 'I_OWE' ? 'منبع پرداخت وجه (کسر از موجودی)' : 'حساب مقصد دریافت وجه (افزایش موجودی)' }}
           </label>
 
@@ -137,28 +137,28 @@ async function handleSubmit() {
               type="button"
               @click="paymentMethod = 'cash'"
               class="w-full flex items-center justify-between p-3.5 rounded-xl border text-right transition"
-              :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-500/20' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'"
+              :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/60'"
             >
               <div class="flex items-center gap-3">
                 <div
                   class="flex h-10 w-10 items-center justify-center rounded-xl transition"
-                  :class="paymentMethod === 'cash' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'"
+                  :class="paymentMethod === 'cash' ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'"
                 >
                   <Icon name="lucide:wallet" class="w-5 h-5" />
                 </div>
                 <div>
                   <div class="flex items-center gap-2">
-                    <p class="text-sm font-bold text-slate-900">کیف پول نقدی (پول نقد)</p>
-                    <span v-if="paymentMethod === 'cash'" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">انتخاب‌شده</span>
+                    <p class="text-sm font-bold text-slate-900 dark:text-white">کیف پول نقدی (پول نقد)</p>
+                    <span v-if="paymentMethod === 'cash'" class="rounded-full bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300">انتخاب‌شده</span>
                   </div>
                   <p class="text-xs text-slate-400 font-medium mt-0.5">
-                    موجودی فعلی نقد: <bdi class="money font-semibold text-slate-600">{{ formatCurrency(cashBalance) }}</bdi>
+                    موجودی فعلی نقد: <bdi class="money font-semibold text-slate-600 dark:text-slate-300">{{ formatCurrency(cashBalance) }}</bdi>
                   </p>
                 </div>
               </div>
               <div
                 class="flex h-5 w-5 items-center justify-center rounded-full border"
-                :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white'"
+                :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900'"
               >
                 <Icon v-if="paymentMethod === 'cash'" name="lucide:check" class="w-3 h-3 stroke-[3]" />
               </div>
@@ -172,28 +172,28 @@ async function handleSubmit() {
                 type="button"
                 @click="paymentMethod = 'bank'; selectedBankAccountId = acc.id"
                 class="w-full flex items-center justify-between p-3.5 rounded-xl border text-right transition"
-                :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-50/50 ring-2 ring-emerald-500/20' : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/60'"
+                :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/60'"
               >
                 <div class="flex items-center gap-3">
                   <div
                     class="flex h-10 w-10 items-center justify-center rounded-xl transition"
-                    :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'"
+                    :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'"
                   >
                     <Icon :name="acc.icon || 'lucide:landmark'" class="w-5 h-5" />
                   </div>
                   <div>
                     <div class="flex items-center gap-2">
-                      <p class="text-sm font-bold text-slate-900">{{ acc.name }}</p>
-                      <span v-if="paymentMethod === 'bank' && selectedBankAccountId === acc.id" class="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">انتخاب‌شده</span>
+                      <p class="text-sm font-bold text-slate-900 dark:text-white">{{ acc.name }}</p>
+                      <span v-if="paymentMethod === 'bank' && selectedBankAccountId === acc.id" class="rounded-full bg-emerald-100 dark:bg-emerald-950/70 px-2 py-0.5 text-[10px] font-bold text-emerald-800 dark:text-emerald-300">انتخاب‌شده</span>
                     </div>
                     <p class="text-xs text-slate-400 font-medium mt-0.5">
-                      موجودی حساب: <bdi class="money font-semibold text-slate-600">{{ formatCurrency(acc.balance || 0) }}</bdi>
+                      موجودی حساب: <bdi class="money font-semibold text-slate-600 dark:text-slate-300">{{ formatCurrency(acc.balance || 0) }}</bdi>
                     </p>
                   </div>
                 </div>
                 <div
                   class="flex h-5 w-5 items-center justify-center rounded-full border"
-                  :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white'"
+                  :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900'"
                 >
                   <Icon v-if="paymentMethod === 'bank' && selectedBankAccountId === acc.id" name="lucide:check" class="w-3 h-3 stroke-[3]" />
                 </div>
@@ -204,7 +204,7 @@ async function handleSubmit() {
 
         <!-- Date Input -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
             {{ debt.type === 'I_OWE' ? 'تاریخ پرداخت (شمسی)' : 'تاریخ دریافت (شمسی)' }}
           </label>
           <input
@@ -218,7 +218,7 @@ async function handleSubmit() {
 
         <!-- Description Input -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1.5">توضیحات و شرح تراکنش</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">توضیحات و شرح تراکنش</label>
           <input
             v-model="form.description"
             type="text"
@@ -230,7 +230,7 @@ async function handleSubmit() {
         <!-- Impact Information Notice -->
         <div
           class="rounded-xl p-3.5 text-xs font-medium border"
-          :class="debt.type === 'I_OWE' ? 'bg-amber-50/70 border-amber-200/80 text-amber-900' : 'bg-teal-50/70 border-teal-200/80 text-teal-900'"
+          :class="debt.type === 'I_OWE' ? 'bg-amber-50/70 dark:bg-amber-950/40 border-amber-200/80 dark:border-amber-800/60 text-amber-900 dark:text-amber-300' : 'bg-teal-50/70 dark:bg-teal-950/40 border-teal-200/80 dark:border-teal-800/60 text-teal-900 dark:text-teal-300'"
         >
           <p class="flex items-center gap-1.5 font-bold mb-1">
             <Icon name="lucide:info" class="w-4 h-4" />

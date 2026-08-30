@@ -103,24 +103,24 @@ async function handlePaid() {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
-          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 ring-1 ring-amber-500/20">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 ring-1 ring-amber-500/20 dark:ring-amber-500/30">
             <Icon name="lucide:arrow-up-right" class="w-5 h-5" />
           </div>
-          <span class="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-bold text-amber-800">بدهی باز</span>
+          <span class="rounded-full bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 text-[11px] font-bold text-amber-800 dark:text-amber-300">بدهی باز</span>
         </div>
-        <p class="text-xs font-medium text-slate-500">بدهی‌های من (پرداخت‌نشده)</p>
-        <p class="money mt-1.5 max-w-full break-words text-xl sm:text-2xl font-extrabold text-amber-700">{{ formatCurrency(totalIOwe) }}</p>
+        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">بدهی‌های من (پرداخت‌نشده)</p>
+        <p class="money mt-1.5 max-w-full break-words text-xl sm:text-2xl font-extrabold text-amber-700 dark:text-amber-400">{{ formatCurrency(totalIOwe) }}</p>
       </div>
 
       <div class="surface p-6">
         <div class="flex items-center justify-between mb-4">
-          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 ring-1 ring-teal-500/20">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 ring-1 ring-teal-500/20 dark:ring-teal-500/30">
             <Icon name="lucide:arrow-down-left" class="w-5 h-5" />
           </div>
-          <span class="rounded-full bg-teal-50 px-2.5 py-1 text-[11px] font-bold text-teal-800">طلب باز</span>
+          <span class="rounded-full bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 text-[11px] font-bold text-teal-800 dark:text-teal-300">طلب باز</span>
         </div>
-        <p class="text-xs font-medium text-slate-500">طلب‌های من (دریافت‌نشده)</p>
-        <p class="money mt-1.5 max-w-full break-words text-xl sm:text-2xl font-extrabold text-teal-700">{{ formatCurrency(totalOwedToMe) }}</p>
+        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">طلب‌های من (دریافت‌نشده)</p>
+        <p class="money mt-1.5 max-w-full break-words text-xl sm:text-2xl font-extrabold text-teal-700 dark:text-teal-400">{{ formatCurrency(totalOwedToMe) }}</p>
       </div>
     </div>
 
@@ -128,79 +128,79 @@ async function handlePaid() {
     <div class="segmented">
       <button
         @click="filterType = ''"
-        :class="!filterType ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="!filterType ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >همه</button>
       <button
         @click="filterType = 'I_OWE'"
-        :class="filterType === 'I_OWE' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="filterType === 'I_OWE' ? 'bg-amber-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >بدهی من</button>
       <button
         @click="filterType = 'OWED_TO_ME'"
-        :class="filterType === 'OWED_TO_ME' ? 'bg-teal-600 text-white shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'"
+        :class="filterType === 'OWED_TO_ME' ? 'bg-teal-600 text-white shadow-sm font-bold' : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'"
       >طلب من</button>
     </div>
 
     <!-- Debts List -->
-    <div v-if="debts?.length" class="surface divide-y divide-slate-100 overflow-hidden">
+    <div v-if="debts?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
       <div
         v-for="d in debts"
         :key="d.id"
-        class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70"
-        :class="d.status === 'paid' ? 'opacity-70 bg-slate-50/40' : ''"
+        class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70 dark:hover:bg-slate-800/40"
+        :class="d.status === 'paid' ? 'opacity-70 bg-slate-50/40 dark:bg-slate-900/40' : ''"
       >
         <div class="flex min-w-0 items-start gap-3.5">
           <div
             class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl transition text-xs font-bold"
-            :class="d.type === 'I_OWE' ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-500/20' : 'bg-teal-50 text-teal-700 ring-1 ring-teal-500/20'"
+            :class="d.type === 'I_OWE' ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 ring-1 ring-amber-500/20' : 'bg-teal-50 dark:bg-teal-950/50 text-teal-700 dark:text-teal-400 ring-1 ring-teal-500/20'"
           >
             {{ d.person.slice(0, 2) }}
           </div>
           <div class="min-w-0">
             <div class="flex min-w-0 flex-wrap items-center gap-2">
-              <p class="break-words text-sm font-bold text-slate-900">{{ d.person }}</p>
+              <p class="break-words text-sm font-bold text-slate-900 dark:text-white">{{ d.person }}</p>
 
               <!-- Status & Settlement Badges -->
               <template v-if="d.status === 'paid'">
                 <span
                   v-if="d.isCash"
-                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800 border border-emerald-200/60"
+                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50"
                 >
-                  <Icon name="lucide:wallet" class="h-3 w-3 text-emerald-600" />
+                  <Icon name="lucide:wallet" class="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                   تسویه نقدی
                 </span>
                 <span
                   v-else-if="d.bankAccount"
-                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800 border border-emerald-200/60"
+                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 text-[11px] font-bold text-emerald-800 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/50"
                 >
-                  <Icon :name="d.bankAccount.icon || 'lucide:landmark'" class="h-3 w-3 text-emerald-600" />
+                  <Icon :name="d.bankAccount.icon || 'lucide:landmark'" class="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
                   تسویه: {{ d.bankAccount.name }}
                 </span>
                 <span
                   v-else
-                  class="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800"
+                  class="rounded-md bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 text-[11px] font-bold text-emerald-800 dark:text-emerald-300"
                 >تسویه شده</span>
               </template>
 
               <span
                 v-else
                 class="rounded-md px-2 py-0.5 text-[11px] font-bold"
-                :class="d.type === 'I_OWE' ? 'bg-amber-100 text-amber-800' : 'bg-teal-100 text-teal-800'"
+                :class="d.type === 'I_OWE' ? 'bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300' : 'bg-teal-100 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300'"
               >{{ d.type === 'I_OWE' ? 'بدهی' : 'طلب' }}</span>
             </div>
 
-            <div class="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-slate-400 font-medium">
+            <div class="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-slate-400 dark:text-slate-400 font-medium">
               <span>سررسید: {{ toJalali(d.date) }}</span>
               <template v-if="d.status === 'paid' && d.paymentDate">
                 <span>•</span>
-                <span class="text-emerald-700 font-semibold">پرداخت: {{ toJalali(d.paymentDate) }}</span>
+                <span class="text-emerald-700 dark:text-emerald-400 font-semibold">پرداخت: {{ toJalali(d.paymentDate) }}</span>
               </template>
             </div>
 
-            <p v-if="d.description" class="mt-1 break-words text-xs leading-5 text-slate-500">{{ d.description }}</p>
+            <p v-if="d.description" class="mt-1 break-words text-xs leading-5 text-slate-500 dark:text-slate-400">{{ d.description }}</p>
           </div>
         </div>
         <div class="flex flex-col items-end gap-2">
-          <p class="money whitespace-nowrap text-sm sm:text-base font-extrabold" :class="d.type === 'I_OWE' ? 'text-amber-700' : 'text-teal-700'">
+          <p class="money whitespace-nowrap text-sm sm:text-base font-extrabold" :class="d.type === 'I_OWE' ? 'text-amber-700 dark:text-amber-400' : 'text-teal-700 dark:text-teal-400'">
             {{ formatCurrency(d.amount) }}
           </p>
           <div class="flex items-center gap-1">
@@ -208,7 +208,7 @@ async function handlePaid() {
             <button
               v-if="d.status === 'pending'"
               @click="openSettle(d)"
-              class="icon-button h-9 w-9 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 transition"
+              class="icon-button h-9 w-9 text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 hover:text-emerald-700 dark:hover:text-emerald-300 transition"
               :title="d.type === 'I_OWE' ? 'ثبت پرداخت بدهی' : 'ثبت وصول طلب'"
             >
               <Icon name="lucide:check" class="w-4 h-4" />
@@ -218,19 +218,19 @@ async function handlePaid() {
             <button
               v-if="d.status === 'paid'"
               @click="revertPaid(d)"
-              class="icon-button h-9 w-9 text-amber-600 bg-amber-50 hover:bg-amber-100 hover:text-amber-700 transition"
+              class="icon-button h-9 w-9 text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 hover:text-amber-700 dark:hover:text-amber-300 transition"
               title="بازگردانی به وضعیت در انتظار (حذف تراکنش)"
             >
               <Icon name="lucide:rotate-ccw" class="w-4 h-4" />
             </button>
 
             <!-- Edit Button -->
-            <button @click="editDebt = d" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش">
+            <button @click="editDebt = d" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" title="ویرایش">
               <Icon name="lucide:pencil" class="w-4 h-4" />
             </button>
 
             <!-- Delete Button -->
-            <button @click="deleteDebt(d)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
+            <button @click="deleteDebt(d)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400" title="حذف">
               <Icon name="lucide:trash-2" class="w-4 h-4" />
             </button>
           </div>
@@ -239,10 +239,10 @@ async function handlePaid() {
     </div>
 
     <div v-else class="empty-state">
-      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 mb-3">
+      <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 mb-3">
         <Icon name="lucide:hand-coins" class="w-7 h-7" />
       </div>
-      <h3 class="font-bold text-slate-800">بدهی یا طلبی ثبت نشده</h3>
+      <h3 class="font-bold text-slate-800 dark:text-slate-200">بدهی یا طلبی ثبت نشده</h3>
       <p class="mt-1 text-xs text-slate-400">تعهدات و قرض‌های خود با دیگران را اینجا بنویس.</p>
     </div>
 
@@ -251,4 +251,3 @@ async function handlePaid() {
     <DebtPayModal v-if="settleDebt" :debt="settleDebt" @close="settleDebt = null" @paid="handlePaid" />
   </div>
 </template>
-

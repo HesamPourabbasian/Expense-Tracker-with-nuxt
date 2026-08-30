@@ -25,17 +25,20 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div class="min-h-[calc(100dvh-2.25rem)] bg-slate-50">
+  <div class="min-h-[calc(100dvh-2.25rem)] bg-slate-50 dark:bg-[#090e17] text-slate-900 dark:text-slate-100 transition-colors duration-150">
     <!-- Desktop Sidebar -->
     <aside class="hidden border-l border-slate-800 bg-[#090e17] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col shadow-xl">
-      <div class="flex h-20 items-center gap-3 border-b border-slate-800/80 px-6">
-        <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20 ring-1 ring-white/20">
-          <Icon name="lucide:wallet-cards" class="h-6 w-6" />
+      <div class="flex h-20 items-center justify-between border-b border-slate-800/80 px-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-md shadow-emerald-500/20 ring-1 ring-white/20">
+            <Icon name="lucide:wallet-cards" class="h-6 w-6" />
+          </div>
+          <div>
+            <h1 class="text-base font-extrabold tracking-tight text-white">خرج‌یار</h1>
+            <p class="text-[11px] font-medium text-emerald-400/90">مدیریت مالی شخصی</p>
+          </div>
         </div>
-        <div>
-          <h1 class="text-base font-extrabold tracking-tight text-white">خرج‌یار</h1>
-          <p class="text-[11px] font-medium text-emerald-400/90">مدیریت مالی شخصی</p>
-        </div>
+        <ThemeToggle />
       </div>
 
       <nav class="flex-1 space-y-1.5 px-3.5 py-6">
@@ -78,17 +81,20 @@ function isActive(path: string) {
     </aside>
 
     <!-- Mobile Header -->
-    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200 bg-white/95 lg:hidden transform-gpu">
+    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-white lg:hidden transform-gpu backdrop-blur-xs">
       <div class="flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-2.5">
           <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
             <Icon name="lucide:wallet-cards" class="h-5 w-5" />
           </div>
-          <h1 class="font-bold text-slate-900">خرج‌یار</h1>
+          <h1 class="font-bold text-slate-900 dark:text-white">خرج‌یار</h1>
         </div>
-        <button @click="logout" class="icon-button text-slate-500 hover:text-rose-600 hover:bg-rose-50" title="خروج">
-          <Icon name="lucide:log-out" class="h-5 w-5" />
-        </button>
+        <div class="flex items-center gap-1.5">
+          <ThemeToggle />
+          <button @click="logout" class="icon-button text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40" title="خروج">
+            <Icon name="lucide:log-out" class="h-5 w-5" />
+          </button>
+        </div>
       </div>
     </header>
 
@@ -100,13 +106,13 @@ function isActive(path: string) {
     </main>
 
     <!-- Mobile Bottom Floating Navigation Dock -->
-    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200 bg-white p-1.5 shadow-lg shadow-slate-900/5 rounded-2xl lg:hidden transform-gpu">
+    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xs p-1.5 shadow-lg shadow-slate-900/5 dark:shadow-black/40 rounded-2xl lg:hidden transform-gpu">
       <NuxtLink 
         v-for="item in navItems" 
         :key="item.to" 
         :to="item.to" 
         class="flex min-h-12 flex-col items-center justify-center gap-1 text-[11px] font-medium rounded-xl transition-colors duration-150"
-        :class="isActive(item.to) ? 'bg-emerald-50 text-emerald-700 font-bold' : 'text-slate-400 hover:text-slate-700'"
+        :class="isActive(item.to) ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 font-bold' : 'text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-300'"
       >
         <Icon :name="item.icon" class="h-5 w-5" />
         <span>{{ item.mobileLabel }}</span>

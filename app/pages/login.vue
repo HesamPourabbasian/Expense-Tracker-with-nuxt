@@ -29,43 +29,47 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="relative flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 sm:p-6">
+  <div class="relative flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 sm:p-6 transition-colors duration-150">
+    <div class="absolute top-4 left-4 z-20">
+      <ThemeToggle />
+    </div>
+
     <div class="relative z-10 w-full max-w-md">
       <div class="mb-8 text-center">
-        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-xl shadow-emerald-950 ring-1 ring-white/20">
+        <div class="mb-5 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white shadow-xl shadow-emerald-500/20 dark:shadow-emerald-950 ring-1 ring-white/20">
           <Icon name="lucide:wallet-cards" class="h-8 w-8" />
         </div>
-        <h1 class="text-3xl font-extrabold tracking-tight text-white">خرج‌یار</h1>
-        <p class="mt-2 text-sm leading-6 text-slate-400">سامانه مدرن مدیریت دارایی و زندگی مالی شما</p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">خرج‌یار</h1>
+        <p class="mt-2 text-sm leading-6 text-slate-500 dark:text-slate-400">سامانه مدرن مدیریت دارایی و زندگی مالی شما</p>
       </div>
 
-      <form @submit.prevent="handleLogin" class="space-y-5 rounded-3xl border border-slate-800 bg-slate-950 p-6 sm:p-8 shadow-2xl ring-1 ring-white/10">
-        <div v-if="error" class="bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs font-semibold rounded-xl px-4 py-3">
+      <form @submit.prevent="handleLogin" class="space-y-5 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-6 sm:p-8 shadow-xl dark:shadow-2xl ring-1 ring-slate-900/5 dark:ring-white/10">
+        <div v-if="error" class="bg-rose-50 dark:bg-rose-500/15 border border-rose-200 dark:border-rose-500/30 text-rose-700 dark:text-rose-300 text-xs font-semibold rounded-xl px-4 py-3">
           {{ error }}
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-2">نام کاربری</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">نام کاربری</label>
           <div class="relative">
             <input
               v-model="form.username"
               type="text"
               autocomplete="username"
               autofocus
-              class="w-full rounded-xl border border-slate-800 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20"
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-emerald-500/20"
               placeholder="نام کاربری خود را وارد کنید"
             />
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-300 mb-2">رمز عبور</label>
+          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">رمز عبور</label>
           <div class="relative">
             <input
               v-model="form.password"
               type="password"
               autocomplete="current-password"
-              class="w-full rounded-xl border border-slate-800 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20"
+              class="w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 px-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 outline-none transition focus:border-emerald-500 focus:bg-white dark:focus:bg-slate-900 focus:ring-4 focus:ring-emerald-500/20"
               placeholder="رمز عبور خود را وارد کنید"
             />
           </div>

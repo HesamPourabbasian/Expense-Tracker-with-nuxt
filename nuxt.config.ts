@@ -29,13 +29,18 @@ export default defineNuxtConfig({
         'lucide:gem',
         'lucide:shield-check',
         'lucide:receipt',
-        'lucide:gift'
+        'lucide:gift',
+        'lucide:sun',
+        'lucide:moon',
+        'lucide:monitor',
+        'lucide:laptop'
       ]
     }
   },
   css: ['~/assets/css/main.css'],
   tailwindcss: {
     config: {
+      darkMode: 'class',
       content: [],
       theme: {
         extend: {
@@ -81,7 +86,13 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { dir: 'rtl', lang: 'fa' },
       title: 'خرج‌یار | مدیریت مالی شخصی',
-      meta: [{ name: 'theme-color', content: '#059669' }]
+      meta: [{ name: 'theme-color', content: '#059669' }],
+      script: [
+        {
+          innerHTML: `(function(){try{var stored=localStorage.getItem('expense_tracker_theme');var isDark=false;if(stored==='dark'){isDark=true;}else if(stored==='light'){isDark=false;}else{isDark=window.matchMedia('(prefers-color-scheme: dark)').matches;}if(isDark){document.documentElement.classList.add('dark');document.documentElement.style.colorScheme='dark';}else{document.documentElement.classList.remove('dark');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+          type: 'text/javascript'
+        }
+      ]
     }
   },
   runtimeConfig: {
