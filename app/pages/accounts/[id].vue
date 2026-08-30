@@ -160,13 +160,13 @@ async function handleUpdated() {
           <Icon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
         <div class="flex min-w-0 items-center gap-3.5">
-          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20 shadow-xs">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20 shadow-xs">
             <Icon :name="account.icon" class="h-6 w-6" />
           </div>
           <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
-            <p class="text-xs sm:text-sm font-medium mt-0.5" :class="(account.balance || 0) >= 0 ? 'text-slate-500' : 'text-rose-600'">
-              موجودی کل: <bdi class="money font-extrabold text-slate-900">{{ formatCurrency(account.balance || 0) }}</bdi>
+            <p class="text-xs sm:text-sm font-medium mt-0.5" :class="(account.balance || 0) >= 0 ? 'text-slate-500 dark:text-slate-400' : 'text-rose-600 dark:text-rose-400'">
+              موجودی کل: <bdi class="money font-extrabold" :class="(account.balance || 0) >= 0 ? 'text-slate-900 dark:text-white' : 'text-rose-600 dark:text-rose-400'">{{ formatCurrency(account.balance || 0) }}</bdi>
             </p>
           </div>
         </div>
