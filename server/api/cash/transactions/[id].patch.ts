@@ -20,15 +20,24 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Amount must be a positive number' })
   }
 
-  const updated = await prisma.cashTransaction.update({
-    where: { id },
-    data: {
-      ...(type && { type }),
-      ...(amount && { amount }),
-      ...(description !== undefined && { description: description || null }),
-      ...(date && { date: new Date(date) })
-    }
-  })
+  return await prisma.$transaction(async (tx) => {
+    const updated = await tx.cashTransaction.update({
+      where: { id },
+      data: {
+        ...(type && { type }),
+        ...(amount && { amount }),
+        ...(description !== undefined && { description: description || null }),
+        ...(date && { date: new Date(date) })
+      }
+    })
 
-  return updated
+    if (amount !== undefined) {
+      await tx.debt.updateMany({
+        where: { cashTransactionId: id, userId: user.id },
+        data: { amount }
+      })
+    }
+
+    return updated
+  })
 })

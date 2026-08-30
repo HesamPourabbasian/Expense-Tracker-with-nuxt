@@ -1,14 +1,41 @@
 <script setup lang="ts">
+import type { BankAccountWithBalance, CashTransaction } from '~/types'
 import moment from 'jalali-moment'
 
 const emit = defineEmits(['close', 'created'])
+const { formatCurrency } = useFormat()
+
+onKeyStroke('Escape', () => emit('close'))
+
+const { data: accounts } = await useFetch<BankAccountWithBalance[]>('/api/accounts')
+const { data: cashTransactions } = await useFetch<CashTransaction[]>('/api/cash/transactions')
+
+const cashBalance = computed(() => {
+  if (!cashTransactions.value) return 0
+  return cashTransactions.value.reduce((acc, t) => {
+    return acc + (t.type === 'income' ? t.amount : -t.amount)
+  }, 0)
+})
+
+const isSettled = ref(false)
+const paymentMethod = ref<'bank' | 'cash'>('bank')
+const selectedBankAccountId = ref<number | null>(null)
+
+watchEffect(() => {
+  if (accounts.value && accounts.value.length > 0 && selectedBankAccountId.value === null) {
+    selectedBankAccountId.value = accounts.value[0]?.id ?? null
+  } else if ((!accounts.value || accounts.value.length === 0) && paymentMethod.value === 'bank') {
+    paymentMethod.value = 'cash'
+  }
+})
 
 const form = reactive({
   person: '',
   amount: 0,
   type: 'I_OWE' as 'I_OWE' | 'OWED_TO_ME',
   description: '',
-  date: moment().format('jYYYY/jMM/jDD')
+  date: moment().format('jYYYY/jMM/jDD'),
+  paymentDate: moment().format('jYYYY/jMM/jDD')
 })
 
 const error = ref('')
@@ -16,7 +43,7 @@ const loading = ref(false)
 
 async function handleSubmit() {
   if (!form.person) {
-    error.value = 'نام شخص را وارد کنید'
+    error.value = 'نام طرف حساب را وارد کنید'
     return
   }
   if (!form.amount || form.amount <= 0) {
@@ -24,7 +51,20 @@ async function handleSubmit() {
     return
   }
 
+  if (isSettled.value && paymentMethod.value === 'bank' && !selectedBankAccountId.value) {
+    error.value = 'لطفاً حساب بانکی را انتخاب کنید'
+    return
+  }
+
   const gregorianDate = moment(form.date, 'jYYYY/jMM/jDD').toDate()
+  if (isNaN(gregorianDate.getTime())) {
+    error.value = 'تاریخ سررسید نامعتبر است'
+    return
+  }
+
+  const gregorianPaymentDate = isSettled.value && form.paymentDate
+    ? moment(form.paymentDate, 'jYYYY/jMM/jDD').toDate()
+    : gregorianDate
 
   loading.value = true
   try {
@@ -35,7 +75,11 @@ async function handleSubmit() {
         amount: form.amount,
         type: form.type,
         description: form.description || null,
-        date: gregorianDate.toISOString()
+        date: gregorianDate.toISOString(),
+        status: isSettled.value ? 'paid' : 'pending',
+        paymentMethod: isSettled.value ? paymentMethod.value : undefined,
+        bankAccountId: isSettled.value && paymentMethod.value === 'bank' ? selectedBankAccountId.value : null,
+        paymentDate: isSettled.value ? gregorianPaymentDate.toISOString() : null
       }
     })
     emit('created')
@@ -49,7 +93,7 @@ async function handleSubmit() {
 
 <template>
   <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
-    <div class="modal-panel">
+    <div class="modal-panel max-w-lg">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-base font-extrabold text-slate-900">ثبت تعهد جدید</h2>
         <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700" aria-label="بستن پنجره">
@@ -93,7 +137,7 @@ async function handleSubmit() {
             v-model.number="form.amount"
             type="number"
             min="1"
-            class="form-control font-bold"
+            class="form-control font-bold text-base"
             placeholder="مبلغ به تومان"
           />
         </div>
@@ -107,6 +151,89 @@ async function handleSubmit() {
             dir="ltr"
             placeholder="1405/05/10"
           />
+        </div>
+
+        <!-- Optional Settlement Checkbox -->
+        <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200 space-y-3">
+          <label class="flex items-center gap-2.5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              v-model="isSettled"
+              class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 h-4 w-4"
+            />
+            <span class="text-xs font-bold text-slate-800">
+              این تعهد قبلاً پرداخت / دریافت شده است (ثبت همزمان تراکنش مالی)
+            </span>
+          </label>
+
+          <!-- Account selector if settled immediately -->
+          <div v-if="isSettled" class="space-y-3 pt-2 border-t border-slate-200">
+            <label class="block text-xs font-bold text-slate-800">
+              {{ form.type === 'I_OWE' ? 'این بدهی را چطور پرداخت کردید؟' : 'این طلب را کجا دریافت کردید؟' }}
+            </label>
+
+            <div class="space-y-2">
+              <!-- Cash Option -->
+              <button
+                type="button"
+                @click="paymentMethod = 'cash'"
+                class="w-full flex items-center justify-between p-3 rounded-xl border text-right transition"
+                :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-50/60 ring-1 ring-emerald-500/20' : 'border-slate-200 bg-white hover:bg-slate-50'"
+              >
+                <div class="flex items-center gap-2.5">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-lg" :class="paymentMethod === 'cash' ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'">
+                    <Icon name="lucide:wallet" class="w-4 h-4" />
+                  </div>
+                  <div>
+                    <p class="text-xs font-bold text-slate-900">کیف پول نقدی (نقد)</p>
+                    <p class="text-[11px] text-slate-400 font-medium mt-0.5">موجودی: {{ formatCurrency(cashBalance) }}</p>
+                  </div>
+                </div>
+                <div class="flex h-4 w-4 items-center justify-center rounded-full border" :class="paymentMethod === 'cash' ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white'">
+                  <Icon v-if="paymentMethod === 'cash'" name="lucide:check" class="w-2.5 h-2.5 stroke-[3]" />
+                </div>
+              </button>
+
+              <!-- Bank Accounts List -->
+              <div v-if="accounts && accounts.length > 0" class="space-y-2">
+                <button
+                  v-for="acc in accounts"
+                  :key="acc.id"
+                  type="button"
+                  @click="paymentMethod = 'bank'; selectedBankAccountId = acc.id"
+                  class="w-full flex items-center justify-between p-3 rounded-xl border text-right transition"
+                  :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-50/60 ring-1 ring-emerald-500/20' : 'border-slate-200 bg-white hover:bg-slate-50'"
+                >
+                  <div class="flex items-center gap-2.5">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-lg" :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600'">
+                      <Icon :name="acc.icon || 'lucide:landmark'" class="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p class="text-xs font-bold text-slate-900">{{ acc.name }}</p>
+                      <p class="text-[11px] text-slate-400 font-medium mt-0.5">موجودی: {{ formatCurrency(acc.balance || 0) }}</p>
+                    </div>
+                  </div>
+                  <div class="flex h-4 w-4 items-center justify-center rounded-full border" :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-slate-300 bg-white'">
+                    <Icon v-if="paymentMethod === 'bank' && selectedBankAccountId === acc.id" name="lucide:check" class="w-2.5 h-2.5 stroke-[3]" />
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Payment Date -->
+            <div class="pt-1">
+              <label class="block text-xs font-bold text-slate-700 mb-1">
+                {{ form.type === 'I_OWE' ? 'تاریخ پرداخت (شمسی)' : 'تاریخ دریافت (شمسی)' }}
+              </label>
+              <input
+                v-model="form.paymentDate"
+                type="text"
+                class="form-control text-left font-mono"
+                dir="ltr"
+                placeholder="1405/06/08"
+              />
+            </div>
+          </div>
         </div>
 
         <div>
@@ -131,3 +258,4 @@ async function handleSubmit() {
     </div>
   </div>
 </template>
+

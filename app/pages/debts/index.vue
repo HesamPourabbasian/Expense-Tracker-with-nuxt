@@ -6,6 +6,7 @@ const toast = useToast()
 
 const showCreateModal = ref(false)
 const editDebt = ref<Debt | null>(null)
+const settleDebt = ref<Debt | null>(null)
 const filterType = ref<string>('')
 
 const { data: allDebts, refresh } = await useFetch<Debt[]>('/api/debts')
@@ -27,40 +28,57 @@ const totalOwedToMe = computed(() => {
     .reduce((acc, d) => acc + d.amount, 0)
 })
 
-async function deleteDebt(id: number) {
-  if (!confirm('آیا مطمئن هستید؟')) return
+async function deleteDebt(d: Debt) {
+  const message = d.status === 'paid'
+    ? 'آیا از حذف این تعهد مطمئن هستید؟ تراکنش مالی ثبت‌شده نیز حذف و موجودی حساب اصلاح خواهد شد.'
+    : 'آیا از حذف این تعهد مطمئن هستید؟'
+
+  if (!confirm(message)) return
   try {
-    await $fetch(`/api/debts/${id}`, { method: 'DELETE' })
-    toast.success('بدهی حذف شد')
+    await $fetch(`/api/debts/${d.id}`, { method: 'DELETE' })
+    toast.success('تعهد حذف و موجودی حساب اصلاح شد')
     refresh()
   } catch (e: any) {
-    toast.error('خطا در حذف بدهی')
+    toast.error('خطا در حذف تعهد')
   }
 }
 
-async function markPaid(id: number) {
+function openSettle(d: Debt) {
+  settleDebt.value = d
+}
+
+async function revertPaid(d: Debt) {
+  const confirmMsg = 'آیا می‌خواهید وضعیت این مورد را به «در انتظار» تغییر دهید؟\nتراکنش مالی ثبت‌شده حذف و مبلغ به موجودی حساب/کیف پول بازمی‌گردد.'
+  if (!confirm(confirmMsg)) return
+
   try {
-    await $fetch(`/api/debts/${id}`, {
+    await $fetch(`/api/debts/${d.id}`, {
       method: 'PATCH',
-      body: { status: 'paid' }
+      body: { status: 'pending' }
     })
-    toast.success('بدهی به عنوان پرداخت شده علامت‌گذاری شد')
-    refresh()
+    toast.success('تعهد به وضعیت در انتظار بازگشت و تراکنش حذف شد')
+    await refresh()
   } catch (e: any) {
-    toast.error('خطا در تغییر وضعیت')
+    toast.error('خطا در بازگردانی وضعیت تعهد')
   }
 }
 
 async function handleCreated() {
   showCreateModal.value = false
   await refresh()
-  toast.success('بدهی جدید اضافه شد')
+  toast.success('تعهد جدید ثبت شد')
 }
 
 async function handleUpdated() {
   editDebt.value = null
   await refresh()
-  toast.success('بدهی ویرایش شد')
+  toast.success('تعهد ویرایش شد')
+}
+
+async function handlePaid() {
+  settleDebt.value = null
+  await refresh()
+  toast.success('تسویه با موفقیت انجام شد و تراکنش ثبت گردید')
 }
 </script>
 
@@ -128,7 +146,7 @@ async function handleUpdated() {
         v-for="d in debts"
         :key="d.id"
         class="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3 p-4 sm:p-5 transition hover:bg-slate-50/70"
-        :class="d.status === 'paid' ? 'opacity-55' : ''"
+        :class="d.status === 'paid' ? 'opacity-70 bg-slate-50/40' : ''"
       >
         <div class="flex min-w-0 items-start gap-3.5">
           <div
@@ -140,17 +158,44 @@ async function handleUpdated() {
           <div class="min-w-0">
             <div class="flex min-w-0 flex-wrap items-center gap-2">
               <p class="break-words text-sm font-bold text-slate-900">{{ d.person }}</p>
-              <span
-                v-if="d.status === 'paid'"
-                class="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800"
-              >تسویه شده</span>
+
+              <!-- Status & Settlement Badges -->
+              <template v-if="d.status === 'paid'">
+                <span
+                  v-if="d.isCash"
+                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800 border border-emerald-200/60"
+                >
+                  <Icon name="lucide:wallet" class="h-3 w-3 text-emerald-600" />
+                  تسویه نقدی
+                </span>
+                <span
+                  v-else-if="d.bankAccount"
+                  class="inline-flex items-center gap-1 rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800 border border-emerald-200/60"
+                >
+                  <Icon :name="d.bankAccount.icon || 'lucide:landmark'" class="h-3 w-3 text-emerald-600" />
+                  تسویه: {{ d.bankAccount.name }}
+                </span>
+                <span
+                  v-else
+                  class="rounded-md bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-800"
+                >تسویه شده</span>
+              </template>
+
               <span
                 v-else
                 class="rounded-md px-2 py-0.5 text-[11px] font-bold"
                 :class="d.type === 'I_OWE' ? 'bg-amber-100 text-amber-800' : 'bg-teal-100 text-teal-800'"
               >{{ d.type === 'I_OWE' ? 'بدهی' : 'طلب' }}</span>
             </div>
-            <p class="mt-0.5 text-xs text-slate-400 font-medium">{{ toJalali(d.date) }}</p>
+
+            <div class="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-slate-400 font-medium">
+              <span>سررسید: {{ toJalali(d.date) }}</span>
+              <template v-if="d.status === 'paid' && d.paymentDate">
+                <span>•</span>
+                <span class="text-emerald-700 font-semibold">پرداخت: {{ toJalali(d.paymentDate) }}</span>
+              </template>
+            </div>
+
             <p v-if="d.description" class="mt-1 break-words text-xs leading-5 text-slate-500">{{ d.description }}</p>
           </div>
         </div>
@@ -159,18 +204,33 @@ async function handleUpdated() {
             {{ formatCurrency(d.amount) }}
           </p>
           <div class="flex items-center gap-1">
+            <!-- Settle / Pay Button (for pending debts) -->
             <button
               v-if="d.status === 'pending'"
-              @click="markPaid(d.id)"
-              class="icon-button h-9 w-9 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700"
-              title="علامت‌گذاری به‌عنوان پرداخت‌شده"
+              @click="openSettle(d)"
+              class="icon-button h-9 w-9 text-emerald-600 bg-emerald-50 hover:bg-emerald-100 hover:text-emerald-700 transition"
+              :title="d.type === 'I_OWE' ? 'ثبت پرداخت بدهی' : 'ثبت وصول طلب'"
             >
               <Icon name="lucide:check" class="w-4 h-4" />
             </button>
+
+            <!-- Revert / Undo Button (for paid debts) -->
+            <button
+              v-if="d.status === 'paid'"
+              @click="revertPaid(d)"
+              class="icon-button h-9 w-9 text-amber-600 bg-amber-50 hover:bg-amber-100 hover:text-amber-700 transition"
+              title="بازگردانی به وضعیت در انتظار (حذف تراکنش)"
+            >
+              <Icon name="lucide:rotate-ccw" class="w-4 h-4" />
+            </button>
+
+            <!-- Edit Button -->
             <button @click="editDebt = d" class="icon-button h-9 w-9 text-slate-400 hover:text-slate-700" title="ویرایش">
               <Icon name="lucide:pencil" class="w-4 h-4" />
             </button>
-            <button @click="deleteDebt(d.id)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
+
+            <!-- Delete Button -->
+            <button @click="deleteDebt(d)" class="icon-button h-9 w-9 text-slate-400 hover:bg-rose-50 hover:text-rose-600" title="حذف">
               <Icon name="lucide:trash-2" class="w-4 h-4" />
             </button>
           </div>
@@ -188,5 +248,7 @@ async function handleUpdated() {
 
     <DebtModal v-if="showCreateModal" @close="showCreateModal = false" @created="handleCreated" />
     <DebtEditModal v-if="editDebt" :debt="editDebt" @close="editDebt = null" @updated="handleUpdated" />
+    <DebtPayModal v-if="settleDebt" :debt="settleDebt" @close="settleDebt = null" @paid="handlePaid" />
   </div>
 </template>
+

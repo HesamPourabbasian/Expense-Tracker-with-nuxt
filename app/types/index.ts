@@ -76,8 +76,14 @@ export interface Debt {
   description: string | null
   status: 'pending' | 'paid'
   date: string
+  paymentDate?: string | null
+  bankAccountId?: number | null
+  isCash?: boolean
+  transactionId?: number | null
+  cashTransactionId?: number | null
   createdAt: string
   updatedAt: string
+  bankAccount?: { id: number; name: string; icon: string } | null
 }
 
 export interface DashboardData {

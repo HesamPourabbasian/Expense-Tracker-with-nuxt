@@ -4,20 +4,37 @@ export default defineEventHandler(async (event) => {
   const user = event.context.user
   const id = parseInt(getRouterParam(event, 'id')!)
 
-  const transaction = await prisma.transaction.findUnique({ where: { id } })
-  if (!transaction || transaction.userId !== user.id) {
-    throw createError({ statusCode: 404, statusMessage: 'Transaction not found' })
-  }
+  return await prisma.$transaction(async (tx) => {
+    const transaction = await tx.transaction.findUnique({ where: { id } })
+    if (!transaction || transaction.userId !== user.id) {
+      throw createError({ statusCode: 404, statusMessage: 'Transaction not found' })
+    }
 
-  if (transaction.relatedTransactionId) {
-    await prisma.transaction.deleteMany({
+    const idsToDelete = transaction.relatedTransactionId
+      ? [transaction.id, transaction.relatedTransactionId]
+      : [transaction.id]
+
+    await tx.debt.updateMany({
       where: {
-        id: { in: [transaction.id, transaction.relatedTransactionId] },
+        transactionId: { in: idsToDelete },
+        userId: user.id
+      },
+      data: {
+        status: 'pending',
+        transactionId: null,
+        bankAccountId: null,
+        isCash: false,
+        paymentDate: null
+      }
+    })
+
+    await tx.transaction.deleteMany({
+      where: {
+        id: { in: idsToDelete },
         userId: user.id
       }
     })
-  } else {
-    await prisma.transaction.delete({ where: { id } })
-  }
-  return { success: true }
+
+    return { success: true }
+  })
 })

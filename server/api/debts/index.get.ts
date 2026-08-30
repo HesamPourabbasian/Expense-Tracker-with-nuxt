@@ -12,6 +12,11 @@ export default defineEventHandler(async (event) => {
 
   const debts = await prisma.debt.findMany({
     where,
+    include: {
+      bankAccount: {
+        select: { id: true, name: true, icon: true }
+      }
+    },
     orderBy: { date: 'desc' }
   })
 
