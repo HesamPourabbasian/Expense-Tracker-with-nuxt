@@ -232,6 +232,8 @@ async function handleSubmit() {
               type="text"
               class="form-control"
               placeholder="مثال: انتقال پول برای مدیریت موجودی..."
+              spellcheck="false"
+              autocomplete="off"
             />
           </div>
 
