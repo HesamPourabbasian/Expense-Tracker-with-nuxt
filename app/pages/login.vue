@@ -29,7 +29,7 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="relative flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 sm:p-6 transition-colors duration-150">
+  <div class="relative flex min-h-[calc(100dvh-2.25rem)] items-center justify-center bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 p-4 sm:p-6">
     <div class="absolute top-4 left-4 z-20">
       <ThemeToggle />
     </div>

@@ -3,6 +3,8 @@ import prisma from './prisma'
 import { getSessionUserId } from './session'
 
 export async function getUserFromEvent(event: H3Event) {
+  if (event.context.user) return event.context.user
+
   const userId = getSessionUserId(event)
   if (!userId) return null
 
@@ -10,6 +12,10 @@ export async function getUserFromEvent(event: H3Event) {
     where: { id: userId },
     select: { id: true, username: true }
   })
+
+  if (user) {
+    event.context.user = user
+  }
 
   return user
 }

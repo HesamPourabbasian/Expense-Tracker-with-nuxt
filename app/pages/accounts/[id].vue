@@ -38,8 +38,8 @@ const groupedTransactions = computed(() => {
   const groupMap = new Map<string, typeof groups[0]>()
 
   for (const t of transactions.value) {
-    const formatted = moment(t.date).format('jYYYY-jMM')
-    const [jYearStr, jMonthStr] = formatted.split('-')
+    const formatted = toJalali(t.date).slice(0, 7)
+    const [jYearStr, jMonthStr] = formatted.split('/')
     const jYear = Number(jYearStr)
     const jMonth = Number(jMonthStr)
     const key = formatted

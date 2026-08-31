@@ -26,6 +26,7 @@ export default defineNuxtConfig({
         'lucide:briefcase',
         'lucide:badge-dollar-sign',
         'lucide:trending-up',
+        'lucide:trending-down',
         'lucide:gem',
         'lucide:shield-check',
         'lucide:receipt',
@@ -33,9 +34,51 @@ export default defineNuxtConfig({
         'lucide:sun',
         'lucide:moon',
         'lucide:monitor',
-        'lucide:laptop'
+        'lucide:laptop',
+        'lucide:plus',
+        'lucide:x',
+        'lucide:pencil',
+        'lucide:trash-2',
+        'lucide:arrow-right',
+        'lucide:arrow-left',
+        'lucide:arrow-left-right',
+        'lucide:arrow-down-left',
+        'lucide:arrow-up-right',
+        'lucide:arrow-up-left',
+        'lucide:arrow-down-up',
+        'lucide:calendar',
+        'lucide:chevron-right',
+        'lucide:chevron-left',
+        'lucide:check',
+        'lucide:check-circle-2',
+        'lucide:check-square-2',
+        'lucide:alert-circle',
+        'lucide:alert-triangle',
+        'lucide:info',
+        'lucide:log-out',
+        'lucide:layout-dashboard',
+        'lucide:activity',
+        'lucide:layers-3',
+        'lucide:chart-no-axes-combined',
+        'lucide:refresh-cw',
+        'lucide:quote',
+        'lucide:align-left',
+        'lucide:rotate-ccw',
+        'bx:bxs-star',
+        'bx:bx-star',
+        'line-md:loading-twotone-loop',
+        'tabler:currency-bitcoin',
+        'tabler:currency-ethereum',
+        'tabler:currency-solana',
+        'tabler:currency-dogecoin',
+        'tabler:coin',
+        'mdi:currency-usd',
+        'mdi:litecoin'
       ]
     }
+  },
+  nitro: {
+    compressPublicAssets: true
   },
   css: ['~/assets/css/main.css'],
   tailwindcss: {
@@ -78,8 +121,9 @@ export default defineNuxtConfig({
       'Vazirmatn': [400, 500, 600, 700, 800]
     },
     display: 'swap',
-    prefetch: true,
-    preconnect: true
+    download: true,
+    prefetch: false,
+    preconnect: false
   },
   app: {
     pageTransition: { name: 'page-fade', mode: 'out-in' },

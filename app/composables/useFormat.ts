@@ -7,6 +7,9 @@ const PERSIAN_MONTHS = [
   'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
 ] as const
 
+const jalaliCache = new Map<string, string>()
+const MAX_CACHE_SIZE = 1000
+
 export function useFormat() {
   function formatCurrency(amount: number): string {
     return numberFormatter.format(amount || 0) + ' تومان'
@@ -17,8 +20,18 @@ export function useFormat() {
   }
 
   function toJalali(date: Date | string): string {
+    if (!date) return ''
+    const key = typeof date === 'string' ? date : date.toISOString()
+    const cached = jalaliCache.get(key)
+    if (cached) return cached
+
     const d = typeof date === 'string' ? new Date(date) : date
-    return moment(d).format('jYYYY/jMM/jDD')
+    const formatted = moment(d).format('jYYYY/jMM/jDD')
+    if (jalaliCache.size > MAX_CACHE_SIZE) {
+      jalaliCache.clear()
+    }
+    jalaliCache.set(key, formatted)
+    return formatted
   }
 
   function toGregorian(jalaliDate: string): Date {

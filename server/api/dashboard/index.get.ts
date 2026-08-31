@@ -23,7 +23,10 @@ export default defineEventHandler(async (event) => {
   const [accounts, cashTransactions, monthlyBankTransactions, debts] = await Promise.all([
     prisma.bankAccount.findMany({
       where: { userId: user.id },
-      include: {
+      select: {
+        id: true,
+        name: true,
+        icon: true,
         transactions: {
           select: {
             type: true,
@@ -36,16 +39,19 @@ export default defineEventHandler(async (event) => {
       }
     }),
     prisma.cashTransaction.findMany({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      select: { type: true, amount: true, date: true }
     }),
     prisma.transaction.findMany({
       where: {
         userId: user.id,
         date: { gte: startOfMonth, lt: startOfNextMonth }
-      }
+      },
+      select: { type: true, amount: true }
     }),
     prisma.debt.findMany({
-      where: { userId: user.id }
+      where: { userId: user.id, status: 'pending' },
+      select: { type: true, amount: true, status: true }
     })
   ])
 
