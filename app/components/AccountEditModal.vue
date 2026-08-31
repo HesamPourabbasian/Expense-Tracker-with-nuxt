@@ -58,6 +58,8 @@ async function handleSubmit() {
             v-model="form.name"
             type="text"
             class="form-control font-bold"
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
