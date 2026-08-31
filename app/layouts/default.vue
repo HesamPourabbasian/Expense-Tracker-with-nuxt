@@ -25,7 +25,7 @@ function isActive(path: string) {
 </script>
 
 <template>
-  <div class="min-h-[calc(100dvh-2.25rem)] bg-slate-50 dark:bg-[#090e17] text-slate-900 dark:text-slate-100 transition-colors duration-150">
+  <div class="min-h-[calc(100dvh-2.25rem)] bg-slate-50 dark:bg-[#090e17] text-slate-900 dark:text-slate-100">
     <!-- Desktop Sidebar -->
     <aside class="hidden border-l border-slate-800 bg-[#090e17] text-white lg:fixed lg:bottom-0 lg:right-0 lg:top-9 lg:z-50 lg:flex lg:w-64 lg:flex-col shadow-xl">
       <div class="flex h-20 items-center justify-between border-b border-slate-800/80 px-6">
