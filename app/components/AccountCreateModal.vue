@@ -56,6 +56,8 @@ async function handleSubmit() {
             type="text"
             class="form-control font-bold"
             placeholder="مثال: بانک سامان / حساب اصلی"
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
