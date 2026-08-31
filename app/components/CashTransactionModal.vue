@@ -100,6 +100,8 @@ async function handleSubmit() {
             type="text"
             class="form-control"
             placeholder="عنوان یا توضیحات اختیاری..."
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
