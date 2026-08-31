@@ -137,7 +137,7 @@ async function deleteTask(id: number) {
           <div class="flex flex-col gap-3 sm:flex-row">
             <div class="relative min-w-0 flex-1">
               <Icon name="lucide:plus" class="absolute right-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
-              <input v-model="newTask" class="form-control pr-12" type="text" maxlength="160" placeholder="امروز چه کاری باید انجام شود؟">
+              <input v-model="newTask" class="form-control pr-12" type="text" maxlength="160" placeholder="امروز چه کاری باید انجام شود؟" spellcheck="false" autocomplete="off">
             </div>
             <button class="primary-button w-full sm:w-auto" type="submit" :disabled="saving || !newTask.trim()">
               <Icon name="lucide:plus" class="h-4 w-4" />
@@ -148,7 +148,7 @@ async function deleteTask(id: number) {
             <Icon name="lucide:align-left" class="h-3.5 w-3.5" />
             {{ showDetails ? 'بستن توضیحات اختیاری' : '+ افزودن توضیحات اختیاری' }}
           </button>
-          <textarea v-if="showDetails" v-model="newDescription" class="form-control mt-2.5 resize-none" rows="2" maxlength="500" placeholder="جزئیات تکمیلی این کار..." />
+          <textarea v-if="showDetails" v-model="newDescription" class="form-control mt-2.5 resize-none" rows="2" maxlength="500" placeholder="جزئیات تکمیلی این کار..." spellcheck="false" />
         </form>
 
         <div v-if="status === 'pending'" class="space-y-3">
@@ -158,8 +158,8 @@ async function deleteTask(id: number) {
         <div v-else-if="data?.todos.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
           <article v-for="todo in data.todos" :key="todo.id" class="group p-4 sm:p-5 transition-colors duration-150 hover:bg-slate-50 dark:hover:bg-slate-800/40" :class="todo.completed ? 'bg-emerald-50/30 dark:bg-emerald-950/20' : ''">
             <div v-if="editingId === todo.id" class="space-y-3">
-              <input v-model="editTitle" class="form-control font-bold" maxlength="160" @keyup.enter="saveEdit(todo.id)">
-              <textarea v-model="editDescription" class="form-control resize-none text-sm" rows="2" maxlength="500" placeholder="توضیحات..." />
+              <input v-model="editTitle" class="form-control font-bold" maxlength="160" @keyup.enter="saveEdit(todo.id)" spellcheck="false" autocomplete="off">
+              <textarea v-model="editDescription" class="form-control resize-none text-sm" rows="2" maxlength="500" placeholder="توضیحات..." spellcheck="false" />
               <div class="flex flex-wrap justify-end gap-2">
                 <button class="min-h-9 px-4 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200" @click="editingId = null">انصراف</button>
                 <button class="primary-button min-h-9 text-xs px-4" @click="saveEdit(todo.id)">ذخیره تغییرات</button>
