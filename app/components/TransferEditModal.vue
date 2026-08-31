@@ -204,6 +204,8 @@ async function handleSubmit() {
             type="text"
             class="form-control"
             placeholder="عنوان یا توضیحات انتقال..."
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
