@@ -109,7 +109,7 @@ async function submit() {
 
         <div>
           <label class="mb-1.5 block text-xs font-bold text-slate-700 dark:text-slate-300">یادداشت</label>
-          <input v-model="form.note" class="form-control" maxlength="300" placeholder="نام صرافی، شماره پیگیری یا یادداشت اختیاری">
+          <input v-model="form.note" class="form-control" maxlength="300" placeholder="نام صرافی، شماره پیگیری یا یادداشت اختیاری" spellcheck="false" autocomplete="off">
         </div>
 
         <button 
