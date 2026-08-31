@@ -46,11 +46,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-slate-800/80 bg-slate-950 px-4 text-white will-change-transform transform-gpu">
+  <div class="fixed inset-x-0 top-0 z-[60] flex h-9 items-center justify-center border-b border-slate-800/80 bg-slate-950 px-4 text-white will-change-transform transform-gpu [contain:strict] [isolation:isolate]">
     <div class="flex w-full max-w-7xl items-center justify-between gap-3 text-xs">
       <div class="flex items-center gap-2 font-medium text-slate-400">
         <span class="relative flex h-2 w-2">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75 will-change-[transform,opacity] transform-gpu"></span>
           <span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
         </span>
         <span class="font-semibold text-slate-300">ایران</span>
