@@ -224,6 +224,8 @@ async function handleSubmit() {
             type="text"
             class="form-control"
             placeholder="یادداشت برای این پرداخت..."
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
