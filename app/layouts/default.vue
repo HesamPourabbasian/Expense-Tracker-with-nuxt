@@ -81,7 +81,7 @@ function isActive(path: string) {
     </aside>
 
     <!-- Mobile Header -->
-    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-white lg:hidden transform-gpu backdrop-blur-xs">
+    <header class="fixed inset-x-0 top-9 z-40 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 text-slate-900 dark:text-white lg:hidden transform-gpu backdrop-blur-sm">
       <div class="flex h-16 items-center justify-between px-4">
         <div class="flex items-center gap-2.5">
           <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
@@ -106,7 +106,7 @@ function isActive(path: string) {
     </main>
 
     <!-- Mobile Bottom Floating Navigation Dock -->
-    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xs p-1.5 shadow-lg shadow-slate-900/5 dark:shadow-black/40 rounded-2xl lg:hidden transform-gpu">
+    <nav class="fixed inset-x-3 bottom-[calc(0.75rem+env(safe-area-inset-bottom))] z-40 grid grid-cols-6 border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-sm p-1.5 shadow-lg shadow-slate-900/5 dark:shadow-black/40 rounded-2xl lg:hidden transform-gpu">
       <NuxtLink 
         v-for="item in navItems" 
         :key="item.to" 
