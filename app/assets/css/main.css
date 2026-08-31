@@ -24,7 +24,7 @@
   html {
     background: var(--canvas);
     color-scheme: light;
-    text-rendering: optimizeLegibility;
+    text-rendering: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -36,8 +36,12 @@
     background: var(--canvas);
     overflow-x: hidden;
   }
-  button, a, input, select, textarea {
+  button, a {
     -webkit-tap-highlight-color: transparent;
+  }
+  input, select, textarea {
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: auto;
   }
   button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
     @apply outline-none ring-2 ring-emerald-500 ring-offset-2 dark:ring-offset-slate-900;
@@ -105,14 +109,21 @@
     @apply surface flex min-h-64 flex-col items-center justify-center p-8 text-center;
   }
   .modal-backdrop {
-    @apply fixed inset-0 z-[70] flex overflow-y-auto bg-slate-950/75 backdrop-blur-sm p-3 sm:items-center sm:justify-center sm:p-4;
+    @apply fixed inset-0 z-[70] flex overflow-y-auto bg-slate-950/80 backdrop-blur-xs p-3 sm:items-center sm:justify-center sm:p-4;
     overscroll-behavior: contain;
+    transform: translateZ(0);
+    will-change: opacity;
   }
   .modal-panel {
     @apply my-auto w-full max-w-md overflow-y-auto border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 shadow-2xl;
     max-height: calc(100dvh - 1.5rem);
     border-radius: 20px;
     padding-bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    isolation: isolate;
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
+    contain: layout style;
   }
   .money {
     direction: ltr;
@@ -121,7 +132,9 @@
     unicode-bidi: isolate;
   }
   .form-control {
-    @apply w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:bg-white dark:hover:bg-slate-900/60 px-4 py-2.5 text-sm text-slate-900 dark:text-white outline-none transition-colors duration-150 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20;
+    @apply w-full rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 hover:bg-white dark:hover:bg-slate-900/60 px-4 py-2.5 text-sm text-slate-900 dark:text-white outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-900 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20;
+    transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+    text-rendering: auto;
   }
 }
 
