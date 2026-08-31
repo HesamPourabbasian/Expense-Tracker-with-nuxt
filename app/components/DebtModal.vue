@@ -128,6 +128,8 @@ async function handleSubmit() {
             type="text"
             class="form-control font-bold"
             placeholder="مثال: علی رضایی"
+            spellcheck="false"
+            autocomplete="off"
           />
         </div>
 
@@ -243,6 +245,7 @@ async function handleSubmit() {
             rows="2"
             class="form-control resize-none text-sm"
             placeholder="جزئیات و یادداشت این بدهی یا طلب..."
+            spellcheck="false"
           ></textarea>
         </div>
 
