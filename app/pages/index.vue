@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { DashboardData } from '~/types'
+import type { DashboardData, MarketPricesResponse } from '~/types'
 import moment from 'jalali-moment'
 
-const { formatCurrency, getPersianMonthName } = useFormat()
+const { formatCurrency, formatNumber, getPersianMonthName } = useFormat()
 const currentJalali = moment()
 const year = ref(Number(currentJalali.format('jYYYY')))
 const month = ref(Number(currentJalali.format('jMM')))
@@ -10,6 +10,12 @@ const month = ref(Number(currentJalali.format('jMM')))
 const { data: dashboard, status } = await useFetch<DashboardData>('/api/dashboard', {
   query: { year, month }
 })
+
+const { data: marketData, status: marketStatus, refresh: refreshMarket } = await useFetch<MarketPricesResponse>('/api/market/prices')
+
+function formatRial(amount: number): string {
+  return formatNumber(amount) + ' ریال'
+}
 
 const totalAssets = computed(() => (dashboard.value?.totalBankBalance || 0) + (dashboard.value?.cashBalance || 0))
 const totalIncome = computed(() => (dashboard.value?.monthlyIncome || 0) + (dashboard.value?.monthlyCashIncome || 0))
@@ -94,6 +100,85 @@ function nextMonth() {
           <p class="text-xs font-medium text-slate-500 dark:text-slate-400">مجموع هزینه</p>
           <p class="money mt-1.5 max-w-full break-words text-xl font-extrabold text-slate-900 dark:text-white sm:text-2xl">{{ formatCurrency(totalExpenses) }}</p>
           <p class="mt-3 text-xs text-slate-400 dark:text-slate-500"><bdi class="money font-medium text-slate-600 dark:text-slate-300">{{ formatCurrency(dashboard.monthlyCashExpenses) }}</bdi> به‌صورت نقدی</p>
+        </div>
+      </section>
+
+      <!-- Live Market Rates in Iranian Rial -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <h2 class="font-extrabold text-slate-900 dark:text-white text-sm sm:text-base">نرخ زنده ارز و طلا</h2>
+            <span class="rounded-md bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[11px] font-bold text-slate-500 dark:text-slate-400">ریال ایران</span>
+          </div>
+          <button
+            @click="refreshMarket()"
+            :disabled="marketStatus === 'pending'"
+            class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition"
+            title="به‌روزرسانی قیمت‌ها"
+          >
+            <Icon name="lucide:refresh-cw" class="w-3.5 h-3.5" :class="marketStatus === 'pending' ? 'animate-spin text-emerald-600' : ''" />
+          </button>
+        </div>
+
+        <div v-if="marketStatus === 'pending' && !marketData" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          <div v-for="i in 5" :key="i" class="surface p-4 animate-pulse h-28 rounded-2xl bg-slate-200/60 dark:bg-slate-800/60" />
+        </div>
+
+        <div v-else-if="marketData?.rates?.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+          <article
+            v-for="rate in marketData.rates"
+            :key="rate.id"
+            class="surface p-4 transition-all hover:shadow-card-hover border-slate-200/80 dark:border-slate-800/80"
+          >
+            <div class="flex items-start justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div
+                  class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ring-1"
+                  :class="{
+                    'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 ring-emerald-500/20': rate.color === 'emerald',
+                    'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 ring-blue-500/20': rate.color === 'blue',
+                    'bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 ring-rose-500/20': rate.color === 'rose',
+                    'bg-teal-50 dark:bg-teal-950/50 text-teal-600 dark:text-teal-400 ring-teal-500/20': rate.color === 'teal',
+                    'bg-amber-50 dark:bg-amber-950/50 text-amber-600 dark:text-amber-400 ring-amber-500/20': rate.color === 'amber'
+                  }"
+                >
+                  <Icon :name="rate.icon" class="h-5 w-5" />
+                </div>
+                <div class="min-w-0">
+                  <h3 class="truncate text-xs font-extrabold text-slate-800 dark:text-slate-200">{{ rate.name }}</h3>
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{{ rate.symbol }}</span>
+                </div>
+              </div>
+
+              <!-- 24h Change Badge -->
+              <span
+                v-if="rate.change24h > 0"
+                class="inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-[10px] font-bold shrink-0"
+                :class="rate.trend === 'up'
+                  ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400'
+                  : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-400'"
+              >
+                <Icon
+                  :name="rate.trend === 'up' ? 'lucide:trending-up' : 'lucide:trending-down'"
+                  class="h-3 w-3"
+                />
+                <bdi>{{ rate.change24h }}%</bdi>
+              </span>
+            </div>
+
+            <div>
+              <div class="money text-base sm:text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                {{ formatRial(rate.price) }}
+              </div>
+              <p class="text-[11px] font-medium text-slate-400 dark:text-slate-500 mt-0.5">
+                معادل <bdi class="money font-semibold text-slate-600 dark:text-slate-400">{{ formatCurrency(rate.priceToman) }}</bdi>
+              </p>
+            </div>
+          </article>
         </div>
       </section>
 

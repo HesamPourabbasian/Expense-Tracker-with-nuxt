@@ -72,6 +72,10 @@ export default defineNuxtConfig({
         'tabler:currency-solana',
         'tabler:currency-dogecoin',
         'tabler:coin',
+        'tabler:currency-dollar',
+        'tabler:currency-euro',
+        'tabler:currency-lira',
+        'tabler:currency-tether',
         'mdi:currency-usd',
         'mdi:litecoin'
       ]

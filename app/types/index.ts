@@ -139,3 +139,22 @@ export interface CryptoMarketPrice {
   price: number
   change24h: number
 }
+
+export interface MarketRate {
+  id: string
+  name: string
+  symbol: string
+  price: number
+  priceToman: number
+  change24h: number
+  trend: 'up' | 'down' | 'neutral'
+  icon: string
+  color: string
+}
+
+export interface MarketPricesResponse {
+  rates: MarketRate[]
+  unit: 'IRR'
+  updatedAt: string
+  stale: boolean
+}
