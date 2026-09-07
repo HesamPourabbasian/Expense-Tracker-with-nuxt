@@ -17,10 +17,20 @@ const page = ref(1)
 const { data: account, refresh: refreshAccount } = await useFetch<BankAccount>(`/api/accounts/${accountId}`)
 
 const { data: transactionData, status, refresh: refreshTransactions } = await useFetch<PaginatedTransactions>('/api/transactions', {
-  query: { bankAccountId: accountId, type: filterType, page }
+  query: { bankAccountId: accountId, all: true }
 })
 
-const transactions = computed(() => transactionData.value?.transactions)
+const allTransactions = computed(() => transactionData.value?.transactions || [])
+
+const transactions = computed(() => {
+  if (!allTransactions.value.length) return []
+  if (!filterType.value) return allTransactions.value
+  if (filterType.value === 'unnecessary') {
+    return allTransactions.value.filter(t => t.isUnnecessary)
+  }
+  return allTransactions.value.filter(t => t.type === filterType.value)
+})
+
 const pagination = computed(() => transactionData.value?.pagination)
 
 const groupedTransactions = computed(() => {
@@ -225,7 +235,7 @@ async function handleUpdated() {
             <span v-if="group.totalIncome > 0" class="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-1 rounded-lg border border-emerald-100 dark:border-emerald-900/40">
               درآمد: <bdi class="money font-bold">+{{ formatCurrency(group.totalIncome) }}</bdi>
             </span>
-            <span v-if="group.totalExpense > 0" class="text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-lg border border-rose-100 dark:border-rose-900/40">
+            <span v-if="filterType !== 'unnecessary' && group.totalExpense > 0" class="text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/50 px-2.5 py-1 rounded-lg border border-rose-100 dark:border-rose-900/40">
               هزینه: <bdi class="money font-bold">-{{ formatCurrency(group.totalExpense) }}</bdi>
             </span>
             <span v-if="group.totalUnnecessary > 0" class="inline-flex items-center gap-1 text-amber-900 dark:text-amber-300 bg-amber-100/90 dark:bg-amber-950/50 px-2.5 py-1 rounded-lg border border-amber-200 dark:border-amber-800/40">

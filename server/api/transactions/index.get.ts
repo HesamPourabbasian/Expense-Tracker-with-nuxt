@@ -3,7 +3,8 @@ import prisma from '~~/server/utils/prisma'
 export default defineEventHandler(async (event) => {
   const user = event.context.user
   const query = getQuery(event)
-  const pageSize = 50
+  const isAll = query.all === 'true' || query.pageSize === 'all'
+  const pageSize = isAll ? undefined : (Number(query.pageSize) || 50)
   const requestedPage = Number(query.page ?? 1)
   const page = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1
   
@@ -37,18 +38,18 @@ export default defineEventHandler(async (event) => {
         destinationAccount: { select: { id: true, name: true, icon: true } }
       },
       orderBy: [{ date: 'desc' }, { id: 'desc' }],
-      skip: (page - 1) * pageSize,
-      take: pageSize
+      ...(isAll ? {} : { skip: (page - 1) * (pageSize || 50), take: pageSize })
     })
   ])
 
+  const effectivePageSize = isAll ? total : (pageSize || 50)
   return {
     transactions,
     pagination: {
-      page,
-      pageSize,
+      page: isAll ? 1 : page,
+      pageSize: effectivePageSize,
       total,
-      totalPages: Math.ceil(total / pageSize)
+      totalPages: isAll ? 1 : Math.ceil(total / effectivePageSize)
     }
   }
 })
