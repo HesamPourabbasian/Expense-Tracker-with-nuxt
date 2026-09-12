@@ -13,8 +13,22 @@ onKeyStroke('Escape', () => emit('close'))
 
 const error = ref('')
 const loading = ref(false)
+const searchQuery = ref('')
 
-const { bankIcons } = useConstants()
+const { bankIcons, detectBankIcon } = useConstants()
+
+function selectIcon(val: string) {
+  form.icon = val
+}
+
+const filteredBankIcons = computed(() => {
+  if (!searchQuery.value.trim()) return bankIcons
+  const q = searchQuery.value.trim().toLowerCase()
+  return bankIcons.filter(b => 
+    b.label.toLowerCase().includes(q) || 
+    b.keywords?.some(k => k.toLowerCase().includes(q))
+  )
+})
 
 async function handleSubmit() {
   if (!form.name) {
@@ -39,9 +53,17 @@ async function handleSubmit() {
 
 <template>
   <div class="modal-backdrop" role="dialog" aria-modal="true" @click.self="emit('close')">
-    <div class="modal-panel">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-base font-extrabold text-slate-900 dark:text-white">ویرایش حساب</h2>
+    <div class="modal-panel max-w-lg">
+      <div class="flex items-center justify-between mb-5">
+        <div class="flex items-center gap-2.5">
+          <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400">
+            <Icon name="lucide:pencil" class="w-4 h-4" />
+          </div>
+          <div>
+            <h2 class="text-base font-extrabold text-slate-900 dark:text-white">ویرایش حساب</h2>
+            <p class="text-xs text-slate-400">تغییر نام یا لوگوی حساب بانکی</p>
+          </div>
+        </div>
         <button @click="emit('close')" class="icon-button h-8 w-8 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200" aria-label="بستن پنجره">
           <Icon name="lucide:x" class="w-4 h-4" />
         </button>
@@ -64,26 +86,58 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">آیکون و نماد بانک</label>
-          <div class="grid grid-cols-4 gap-2">
+          <div class="flex items-center justify-between mb-2">
+            <label class="text-xs font-bold text-slate-700 dark:text-slate-300">آیکون و نماد بانک</label>
+            <span class="text-[11px] text-slate-400">{{ filteredBankIcons.length }} مورد</span>
+          </div>
+
+          <!-- Bank search filter -->
+          <div class="relative mb-2.5">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="جستجوی نام بانک (مثلا ملی، بلو، پاسارگاد...)"
+              class="form-control text-xs pr-8 py-2"
+            />
+            <Icon name="lucide:search" class="w-4 h-4 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
             <button
-              v-for="icon in bankIcons"
+              v-if="searchQuery"
+              @click="searchQuery = ''"
+              type="button"
+              class="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+            >
+              <Icon name="lucide:x" class="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          <!-- Icons Grid -->
+          <div class="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-56 overflow-y-auto rounded-xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-900/40 p-2">
+            <button
+              v-for="icon in filteredBankIcons"
               :key="icon.value"
               type="button"
-              @click="form.icon = icon.value"
-              class="p-2.5 rounded-xl border transition-all flex flex-col items-center gap-1.5"
-              :class="form.icon === icon.value ? 'border-emerald-500 dark:border-emerald-500 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 ring-2 ring-emerald-500/20 font-bold' : 'border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/60 hover:bg-white dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'"
+              @click="selectIcon(icon.value)"
+              class="p-2.5 rounded-xl border transition-all flex flex-col items-center gap-1.5 relative group text-center"
+              :class="form.icon === icon.value ? 'border-emerald-500 dark:border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 ring-2 ring-emerald-500/25 font-bold shadow-sm' : 'border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/80 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700'"
             >
-              <Icon :name="icon.value" class="w-5 h-5" />
-              <span class="text-[11px]">{{ icon.label }}</span>
+              <div class="flex h-8 w-8 items-center justify-center rounded-lg p-0.5 group-hover:scale-110 transition-transform">
+                <Icon :name="icon.value" class="w-7 h-7 object-contain" />
+              </div>
+              <span class="text-[11px] truncate max-w-full font-medium">{{ icon.label }}</span>
+              <div v-if="form.icon === icon.value" class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm">
+                <Icon name="lucide:check" class="w-2.5 h-2.5 stroke-[3]" />
+              </div>
             </button>
+            <div v-if="!filteredBankIcons.length" class="col-span-full py-6 text-center text-xs text-slate-400">
+              بانکی با این نام یافت نشد
+            </div>
           </div>
         </div>
 
         <button
           type="submit"
           :disabled="loading"
-          class="primary-button w-full mt-2"
+          class="primary-button w-full mt-3"
         >
           <span v-if="loading">در حال ذخیره...</span>
           <span v-else>ذخیره تغییرات</span>
