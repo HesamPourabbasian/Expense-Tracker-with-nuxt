@@ -34,6 +34,24 @@ export function useFormat() {
     return formatted
   }
 
+  function getPersianDayName(date: Date | string): string {
+    if (!date) return ''
+    let m: moment.Moment
+    if (typeof date === 'string' && /^\d{4}\/\d{1,2}\/\d{1,2}$/.test(date.trim())) {
+      m = moment(date.trim(), 'jYYYY/jMM/jDD')
+    } else {
+      m = moment(date)
+    }
+    return m.isValid() ? m.locale('fa').format('dddd') : ''
+  }
+
+  function toJalaliWithDay(date: Date | string): string {
+    if (!date) return ''
+    const day = getPersianDayName(date)
+    const jalali = toJalali(date)
+    return day ? `${day}، ${jalali}` : jalali
+  }
+
   function toGregorian(jalaliDate: string): Date {
     return moment(jalaliDate, 'jYYYY/jMM/jDD').toDate()
   }
@@ -54,6 +72,8 @@ export function useFormat() {
     formatCurrency,
     formatNumber,
     toJalali,
+    toJalaliWithDay,
+    getPersianDayName,
     toGregorian,
     getPersianMonthName,
     getCurrentJalaliMonth
