@@ -5,7 +5,7 @@ import moment from 'jalali-moment'
 const route = useRoute()
 const accountId = route.params.id as string
 
-const { toJalali, formatCurrency, getPersianMonthName } = useFormat()
+const { toJalali, getPersianDayName, formatCurrency, getPersianMonthName } = useFormat()
 const toast = useToast()
 
 const showTransactionModal = ref(false)
@@ -170,8 +170,8 @@ async function handleUpdated() {
           <Icon name="lucide:arrow-right" class="h-5 w-5" />
         </NuxtLink>
         <div class="flex min-w-0 items-center gap-3.5">
-          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20 shadow-xs">
-            <Icon :name="account.icon" class="h-6 w-6" />
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm p-2">
+            <Icon :name="account.icon" class="h-7 w-7 object-contain" />
           </div>
           <div class="min-w-0">
             <h1 class="page-heading text-xl lg:text-2xl">{{ account.name }}</h1>
@@ -308,7 +308,10 @@ async function handleUpdated() {
 
                 <!-- Subtitle / Direction & Date -->
                 <div class="flex items-center gap-2 mt-0.5 text-xs text-slate-400 dark:text-slate-400 font-medium">
-                  <span>{{ toJalali(t.date) }}</span>
+                  <span class="inline-flex items-center gap-1">
+                    <span class="font-semibold text-slate-700 dark:text-slate-300">{{ getPersianDayName(t.date) }}،</span>
+                    <span>{{ toJalali(t.date) }}</span>
+                  </span>
                   <template v-if="t.type === 'transfer'">
                     <span>•</span>
                     <span v-if="isOutgoingTransfer(t)" class="text-indigo-600 dark:text-indigo-400 font-semibold">
