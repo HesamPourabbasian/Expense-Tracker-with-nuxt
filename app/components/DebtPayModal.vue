@@ -175,11 +175,8 @@ async function handleSubmit() {
                 :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'border-emerald-600 bg-emerald-50/50 dark:bg-emerald-950/40 ring-2 ring-emerald-500/20' : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300 dark:hover:border-slate-700 hover:bg-slate-50/60 dark:hover:bg-slate-800/60'"
               >
                 <div class="flex items-center gap-3">
-                  <div
-                    class="flex h-10 w-10 items-center justify-center rounded-xl transition"
-                    :class="paymentMethod === 'bank' && selectedBankAccountId === acc.id ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'"
-                  >
-                    <Icon :name="acc.icon || 'lucide:landmark'" class="w-5 h-5" />
+                  <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-xs p-1.5">
+                    <Icon :name="acc.icon || 'bank:general'" class="w-6 h-6 object-contain" />
                   </div>
                   <div>
                     <div class="flex items-center gap-2">
