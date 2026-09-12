@@ -28,6 +28,24 @@ export function toJalali(date: Date | string): string {
   return formatted
 }
 
+export function getPersianDayName(date: Date | string): string {
+  if (!date) return ''
+  let m: moment.Moment
+  if (typeof date === 'string' && /^\d{4}\/\d{1,2}\/\d{1,2}$/.test(date.trim())) {
+    m = moment(date.trim(), 'jYYYY/jMM/jDD')
+  } else {
+    m = moment(date)
+  }
+  return m.isValid() ? m.locale('fa').format('dddd') : ''
+}
+
+export function toJalaliWithDay(date: Date | string): string {
+  if (!date) return ''
+  const day = getPersianDayName(date)
+  const jalali = toJalali(date)
+  return day ? `${day}، ${jalali}` : jalali
+}
+
 export function toGregorian(jalaliDate: string): Date {
   return moment(jalaliDate, 'jYYYY/jMM/jDD').toDate()
 }
