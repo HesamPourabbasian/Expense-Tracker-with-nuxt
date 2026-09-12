@@ -200,8 +200,8 @@ function nextMonth() {
               class="group grid grid-cols-[minmax(0,1fr)] gap-2 py-4 first:pt-0 last:pb-0 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:gap-4 transition"
             >
               <div class="flex min-w-0 items-center gap-3.5">
-                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-300 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950/60 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition">
-                  <Icon :name="account.icon" class="h-5 w-5" />
+                <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm p-1.5 group-hover:scale-105 group-hover:border-emerald-500/50 transition-all">
+                  <Icon :name="account.icon" class="h-6 w-6 object-contain" />
                 </div>
                 <div class="min-w-0">
                   <span class="truncate text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition">{{ account.name }}</span>
