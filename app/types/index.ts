@@ -110,6 +110,28 @@ export interface Todo {
   updatedAt: string
 }
 
+export interface TodoWeekDay {
+  date: string
+  dayName: string
+  shortDayName: string
+  jalaliDay: string
+  jalaliMonth: string
+  total: number
+  completed: number
+  pending: number
+}
+
+export interface TodoResponse {
+  todos: Todo[]
+  summary: {
+    total: number
+    completed: number
+    pending: number
+    percentage: number
+  }
+  weekDays?: TodoWeekDay[]
+}
+
 export interface CryptoTrade {
   id: number
   userId: number
