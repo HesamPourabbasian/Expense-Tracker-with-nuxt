@@ -1,5 +1,6 @@
-import { bankIcons, PERSIAN_MONTHS } from '~/utils/constants'
+import { bankIcons, detectBankIcon, PERSIAN_MONTHS } from '~/utils/constants'
 
 export function useConstants() {
-  return { bankIcons, PERSIAN_MONTHS }
+  return { bankIcons, detectBankIcon, PERSIAN_MONTHS }
 }
+
