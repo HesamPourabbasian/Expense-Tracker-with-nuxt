@@ -7,7 +7,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['close', 'updated'])
-const { formatCurrency } = useFormat()
+const { formatCurrency, getPersianDayName } = useFormat()
 
 onKeyStroke('Escape', () => emit('close'))
 
@@ -186,7 +186,12 @@ async function handleSubmit() {
 
         <!-- Date -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">تاریخ انتقال (شمسی)</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">تاریخ انتقال (شمسی)</label>
+            <span v-if="getPersianDayName(form.date)" class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400">
+              {{ getPersianDayName(form.date) }}
+            </span>
+          </div>
           <input
             v-model="form.date"
             type="text"

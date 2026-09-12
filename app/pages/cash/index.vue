@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CashTransaction } from '~/types'
 
-const { toJalali, formatCurrency } = useFormat()
+const { toJalali, getPersianDayName, formatCurrency } = useFormat()
 const toast = useToast()
 
 const showTransactionModal = ref(false)
@@ -99,7 +99,10 @@ async function handleUpdated() {
           </div>
           <div class="min-w-0">
             <p class="break-words text-sm font-bold text-slate-900 dark:text-white">{{ t.description || (t.type === 'income' ? 'درآمد نقدی' : 'هزینه نقدی') }}</p>
-            <p class="text-xs text-slate-400 dark:text-slate-400 font-medium mt-0.5">{{ toJalali(t.date) }}</p>
+            <p class="text-xs text-slate-400 dark:text-slate-400 font-medium mt-0.5">
+              <span class="font-semibold text-slate-700 dark:text-slate-300">{{ getPersianDayName(t.date) }}،</span>
+              {{ toJalali(t.date) }}
+            </p>
           </div>
         </div>
         <div class="transaction-actions flex items-center gap-3">
