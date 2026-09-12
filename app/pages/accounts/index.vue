@@ -80,8 +80,8 @@ async function handleUpdated() {
       >
         <div class="flex items-center justify-between mb-5">
           <div class="flex min-w-0 flex-1 items-center gap-3.5">
-            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 ring-1 ring-emerald-500/20 dark:ring-emerald-500/30 group-hover:bg-emerald-600 group-hover:text-white transition-all">
-              <Icon :name="account.icon" class="w-6 h-6" />
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm p-2 group-hover:scale-105 group-hover:border-emerald-500/50 group-hover:shadow-md transition-all duration-200">
+              <Icon :name="account.icon" class="w-7 h-7 object-contain" />
             </div>
             <div class="min-w-0">
               <h3 class="truncate font-bold text-slate-900 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-400 transition">{{ account.name }}</h3>
