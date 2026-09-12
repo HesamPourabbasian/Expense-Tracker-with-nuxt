@@ -1,3 +1,7 @@
+import { createResolver } from 'nuxt/kit'
+
+const { resolve } = createResolver(import.meta.url)
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: false },
@@ -10,8 +14,15 @@ export default defineNuxtConfig({
   ],
   icon: {
     serverBundle: 'local',
+    customCollections: [
+      {
+        prefix: 'bank',
+        dir: resolve('./app/assets/icons/banks')
+      }
+    ],
     clientBundle: {
       scan: true,
+      includeCustomCollections: true,
       sizeLimitKb: 0,
       icons: [
         'lucide:landmark',
@@ -37,6 +48,7 @@ export default defineNuxtConfig({
         'lucide:laptop',
         'lucide:plus',
         'lucide:x',
+        'lucide:search',
         'lucide:pencil',
         'lucide:trash-2',
         'lucide:arrow-right',
@@ -64,6 +76,19 @@ export default defineNuxtConfig({
         'lucide:quote',
         'lucide:align-left',
         'lucide:rotate-ccw',
+        'lucide:calendar-days',
+        'lucide:sparkles',
+        'lucide:flame',
+        'lucide:tag',
+        'lucide:filter',
+        'lucide:clock',
+        'lucide:check-check',
+        'lucide:forward',
+        'lucide:shopping-cart',
+        'lucide:party-popper',
+        'lucide:trophy',
+        'lucide:list-todo',
+        'lucide:calendar-check-2',
         'bx:bxs-star',
         'bx:bx-star',
         'line-md:loading-twotone-loop',
