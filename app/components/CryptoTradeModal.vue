@@ -3,6 +3,7 @@ import type { CryptoHolding, CryptoMarketPrice } from '~/types'
 
 const props = defineProps<{ holdings: CryptoHolding[]; prices: Record<string, CryptoMarketPrice> }>()
 const emit = defineEmits(['close', 'created'])
+onKeyStroke('Escape', () => emit('close'))
 
 const assets = [
   { symbol: 'BTC', name: 'بیت‌کوین', icon: 'tabler:currency-bitcoin', color: '#d99a35' },

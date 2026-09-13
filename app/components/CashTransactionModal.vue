@@ -3,6 +3,8 @@ import moment from 'jalali-moment'
 
 const emit = defineEmits(['close', 'created'])
 
+onKeyStroke('Escape', () => emit('close'))
+
 const form = reactive({
   type: 'expense' as 'income' | 'expense',
   amount: 0,

@@ -6,6 +6,8 @@ const emit = defineEmits(['close', 'created'])
 
 const { getPersianDayName } = useFormat()
 
+onKeyStroke('Escape', () => emit('close'))
+
 const form = reactive({
   type: 'expense' as 'income' | 'expense',
   amount: 0,

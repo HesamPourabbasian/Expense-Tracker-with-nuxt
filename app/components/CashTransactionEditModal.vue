@@ -5,6 +5,8 @@ import moment from 'jalali-moment'
 const props = defineProps<{ transaction: CashTransaction }>()
 const emit = defineEmits(['close', 'updated'])
 
+onKeyStroke('Escape', () => emit('close'))
+
 const form = reactive({
   type: props.transaction.type as 'income' | 'expense',
   amount: props.transaction.amount,

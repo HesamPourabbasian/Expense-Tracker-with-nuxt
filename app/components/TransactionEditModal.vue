@@ -5,6 +5,7 @@ import moment from 'jalali-moment'
 const props = defineProps<{ transaction: Transaction }>()
 const emit = defineEmits(['close', 'updated'])
 const { getPersianDayName } = useFormat()
+onKeyStroke('Escape', () => emit('close'))
 
 const form = reactive({
   type: props.transaction.type as 'income' | 'expense',
