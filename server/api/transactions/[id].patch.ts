@@ -3,7 +3,12 @@ import { getAccountCurrentBalance } from '~~/server/utils/account'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
-  const id = parseInt(getRouterParam(event, 'id')!)
+  const id = Number(getRouterParam(event, 'id'))
+
+  if (!Number.isInteger(id) || id <= 0) {
+    throw createError({ statusCode: 400, statusMessage: 'شناسه تراکنش نامعتبر است' })
+  }
+
   const body = await readBody(event)
 
   const transaction = await prisma.transaction.findUnique({
@@ -128,8 +133,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Type must be income or expense' })
   }
 
-  if (amount !== undefined && (typeof amount !== 'number' || amount <= 0)) {
-    throw createError({ statusCode: 400, statusMessage: 'Amount must be a positive number' })
+  const numAmount = amount !== undefined ? (typeof amount === 'number' ? amount : Number(amount)) : undefined
+  if (numAmount !== undefined && (!Number.isFinite(numAmount) || numAmount <= 0)) {
+    throw createError({ statusCode: 400, statusMessage: 'مبلغ باید عددی مثبت باشد' })
+  }
+
+  const parsedDate = date ? new Date(date) : undefined
+  if (parsedDate && isNaN(parsedDate.getTime())) {
+    throw createError({ statusCode: 400, statusMessage: 'تاریخ نامعتبر است' })
   }
 
   return await prisma.$transaction(async (tx) => {
@@ -137,9 +148,9 @@ export default defineEventHandler(async (event) => {
       where: { id },
       data: {
         ...(type && { type }),
-        ...(amount && { amount }),
+        ...(numAmount !== undefined && { amount: numAmount }),
         ...(description !== undefined && { description: description?.trim() || null }),
-        ...(date && { date: new Date(date) }),
+        ...(parsedDate && { date: parsedDate }),
         ...(isUnnecessary !== undefined && { isUnnecessary: Boolean(isUnnecessary) })
       },
       include: {
@@ -147,10 +158,10 @@ export default defineEventHandler(async (event) => {
       }
     })
 
-    if (amount !== undefined) {
+    if (numAmount !== undefined) {
       await tx.debt.updateMany({
         where: { transactionId: id, userId: user.id },
-        data: { amount }
+        data: { amount: numAmount }
       })
     }
 

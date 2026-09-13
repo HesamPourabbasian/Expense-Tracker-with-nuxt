@@ -2,7 +2,11 @@ import prisma from '~~/server/utils/prisma'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
-  const id = parseInt(getRouterParam(event, 'id')!)
+  const id = Number(getRouterParam(event, 'id'))
+
+  if (!Number.isInteger(id) || id <= 0) {
+    throw createError({ statusCode: 400, statusMessage: 'شناسه حساب نامعتبر است' })
+  }
 
   const account = await prisma.bankAccount.findUnique({ where: { id } })
   if (!account || account.userId !== user.id) {

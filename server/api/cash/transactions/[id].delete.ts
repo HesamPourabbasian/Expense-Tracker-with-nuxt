@@ -2,7 +2,11 @@ import prisma from '~~/server/utils/prisma'
 
 export default defineEventHandler(async (event) => {
   const user = event.context.user
-  const id = parseInt(getRouterParam(event, 'id')!)
+  const id = Number(getRouterParam(event, 'id'))
+
+  if (!Number.isInteger(id) || id <= 0) {
+    throw createError({ statusCode: 400, statusMessage: 'شناسه تراکنش نامعتبر است' })
+  }
 
   return await prisma.$transaction(async (tx) => {
     const transaction = await tx.cashTransaction.findUnique({ where: { id } })
