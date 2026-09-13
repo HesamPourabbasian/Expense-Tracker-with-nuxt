@@ -8,7 +8,7 @@ const showTransactionModal = ref(false)
 const editTransaction = ref<CashTransaction | null>(null)
 const filterType = ref<string>('')
 
-const { data: allTransactions, refresh } = await useFetch<CashTransaction[]>('/api/cash/transactions')
+const { data: allTransactions, status, refresh } = await useFetch<CashTransaction[]>('/api/cash/transactions')
 
 const transactions = computed(() => filterType.value
   ? allTransactions.value?.filter(transaction => transaction.type === filterType.value)
@@ -80,8 +80,13 @@ async function handleUpdated() {
       >هزینه</button>
     </div>
 
+    <div v-if="status === 'pending'" class="empty-state">
+      <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-emerald-600" />
+      <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2">در حال دریافت تراکنش‌های نقدی...</p>
+    </div>
+
     <!-- Transactions -->
-    <div v-if="transactions?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
+    <div v-else-if="transactions?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
       <div
         v-for="t in transactions"
         :key="t.id"
