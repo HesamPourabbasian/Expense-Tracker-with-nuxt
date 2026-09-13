@@ -16,7 +16,7 @@ interface MarketResponse {
 }
 
 const toast = useToast()
-const { toJalali } = useFormat()
+const { toJalali, getPersianDayName } = useFormat()
 const showTradeModal = ref(false)
 const filter = ref<'ALL' | 'BUY' | 'SELL'>('ALL')
 const { data, refresh, status } = await useFetch<CryptoResponse>('/api/crypto')
@@ -247,7 +247,10 @@ async function deleteTrade(id: number) {
                   {{ trade.type === 'BUY' ? 'خرید' : 'فروش' }}
                 </span>
               </div>
-              <p class="mt-0.5 text-xs text-slate-400 font-medium">{{ toJalali(trade.date) }}<span v-if="trade.note"> · {{ trade.note }}</span></p>
+              <p class="mt-0.5 text-xs text-slate-400 font-medium">
+                <span class="font-semibold text-slate-700 dark:text-slate-300">{{ getPersianDayName(trade.date) }}،</span>
+                {{ toJalali(trade.date) }}<span v-if="trade.note"> · {{ trade.note }}</span>
+              </p>
             </div>
           </div>
           <div class="text-left">

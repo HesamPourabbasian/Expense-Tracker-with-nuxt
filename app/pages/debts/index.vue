@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Debt } from '~/types'
 
-const { toJalali, formatCurrency } = useFormat()
+const { toJalali, getPersianDayName, formatCurrency } = useFormat()
 const toast = useToast()
 
 const showCreateModal = ref(false)
@@ -189,10 +189,16 @@ async function handlePaid() {
             </div>
 
             <div class="flex flex-wrap items-center gap-2 mt-0.5 text-xs text-slate-400 dark:text-slate-400 font-medium">
-              <span>سررسید: {{ toJalali(d.date) }}</span>
+              <span class="inline-flex items-center gap-1">
+                <span class="font-semibold text-slate-700 dark:text-slate-300">{{ getPersianDayName(d.date) }}،</span>
+                <span>سررسید: {{ toJalali(d.date) }}</span>
+              </span>
               <template v-if="d.status === 'paid' && d.paymentDate">
                 <span>•</span>
-                <span class="text-emerald-700 dark:text-emerald-400 font-semibold">پرداخت: {{ toJalali(d.paymentDate) }}</span>
+                <span class="inline-flex items-center gap-1 text-emerald-700 dark:text-emerald-400 font-semibold">
+                  <span>{{ getPersianDayName(d.paymentDate) }}،</span>
+                  <span>پرداخت: {{ toJalali(d.paymentDate) }}</span>
+                </span>
               </template>
             </div>
 
