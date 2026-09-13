@@ -243,7 +243,7 @@ expense-tracker
 - `GET, PATCH, DELETE /api/accounts/:id` - جزئیات، ویرایش و حذف حساب بانکی
 - `POST /api/accounts/transfer` - انتقال وجه و مدیریت نقدینگی بین حساب‌ها
 - `PATCH, DELETE /api/accounts/transfer/:id` - ویرایش یا حذف انتقال وجه
-- `GET, POST /api/transactions` - لیست و ثبت تراکنش بانکی (پشتیبانی از `bankAccountId`، `type`، `page` و `all=true`)
+- `GET, POST /api/transactions` - لیست و ثبت تراکنش بانکی (صفحه‌بندی واکنشی ۵۰تایی، فیلتر نوع و غیرضروری، پشتیبانی از `bankAccountId`، `type`، `page`، `pageSize` و `all=true`)
 - `PATCH, DELETE /api/transactions/:id` - ویرایش، تغییر وضعیت هزینه غیرضروری یا حذف تراکنش بانکی
 - `GET, POST /api/cash/transactions` - لیست و ایجاد تراکنش نقدی
 - `PATCH, DELETE /api/cash/transactions/:id` - ویرایش و حذف تراکنش نقدی
