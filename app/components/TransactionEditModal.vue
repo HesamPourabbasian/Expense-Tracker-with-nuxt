@@ -4,7 +4,7 @@ import moment from 'jalali-moment'
 
 const props = defineProps<{ transaction: Transaction }>()
 const emit = defineEmits(['close', 'updated'])
-const { getPersianDayName } = useFormat()
+const { formatCurrency, getPersianDayName } = useFormat()
 onKeyStroke('Escape', () => emit('close'))
 
 const form = reactive({
@@ -78,7 +78,12 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">مبلغ (تومان)</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">مبلغ (تومان)</label>
+            <span v-if="form.amount > 0" class="money text-xs font-bold text-emerald-700 dark:text-emerald-400">
+              {{ formatCurrency(form.amount) }}
+            </span>
+          </div>
           <input
             v-model.number="form.amount"
             type="number"

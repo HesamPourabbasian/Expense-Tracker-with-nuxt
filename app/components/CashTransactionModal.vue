@@ -2,6 +2,7 @@
 import moment from 'jalali-moment'
 
 const emit = defineEmits(['close', 'created'])
+const { formatCurrency, getPersianDayName } = useFormat()
 
 onKeyStroke('Escape', () => emit('close'))
 
@@ -74,7 +75,12 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">مبلغ (تومان)</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">مبلغ (تومان)</label>
+            <span v-if="form.amount > 0" class="money text-xs font-bold text-emerald-700 dark:text-emerald-400">
+              {{ formatCurrency(form.amount) }}
+            </span>
+          </div>
           <input
             v-model.number="form.amount"
             type="number"
@@ -85,7 +91,12 @@ async function handleSubmit() {
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">تاریخ (شمسی)</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">تاریخ (شمسی)</label>
+            <span v-if="getPersianDayName(form.date)" class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+              {{ getPersianDayName(form.date) }}
+            </span>
+          </div>
           <input
             v-model="form.date"
             type="text"
