@@ -9,7 +9,7 @@ const editDebt = ref<Debt | null>(null)
 const settleDebt = ref<Debt | null>(null)
 const filterType = ref<string>('')
 
-const { data: allDebts, refresh } = await useFetch<Debt[]>('/api/debts')
+const { data: allDebts, status, refresh } = await useFetch<Debt[]>('/api/debts')
 const debts = computed(() => filterType.value
   ? allDebts.value?.filter(debt => debt.type === filterType.value)
   : allDebts.value)
@@ -140,8 +140,13 @@ async function handlePaid() {
       >طلب من</button>
     </div>
 
+    <div v-if="status === 'pending'" class="empty-state">
+      <Icon name="line-md:loading-twotone-loop" class="mx-auto h-10 w-10 text-emerald-600" />
+      <p class="text-sm font-medium text-slate-500 dark:text-slate-400 mt-2">در حال دریافت تعهدات مالی...</p>
+    </div>
+
     <!-- Debts List -->
-    <div v-if="debts?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
+    <div v-else-if="debts?.length" class="surface divide-y divide-slate-100 dark:divide-slate-800/80 overflow-hidden">
       <div
         v-for="d in debts"
         :key="d.id"
