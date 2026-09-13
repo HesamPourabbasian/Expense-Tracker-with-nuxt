@@ -42,14 +42,14 @@ export default defineEventHandler(async (event) => {
     })
   ])
 
-  const effectivePageSize = isAll ? total : (pageSize || 50)
+  const effectivePageSize = isAll ? (total || 1) : (pageSize || 50)
   return {
     transactions,
     pagination: {
       page: isAll ? 1 : page,
       pageSize: effectivePageSize,
       total,
-      totalPages: isAll ? 1 : Math.ceil(total / effectivePageSize)
+      totalPages: isAll ? 1 : (total === 0 ? 0 : Math.ceil(total / effectivePageSize))
     }
   }
 })

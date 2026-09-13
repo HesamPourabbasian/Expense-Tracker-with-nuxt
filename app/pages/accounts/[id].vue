@@ -16,20 +16,19 @@ const page = ref(1)
 
 const { data: account, refresh: refreshAccount } = await useFetch<BankAccount>(`/api/accounts/${accountId}`)
 
+const queryParams = computed(() => ({
+  bankAccountId: accountId,
+  type: filterType.value || undefined,
+  page: page.value,
+  pageSize: 50
+}))
+
 const { data: transactionData, status, refresh: refreshTransactions } = await useFetch<PaginatedTransactions>('/api/transactions', {
-  query: { bankAccountId: accountId, all: true }
+  query: queryParams,
+  watch: [queryParams]
 })
 
-const allTransactions = computed(() => transactionData.value?.transactions || [])
-
-const transactions = computed(() => {
-  if (!allTransactions.value.length) return []
-  if (!filterType.value) return allTransactions.value
-  if (filterType.value === 'unnecessary') {
-    return allTransactions.value.filter(t => t.isUnnecessary)
-  }
-  return allTransactions.value.filter(t => t.type === filterType.value)
-})
+const transactions = computed(() => transactionData.value?.transactions || [])
 
 const pagination = computed(() => transactionData.value?.pagination)
 
@@ -88,7 +87,7 @@ function setFilter(type: string) {
 }
 
 function setPage(nextPage: number) {
-  if (!pagination.value || nextPage < 1 || nextPage > pagination.value.totalPages) return
+  if (!pagination.value || nextPage < 1 || nextPage > pagination.value.totalPages || status.value === 'pending') return
   page.value = nextPage
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -115,6 +114,12 @@ async function toggleUnnecessary(t: Transaction) {
         : 'تراکنش از هزینه‌های غیرضروری خارج شد'
     )
     await refreshAccount()
+    if (filterType.value === 'unnecessary') {
+      await refreshTransactions()
+      if (pagination.value && page.value > pagination.value.totalPages) {
+        page.value = pagination.value.totalPages || 1
+      }
+    }
   } catch (e: any) {
     t.isUnnecessary = previousState
     toast.error('خطا در به‌روزرسانی وضعیت تراکنش')
@@ -134,7 +139,9 @@ async function deleteTransaction(t: Transaction) {
     toast.success(isTransfer ? 'انتقال وجه حذف و موجودی حساب‌ها اصلاح شد' : 'تراکنش حذف شد')
     await refreshTransactions()
     await refreshAccount()
-    if (pagination.value && page.value > pagination.value.totalPages) page.value = pagination.value.totalPages || 1
+    if (pagination.value && page.value > pagination.value.totalPages) {
+      page.value = pagination.value.totalPages || 1
+    }
   } catch (e: any) {
     toast.error('خطا در حذف تراکنش')
   }
@@ -142,6 +149,7 @@ async function deleteTransaction(t: Transaction) {
 
 async function handleCreated() {
   showTransactionModal.value = false
+  page.value = 1
   await refreshTransactions()
   await refreshAccount()
   toast.success('تراکنش جدید اضافه شد')
@@ -149,6 +157,7 @@ async function handleCreated() {
 
 async function handleTransferCreated() {
   showTransferModal.value = false
+  page.value = 1
   await refreshTransactions()
   await refreshAccount()
   toast.success('انتقال وجه با موفقیت انجام شد')
@@ -369,12 +378,12 @@ async function handleUpdated() {
     </div>
 
     <div v-if="pagination && pagination.totalPages > 1" class="flex items-center justify-between gap-3 pt-2">
-      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === 1" @click="setPage(page - 1)">
+      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === 1 || status === 'pending'" @click="setPage(page - 1)">
         <Icon name="lucide:chevron-right" class="h-4 w-4" />
         قبلی
       </button>
       <p class="text-xs font-bold text-slate-500 dark:text-slate-400">صفحه {{ page }} از {{ pagination.totalPages }}</p>
-      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === pagination.totalPages" @click="setPage(page + 1)">
+      <button class="primary-button bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 ring-1 ring-inset ring-slate-200 dark:ring-slate-700 shadow-none hover:bg-slate-50 dark:hover:bg-slate-700 disabled:opacity-40" :disabled="page === pagination.totalPages || status === 'pending'" @click="setPage(page + 1)">
         بعدی
         <Icon name="lucide:chevron-left" class="h-4 w-4" />
       </button>
