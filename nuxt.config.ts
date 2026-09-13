@@ -91,6 +91,7 @@ export default defineNuxtConfig({
         'lucide:calendar-check-2',
         'bx:bxs-star',
         'bx:bx-star',
+        'lucide:loader-2',
         'line-md:loading-twotone-loop',
         'tabler:currency-bitcoin',
         'tabler:currency-ethereum',

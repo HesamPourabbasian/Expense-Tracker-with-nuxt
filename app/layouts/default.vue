@@ -17,8 +17,6 @@ const navItems = [
   { to: '/crypto', label: 'رمزارز', mobileLabel: 'رمزارز', icon: 'tabler:currency-bitcoin' }
 ]
 
-const mobileMenuOpen = ref(false)
-
 function isActive(path: string) {
   return path === '/' ? route.path === '/' : route.path.startsWith(path)
 }
