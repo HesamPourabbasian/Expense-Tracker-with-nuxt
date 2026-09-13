@@ -301,6 +301,12 @@ function cancelEdit() {
   editingId.value = null
 }
 
+onKeyStroke('Escape', () => {
+  if (editingId.value !== null) {
+    cancelEdit()
+  }
+})
+
 async function saveEdit(id: number) {
   if (!editTitle.value.trim()) return
   try {
