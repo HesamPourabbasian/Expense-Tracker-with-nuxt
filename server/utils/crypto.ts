@@ -38,6 +38,10 @@ export function calculateCryptoPortfolio(trades: TradeInput[]) {
       realizedByTrade.set(trade.id, profit)
       holding.quantity = Math.max(0, holding.quantity - trade.quantity)
       holding.invested = Math.max(0, holding.invested - average * trade.quantity)
+      if (holding.quantity <= 0.00000001) {
+        holding.quantity = 0
+        holding.invested = 0
+      }
     }
     grouped.set(trade.symbol, holding)
   }
